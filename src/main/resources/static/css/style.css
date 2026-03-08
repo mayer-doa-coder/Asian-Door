@@ -1,0 +1,44 @@
+/* =========================================
+   Asian Door — Custom Stylesheet
+   ========================================= */
+
+/* Root variables */
+:root {
+    --ad-primary: #1a1a2e;
+    --ad-accent:  #e63946;
+    --ad-light:   #f8f9fa;
+}
+
+/* General */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Navbar brand */
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+/* Product card */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+.product-card img {
+    object-fit: cover;
+    height: 220px;
+    width: 100%;
+}
+
+/* Page section headings */
+.section-title {
+    font-weight: 700;
+    border-left: 4px solid var(--ad-accent);
+    padding-left: 0.75rem;
+    margin-bottom: 1.5rem;
+}

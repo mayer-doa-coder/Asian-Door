@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row justify-content-center">
+        <div class="col-sm-10 col-md-6 col-lg-5 col-xl-4">
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+                        <i class="bi bi-door-open-fill display-5 text-danger"></i>
+                        <h4 class="fw-bold mt-2">Welcome Back</h4>
+                        <p class="text-muted small">Sign in to your Asian Door account</p>
+                    </div>
+
+                    <!-- Spring Security login error -->
+                    <div th:if="${param.error}" class="alert alert-danger py-2 small">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        Invalid email or password. Please try again.
+                    </div>
+
+                    <!-- Logout success -->
+                    <div th:if="${param.logout}" class="alert alert-success py-2 small">
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        You have been logged out successfully.
+                    </div>
+
+                    <!-- Registration success -->
+                    <div th:if="${param.registered}" class="alert alert-success py-2 small">
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        Account created! Please log in.
+                    </div>
+
+                    <form th:action="@{/login}" method="post">
+                        <!-- CSRF handled automatically by Spring Security + Thymeleaf -->
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-semibold small">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" id="username" name="username"
+                                       class="form-control"
+                                       placeholder="you@example.com"
+                                       autocomplete="email"
+                                       required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <label for="password" class="form-label fw-semibold small">Password</label>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" id="password" name="password"
+                                       class="form-control"
+                                       placeholder="Enter your password"
+                                       autocomplete="current-password"
+                                       required />
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                                        onclick="togglePwd('password', this)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me" />
+                            <label class="form-check-label small" for="rememberMe">Remember me</label>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr />
+                    <p class="text-center small mb-0">
+                        Don't have an account?
+                        <a th:href="@{/register}" class="text-danger fw-semibold text-decoration-none">Register here</a>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script>
+        function togglePwd(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon  = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        }
+    </script>
+</th:block>
+</body>
+</html>

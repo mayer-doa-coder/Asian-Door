@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Products</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row g-4">
+
+        <!-- ===== SIDEBAR: Filters ===== -->
+        <aside class="col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white fw-semibold">
+                    <i class="bi bi-funnel-fill me-1"></i> Filter
+                </div>
+                <div class="card-body">
+
+                    <!-- Search -->
+                    <form th:action="@{/products}" method="get" class="mb-3">
+                        <label class="form-label fw-semibold small">Search</label>
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control form-control-sm"
+                                   placeholder="Keyword…" th:value="${search}" />
+                            <button class="btn btn-sm btn-dark" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Category -->
+                    <label class="form-label fw-semibold small">Category</label>
+                    <div class="list-group list-group-flush mb-3">
+                        <a th:href="@{/products}"
+                           th:classappend="${category == null} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">All Categories</a>
+                        <a th:href="@{/products(category=wooden)}"
+                           th:classappend="${category == 'wooden'} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">Wooden Doors</a>
+                        <a th:href="@{/products(category=steel)}"
+                           th:classappend="${category == 'steel'} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">Steel Doors</a>
+                        <a th:href="@{/products(category=glass)}"
+                           th:classappend="${category == 'glass'} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">Glass Doors</a>
+                        <a th:href="@{/products(category=security)}"
+                           th:classappend="${category == 'security'} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">Security Doors</a>
+                        <a th:href="@{/products(category=interior)}"
+                           th:classappend="${category == 'interior'} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">Interior Doors</a>
+                        <a th:href="@{/products(category=exterior)}"
+                           th:classappend="${category == 'exterior'} ? 'active' : ''"
+                           class="list-group-item list-group-item-action small py-1">Exterior Doors</a>
+                    </div>
+
+                    <!-- Price range placeholder -->
+                    <label class="form-label fw-semibold small">Max Price</label>
+                    <input type="range" class="form-range" min="0" max="50000" step="500" value="50000" disabled />
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">₱0</small>
+                        <small class="text-muted">₱50,000</small>
+                    </div>
+
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN: Product Grid ===== -->
+        <section class="col-lg-9">
+
+            <!-- Heading & sort row -->
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                <h4 class="mb-0 section-title" style="border: none; padding: 0;">
+                    <span th:text="${category != null} ? ${category + ' Doors'} : 'All Products'">All Products</span>
+                </h4>
+                <select class="form-select form-select-sm w-auto" disabled>
+                    <option>Sort: Newest</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
+            </div>
+
+            <!-- Product cards — populated by controller later -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4" th:if="${products != null and !#lists.isEmpty(products)}">
+                <div class="col" th:each="product : ${products}">
+                    <div class="card h-100 product-card border-0 shadow-sm">
+                        <img th:src="${product.imageUrl != null} ? ${product.imageUrl} : '/images/no-image.png'"
+                             th:alt="${product.name}" class="card-img-top" />
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge bg-secondary mb-1 align-self-start"
+                                  th:text="${product.category}">Category</span>
+                            <h6 class="card-title fw-semibold" th:text="${product.name}">Door Name</h6>
+                            <p class="card-text text-muted small flex-grow-1"
+                               th:text="${product.description}">Description…</p>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="fw-bold text-danger"
+                                      th:text="'₱' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">₱0.00</span>
+                                <a th:href="@{/products/{id}(id=${product.id})}"
+                                   class="btn btn-sm btn-outline-dark">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div th:if="${products == null or #lists.isEmpty(products)}"
+                 class="text-center py-5 text-muted">
+                <i class="bi bi-door-open display-1 mb-3"></i>
+                <h5>No products found</h5>
+                <p class="small">Try adjusting your search or filter to find what you're looking for.</p>
+                <a th:href="@{/products}" class="btn btn-outline-dark btn-sm">Clear Filters</a>
+            </div>
+
+        </section>
+    </div>
+
+</div>
+</body>
+</html>

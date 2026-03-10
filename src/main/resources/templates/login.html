@@ -51,31 +51,37 @@
 
                         <div class="mb-3">
                             <label for="username" class="form-label fw-semibold small">Email Address</label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                 <input type="email" id="username" name="username"
+                                       th:classappend="${param.error != null} ? 'is-invalid' : ''"
                                        class="form-control"
                                        placeholder="you@example.com"
                                        autocomplete="email"
                                        required />
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                            <div class="form-text text-muted small">
+                                <i class="bi bi-info-circle me-1"></i>Use the email you registered with.
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <div class="d-flex justify-content-between">
-                                <label for="password" class="form-label fw-semibold small">Password</label>
-                            </div>
-                            <div class="input-group">
+                            <label for="password" class="form-label fw-semibold small">Password</label>
+                            <div class="input-group has-validation">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" id="password" name="password"
+                                       th:classappend="${param.error != null} ? 'is-invalid' : ''"
                                        class="form-control"
                                        placeholder="Enter your password"
                                        autocomplete="current-password"
                                        required />
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword"
-                                        onclick="togglePwd('password', this)">
+                                <button class="btn btn-outline-secondary" type="button"
+                                        onclick="togglePwd('password', this)"
+                                        aria-label="Toggle password visibility">
                                     <i class="bi bi-eye"></i>
                                 </button>
+                                <div class="invalid-feedback">Invalid email or password.</div>
                             </div>
                         </div>
 

@@ -1,15 +1,17 @@
 package com.asiandoor.controller;
 
-import com.asiandoor.dto.RegisterRequest;
-import com.asiandoor.service.UserService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import com.asiandoor.dto.RegisterRequest;
+import com.asiandoor.service.UserService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class AuthController {
                            Model model) {
         // Show field-level validation errors (blank fields, invalid email, short password)
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "Please correct the highlighted errors and try again.");
             return "register";
         }
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {

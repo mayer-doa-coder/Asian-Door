@@ -40,28 +40,33 @@
                         <!-- Full Name -->
                         <div class="mb-3">
                             <label for="fullName" class="form-label fw-semibold small">Full Name</label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text"><i class="bi bi-person"></i></span>
                                 <input type="text" id="fullName" class="form-control"
                                        th:field="*{fullName}"
-                                       th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                                       th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'
+                                                    : (${registerRequest.fullName != null and !#strings.isEmpty(registerRequest.fullName)} ? 'is-valid' : '')"
                                        placeholder="Juan dela Cruz"
                                        autocomplete="name" required />
-                                <div class="invalid-feedback" th:errors="*{fullName}"></div>
+                                <div class="invalid-feedback" th:errors="*{fullName}">Full name is required.</div>
                             </div>
                         </div>
 
                         <!-- Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label fw-semibold small">Email Address</label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                 <input type="email" id="email" class="form-control"
                                        th:field="*{email}"
-                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'
+                                                    : (${registerRequest.email != null and !#strings.isEmpty(registerRequest.email)} ? 'is-valid' : '')"
                                        placeholder="you@example.com"
                                        autocomplete="email" required />
-                                <div class="invalid-feedback" th:errors="*{email}"></div>
+                                <div class="invalid-feedback" th:errors="*{email}">Please enter a valid email address.</div>
+                            </div>
+                            <div id="emailHint" class="form-text text-muted small">
+                                <i class="bi bi-info-circle me-1"></i>Use the format: name@example.com
                             </div>
                         </div>
 
@@ -77,41 +82,60 @@
                                        placeholder="+63 9XX XXX XXXX"
                                        autocomplete="tel" />
                             </div>
+                            <div class="form-text text-muted small">
+                                <i class="bi bi-info-circle me-1"></i>Used for order notifications (optional).
+                            </div>
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label fw-semibold small">Password</label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" id="password" class="form-control"
                                        th:field="*{password}"
-                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'
+                                                    : (${registerRequest.password != null and !#strings.isEmpty(registerRequest.password)} ? 'is-valid' : '')"
                                        placeholder="Min. 8 characters"
+                                       minlength="8"
                                        autocomplete="new-password" required />
                                 <button class="btn btn-outline-secondary" type="button"
-                                        onclick="togglePwd('password', this)">
+                                        onclick="togglePwd('password', this)"
+                                        aria-label="Toggle password visibility">
                                     <i class="bi bi-eye"></i>
                                 </button>
-                                <div class="invalid-feedback" th:errors="*{password}"></div>
+                                <div class="invalid-feedback" th:errors="*{password}">Password must be at least 8 characters.</div>
+                            </div>
+                            <!-- Strength meter -->
+                            <div class="progress mt-2" style="height: 5px;" aria-label="Password strength">
+                                <div id="pwStrengthBar" class="progress-bar" role="progressbar"
+                                     style="width: 0%; transition: width 0.3s ease;"></div>
+                            </div>
+                            <div id="pwHint" class="form-text text-muted small mt-1">
+                                <i class="bi bi-shield-lock me-1"></i>Min. 8 characters. Add uppercase, numbers &amp; symbols for a stronger password.
                             </div>
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-4">
                             <label for="confirmPassword" class="form-label fw-semibold small">Confirm Password</label>
-                            <div class="input-group">
+                            <div class="input-group has-validation">
                                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                                 <input type="password" id="confirmPassword" class="form-control"
                                        th:field="*{confirmPassword}"
-                                       th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
+                                       th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid'
+                                                    : (${registerRequest.confirmPassword != null and !#strings.isEmpty(registerRequest.confirmPassword)} ? 'is-valid' : '')"
                                        placeholder="Repeat your password"
                                        autocomplete="new-password" required />
                                 <button class="btn btn-outline-secondary" type="button"
-                                        onclick="togglePwd('confirmPassword', this)">
+                                        onclick="togglePwd('confirmPassword', this)"
+                                        aria-label="Toggle confirm password visibility">
                                     <i class="bi bi-eye"></i>
                                 </button>
-                                <div class="invalid-feedback" th:errors="*{confirmPassword}"></div>
+                                <div class="invalid-feedback" th:errors="*{confirmPassword}">Please confirm your password.</div>
+                            </div>
+                            <div id="confirmHint" class="form-text text-muted small mt-1">
+                                <i class="bi bi-arrow-repeat me-1"></i>Re-enter your password to confirm.
                             </div>
                         </div>
 
@@ -143,6 +167,7 @@
         crossorigin="anonymous"></script>
 <script th:src="@{/js/main.js}"></script>
 <script>
+    /* ── Password show/hide toggle ── */
     function togglePwd(inputId, btn) {
         const input = document.getElementById(inputId);
         const icon  = btn.querySelector('i');
@@ -154,6 +179,80 @@
             icon.classList.replace('bi-eye-slash', 'bi-eye');
         }
     }
+
+    /* ── Live email format hint ── */
+    const emailInput = document.getElementById('email');
+    const emailHint  = document.getElementById('emailHint');
+    emailInput.addEventListener('input', function () {
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
+        if (this.value.length > 0 && !valid) {
+            emailHint.innerHTML = '<i class="bi bi-x-circle-fill me-1"></i>Format must be: name@example.com';
+            emailHint.className = 'form-text text-danger small';
+        } else if (this.value.length > 0 && valid) {
+            emailHint.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Email format looks good.';
+            emailHint.className = 'form-text text-success small';
+        } else {
+            emailHint.innerHTML = '<i class="bi bi-info-circle me-1"></i>Use the format: name@example.com';
+            emailHint.className = 'form-text text-muted small';
+        }
+    });
+
+    /* ── Password strength meter ── */
+    const pwInput      = document.getElementById('password');
+    const pwBar        = document.getElementById('pwStrengthBar');
+    const pwHint       = document.getElementById('pwHint');
+    const strengthData = [
+        { label: '',       color: '',           width: '0%'   },
+        { label: 'Weak',   color: 'bg-danger',  width: '25%'  },
+        { label: 'Fair',   color: 'bg-warning', width: '50%'  },
+        { label: 'Good',   color: 'bg-info',    width: '75%'  },
+        { label: 'Strong', color: 'bg-success', width: '100%' }
+    ];
+    pwInput.addEventListener('input', function () {
+        const v = this.value;
+        let score = 0;
+        if (v.length >= 8)           score++;
+        if (/[A-Z]/.test(v))         score++;
+        if (/[0-9]/.test(v))         score++;
+        if (/[^A-Za-z0-9]/.test(v))  score++;
+        const s = strengthData[score];
+        pwBar.style.width = s.width;
+        pwBar.className   = 'progress-bar ' + s.color;
+        if (v.length === 0) {
+            pwHint.innerHTML = '<i class="bi bi-shield-lock me-1"></i>Min. 8 characters. Add uppercase, numbers &amp; symbols for a stronger password.';
+            pwHint.className = 'form-text text-muted small mt-1';
+        } else if (v.length < 8) {
+            pwHint.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i>${v.length}/8 characters &mdash; too short.`;
+            pwHint.className = 'form-text text-danger small mt-1';
+        } else {
+            pwHint.innerHTML = `<i class="bi bi-shield-check me-1"></i>Strength: <strong>${s.label}</strong>`;
+            pwHint.className = score >= 3 ? 'form-text text-success small mt-1'
+                             : score === 2 ? 'form-text text-warning small mt-1'
+                             : 'form-text text-danger small mt-1';
+        }
+        updateConfirmHint();
+    });
+
+    /* ── Confirm password live match check ── */
+    const confirmInput = document.getElementById('confirmPassword');
+    const confirmHint  = document.getElementById('confirmHint');
+    function updateConfirmHint() {
+        const pwd  = pwInput.value;
+        const cpwd = confirmInput.value;
+        if (cpwd.length === 0) {
+            confirmHint.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Re-enter your password to confirm.';
+            confirmHint.className = 'form-text text-muted small mt-1';
+            return;
+        }
+        if (pwd === cpwd) {
+            confirmHint.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Passwords match.';
+            confirmHint.className = 'form-text text-success small mt-1';
+        } else {
+            confirmHint.innerHTML = '<i class="bi bi-x-circle-fill me-1"></i>Passwords do not match.';
+            confirmHint.className = 'form-text text-danger small mt-1';
+        }
+    }
+    confirmInput.addEventListener('input', updateConfirmHint);
 </script>
 </body>
 </html>

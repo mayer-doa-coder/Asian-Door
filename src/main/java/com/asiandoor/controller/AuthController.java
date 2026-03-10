@@ -42,6 +42,7 @@ public class AuthController {
                            Model model) {
         // Show field-level validation errors (blank fields, invalid email, short password)
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "Please correct the highlighted errors and try again.");
             return "register";
         }
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {

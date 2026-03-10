@@ -69,22 +69,55 @@ public class DataSeeder implements CommandLineRunner {
     private void seedProducts() {
         if (productRepository.count() > 0) return;
         productRepository.saveAll(List.of(
-            product("Pine Wood Entry Door",     "Pine Wood",          8500.00,  10, "/images/country-house-door-pine-wood.jpg"),
-            product("Steel Security Door",      "Galvanized Steel",  15900.00,   5, "/images/country-house-door-pine-wood.jpg"),
-            product("Tempered Glass Door",      "Tempered Glass",    21500.00,   8, "/images/country-house-door-pine-wood.jpg"),
-            product("Mahogany Interior Door",   "Mahogany Wood",     12300.00,  12, "/images/country-house-door-pine-wood.jpg"),
-            product("Aluminium Sliding Door",   "Aluminium Alloy",   18750.00,   6, "/images/country-house-door-pine-wood.jpg"),
-            product("Fiberglass Exterior Door", "Fiberglass",        24000.00,   3, "/images/country-house-door-pine-wood.jpg")
+
+            // Wooden Doors
+            product("Pine Wood Entry Door", "wooden", "Pine Wood", 8500.00, "210 × 90 cm", 10,
+                "/images/products/pine-wood-door.jpg",
+                "A classic entry door handcrafted from natural pine wood. Features a smooth finish, strong frame, and excellent insulation properties ideal for Filipino homes."),
+
+            product("Narra Solid Wood Door", "wooden", "Narra Wood", 14500.00, "210 × 90 cm", 6,
+                "/images/products/pine-wood-door.jpg",
+                "Premium Narra solid wood door with a rich grain pattern and warm reddish tone. Durable, termite-resistant, and adds timeless elegance to any entrance."),
+
+            // Steel Doors
+            product("Galvanized Steel Entry Door", "steel", "Galvanized Steel", 15900.00, "210 × 90 cm", 5,
+                "/images/products/pine-wood-door.jpg",
+                "Heavy-duty galvanized steel door built for high-traffic areas. Rust-resistant coating ensures long-term durability in tropical climates."),
+
+            // Glass Doors
+            product("Tempered Glass Panel Door", "glass", "Tempered Glass", 21500.00, "210 × 90 cm", 8,
+                "/images/products/pine-wood-door.jpg",
+                "Modern tempered glass door that floods interiors with natural light. Engineered for safety with shatter-resistant glass and an aluminium frame."),
+
+            // Security Doors
+            product("Multi-Point Lock Security Door", "security", "Steel Alloy", 28000.00, "210 × 90 cm", 4,
+                "/images/products/pine-wood-door.jpg",
+                "Advanced security door featuring a multi-point locking system, reinforced steel core, and anti-tamper hinges. Certified for high-security residential use."),
+
+            // Interior Doors
+            product("Mahogany Panel Interior Door", "interior", "Mahogany Wood", 12300.00, "210 × 80 cm", 12,
+                "/images/products/pine-wood-door.jpg",
+                "Elegant mahogany interior door with a smooth, pre-finished surface. Lightweight yet sturdy, ideal for bedrooms, bathrooms, and living spaces."),
+
+            // Exterior Doors
+            product("Fiberglass Exterior Door", "exterior", "Fiberglass", 24000.00, "210 × 90 cm", 3,
+                "/images/products/pine-wood-door.jpg",
+                "Low-maintenance fiberglass exterior door engineered to resist warping, cracking, and corrosion. Achieves the look of real wood with superior weather performance.")
         ));
     }
 
-    private Product product(String name, String material, double price, int stock, String imageUrl) {
+    private Product product(String name, String category, String material,
+                            double price, String dimensions, int stock,
+                            String imageUrl, String description) {
         Product p = new Product();
         p.setName(name);
+        p.setCategory(category);
         p.setMaterial(material);
         p.setPrice(price);
+        p.setDimensions(dimensions);
         p.setStock(stock);
         p.setImageUrl(imageUrl);
+        p.setDescription(description);
         return p;
     }
 }

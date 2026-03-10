@@ -1,5 +1,6 @@
 package com.asiandoor.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,11 +19,19 @@ public class Product {
 
     private String name;
 
+    /** Slug-style category key: wooden | steel | glass | security | interior | exterior */
+    private String category;
+
     private String material;
 
     private Double price;
 
+    private String dimensions;
+
     private Integer stock;
 
     private String imageUrl;
+
+    @Column(length = 1000)
+    private String description;
 }

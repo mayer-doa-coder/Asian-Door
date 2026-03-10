@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--
+  product-detail.html — single product detail page.
+  Delegates structure to layout.html.
+-->
+<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
+<head>
+    <title th:text="${product.name + ' - Asian Door'}">Product Detail - Asian Door</title>
+    <style>
+        .detail-hero-img {
+            width: 100%;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: 0.75rem;
+        }
+        .detail-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ad-accent);
+        }
+        .detail-meta dt {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6c757d;
+        }
+        .detail-meta dd {
+            font-size: 0.95rem;
+            color: #212529;
+            margin-bottom: 0.8rem;
+        }
+        .divider {
+            border-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+<main class="container py-5">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item">
+                <a th:href="@{/}" class="text-decoration-none text-secondary">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a th:href="@{/products}" class="text-decoration-none text-secondary">Products</a>
+            </li>
+            <li class="breadcrumb-item active fw-semibold" th:text="${product.name}">Product</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5 align-items-start">
+
+        <!-- ===== Left: Product Image ===== -->
+        <div class="col-lg-5">
+            <div class="product-card-img-wrapper rounded-3 shadow-sm overflow-hidden bg-light">
+                <img th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}
+                                 ? ${product.imageUrl}
+                                 : '/images/country-house-door-pine-wood.jpg'"
+                     th:alt="${product.name}"
+                     class="detail-hero-img" />
+            </div>
+        </div>
+
+        <!-- ===== Right: Product Info ===== -->
+        <div class="col-lg-7">
+
+            <!-- Category badge + stock indicator -->
+            <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                <span th:if="${product.category != null}"
+                      th:text="${#strings.capitalize(product.category)}"
+                      th:classappend="${'category-badge-' + product.category}"
+                      class="category-badge"></span>
+                <span th:if="${product.stock != null and product.stock > 5}"
+                      class="badge bg-success" style="font-size:0.72rem;">In Stock</span>
+                <span th:if="${product.stock != null and product.stock > 0 and product.stock <= 5}"
+                      class="badge bg-warning text-dark" style="font-size:0.72rem;">
+                    Only <span th:text="${product.stock}"></span> left
+                </span>
+                <span th:if="${product.stock != null and product.stock == 0}"
+                      class="badge bg-danger" style="font-size:0.72rem;">Out of Stock</span>
+            </div>
+
+            <!-- Name -->
+            <h2 class="fw-bold mb-1 lh-sm" th:text="${product.name}">Product Name</h2>
+
+            <!-- Price -->
+            <p class="detail-price mb-3">
+                ₱<span th:text="${product.price != null}
+                    ? ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}
+                    : '0.00'">0.00</span>
+            </p>
+
+            <hr class="divider my-3" />
+
+            <!-- Description -->
+            <p class="text-muted lh-lg mb-4"
+               th:if="${product.description != null and !#strings.isEmpty(product.description)}"
+               th:text="${product.description}">
+                Product description.
+            </p>
+
+            <!-- Specifications -->
+            <h6 class="fw-bold text-uppercase small text-muted mb-3" style="letter-spacing:0.6px;">
+                Specifications
+            </h6>
+            <dl class="detail-meta row mb-4">
+                <dt class="col-sm-4">Material</dt>
+                <dd class="col-sm-8"
+                    th:text="${product.material != null} ? ${product.material} : '—'">—</dd>
+
+                <dt class="col-sm-4">Dimensions</dt>
+                <dd class="col-sm-8"
+                    th:text="${product.dimensions != null} ? ${product.dimensions} : '—'">—</dd>
+
+                <dt class="col-sm-4">Category</dt>
+                <dd class="col-sm-8"
+                    th:text="${product.category != null} ? ${#strings.capitalize(product.category) + ' Door'} : '—'">—</dd>
+
+                <dt class="col-sm-4">Stock</dt>
+                <dd class="col-sm-8"
+                    th:text="${product.stock != null} ? ${product.stock + ' units available'} : '—'">—</dd>
+            </dl>
+
+            <hr class="divider my-3" />
+
+            <!-- Action buttons -->
+            <div class="d-flex gap-2 flex-wrap">
+                <a th:href="@{/products(category=${product.category})}"
+                   class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-grid me-1"></i> More in this Category
+                </a>
+                <a th:href="@{/products}" class="btn btn-outline-dark btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> All Products
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

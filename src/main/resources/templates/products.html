@@ -76,7 +76,7 @@
             <!-- Heading & sort row -->
             <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                 <h4 class="mb-0 section-title" style="border: none; padding: 0;">
-                    <span th:text="${category != null} ? ${category + ' Doors'} : 'All Products'">All Products</span>
+                    <span th:text="${category != null} ? ${#strings.capitalize(category) + ' Doors'} : 'All Products'">All Products</span>
                 </h4>
                 <select class="form-select form-select-sm w-auto" disabled>
                     <option>Sort: Newest</option>
@@ -102,6 +102,12 @@
 
                         <div class="card-body d-flex flex-column gap-1">
 
+                            <!-- Category Badge -->
+                            <span th:if="${product.category != null}"
+                                  th:text="${product.category}"
+                                  th:classappend="${'category-badge-' + product.category}"
+                                  class="category-badge text-capitalize align-self-start"></span>
+
                             <!-- Product Name -->
                             <h6 class="card-title fw-bold mb-0 product-name"
                                 th:text="${product.name}">Product Name</h6>
@@ -110,6 +116,13 @@
                             <p class="card-text text-muted small mb-0">
                                 <i class="bi bi-layers me-1"></i>
                                 <span th:text="${product.material != null} ? ${product.material} : '—'">Material</span>
+                            </p>
+
+                            <!-- Dimensions -->
+                            <p class="card-text text-muted small mb-0"
+                               th:if="${product.dimensions != null}">
+                                <i class="bi bi-rulers me-1"></i>
+                                <span th:text="${product.dimensions}">Dimensions</span>
                             </p>
 
                             <!-- Price -->
@@ -140,6 +153,38 @@
                 <p class="small">Try adjusting your search or filter to find what you're looking for.</p>
                 <a th:href="@{/products}" class="btn btn-outline-dark btn-sm">Clear Filters</a>
             </div>
+
+            <!-- Pagination -->
+            <nav th:if="${totalPages > 1}" aria-label="Product pages" class="mt-4">
+                <ul class="pagination pagination-sm justify-content-center mb-0">
+
+                    <!-- Previous -->
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/products(category=${category}, search=${search}, page=${currentPage - 1})}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- Page numbers -->
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/products(category=${category}, search=${search}, page=${i})}"
+                           th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- Next -->
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/products(category=${category}, search=${search}, page=${currentPage + 1})}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
 
         </section>
     </div>

@@ -1,5 +1,6 @@
 package com.asiandoor.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,5 +17,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // e.g. ROLE_CUSTOMER, ROLE_ADMIN
+    @Column(unique = true, nullable = false)
+    private String name; // ROLE_SELLER (admin/seller), ROLE_BUYER (customer)
 }

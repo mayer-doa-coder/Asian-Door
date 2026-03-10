@@ -1,19 +1,34 @@
 package com.asiandoor.controller;
 
 import com.asiandoor.dto.RegisterRequest;
+import com.asiandoor.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
 
+    private final UserService userService;
+
+    // GET /login  — rendered by Spring Security's filter chain;
+    // this method supplies the view for the custom login page.
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
+
+    // POST /login  — processed entirely by Spring Security (DaoAuthenticationProvider).
+    // No controller method needed; Spring Security intercepts it before MVC.
+
+    // GET /logout  — processed entirely by Spring Security's logout filter.
+    // No controller method needed.
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -22,8 +37,24 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute RegisterRequest registerRequest, Model model) {
-        // Full registration logic will be implemented with the UserService
+    public String register(@Valid @ModelAttribute RegisterRequest registerRequest,
+                           BindingResult bindingResult,
+                           Model model) {
+        // Show field-level validation errors (blank fields, invalid email, short password)
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+            model.addAttribute("errorMessage", "Passwords do not match.");
+            return "register";
+        }
+        try {
+            userService.registerUser(registerRequest);
+        } catch (IllegalArgumentException e) {
+            // Duplicate email
+            model.addAttribute("errorMessage", e.getMessage());
+            return "register";
+        }
         return "redirect:/login?registered";
     }
 }

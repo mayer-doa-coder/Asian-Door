@@ -1,130 +1,198 @@
-<!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+﻿<!DOCTYPE html>
+<!--
+  home.html — delegates structure to layout.html.
+  Passes: page title, page-specific styles, and <main> content.
+-->
+<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
 <head>
-    <title>Home</title>
+    <title>Asian Door - Premium Doors</title>
+    <style>
+        .hero-section {
+            min-height: 100vh;
+            background-image: url('/images/hero_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 100%);
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .btn-gold {
+            background: linear-gradient(135deg, #c9a84c, #f0c040);
+            color: #1a1a1a; border: none; font-weight: 600;
+            letter-spacing: 0.05em; padding: 0.75rem 2rem;
+            border-radius: 4px; transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #b8973e, #d4a832);
+            color: #1a1a1a; transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201,168,76,0.4);
+        }
+        .btn-outline-gold {
+            border: 2px solid #c9a84c; color: #f0c040;
+            background: transparent; font-weight: 600;
+            letter-spacing: 0.05em; padding: 0.75rem 2rem;
+            border-radius: 4px; transition: all 0.3s ease;
+        }
+        .btn-outline-gold:hover {
+            background: rgba(201,168,76,0.15);
+            border-color: #f0c040; color: #f0c040;
+            transform: translateY(-2px);
+        }
+        .category-card {
+            border: none; border-radius: 12px; overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        .category-icon { font-size: 3rem; color: #c9a84c; }
+        .features-strip { background: #1a1a1a; color: #fff; }
+        .feature-item i { font-size: 2rem; color: #c9a84c; }
+        .cta-section { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); }
+    </style>
 </head>
 <body>
-<div layout:fragment="content">
-
-    <!-- ===== HERO ===== -->
-    <section class="rounded-4 p-5 mb-5 text-white text-center"
-             style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);">
-        <h1 class="display-4 fw-bold mb-3">
-            <i class="bi bi-door-open-fill me-2"></i> Find Your Perfect Door
-        </h1>
-        <p class="lead mb-4">
-            Browse our wide selection of wooden, steel, glass, security, interior, and exterior doors —
-            delivered straight to your home.
-        </p>
-        <a th:href="@{/products}" class="btn btn-danger btn-lg me-2">
-            <i class="bi bi-grid-fill me-1"></i> Shop Now
-        </a>
-        <a th:href="@{/register}" class="btn btn-outline-light btn-lg">
-            <i class="bi bi-person-plus me-1"></i> Create Account
-        </a>
-    </section>
-
-    <!-- ===== CATEGORIES ===== -->
-    <h2 class="section-title">Shop by Category</h2>
-    <div class="row row-cols-2 row-cols-md-3 g-4 mb-5">
-
-        <div class="col">
-            <a th:href="@{/products(category=wooden)}" class="text-decoration-none">
-                <div class="card h-100 text-center product-card border-0 shadow-sm">
-                    <div class="card-body py-4">
-                        <i class="bi bi-tree-fill display-4 text-success mb-3"></i>
-                        <h5 class="card-title fw-semibold">Wooden Doors</h5>
-                        <p class="card-text text-muted small">Classic warmth and natural beauty for any room.</p>
-                    </div>
+<main>
+<section class="hero-section">
+    <div class="container hero-content text-white">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-3 fw-bold mb-3"
+                    style="text-shadow:2px 2px 8px rgba(0,0,0,0.6);">
+                    Find Your Perfect Door
+                </h1>
+                <p class="lead mb-4"
+                   style="font-size:1.25rem;color:rgba(255,255,255,0.88);text-shadow:1px 1px 4px rgba(0,0,0,0.5);">
+                    Premium quality doors crafted for every style &mdash; wooden, steel, glass, and more.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a th:href="@{/products}" class="btn btn-gold btn-lg">
+                        <i class="bi bi-grid me-2"></i>Browse Doors
+                    </a>
+                    <a th:href="@{/register}" class="btn btn-outline-gold btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Get Started
+                    </a>
                 </div>
-            </a>
-        </div>
-
-        <div class="col">
-            <a th:href="@{/products(category=steel)}" class="text-decoration-none">
-                <div class="card h-100 text-center product-card border-0 shadow-sm">
-                    <div class="card-body py-4">
-                        <i class="bi bi-shield-fill display-4 text-secondary mb-3"></i>
-                        <h5 class="card-title fw-semibold">Steel Doors</h5>
-                        <p class="card-text text-muted small">Durable strength and modern industrial look.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col">
-            <a th:href="@{/products(category=glass)}" class="text-decoration-none">
-                <div class="card h-100 text-center product-card border-0 shadow-sm">
-                    <div class="card-body py-4">
-                        <i class="bi bi-window-fullscreen display-4 text-info mb-3"></i>
-                        <h5 class="card-title fw-semibold">Glass Doors</h5>
-                        <p class="card-text text-muted small">Elegant transparency that opens up your space.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col">
-            <a th:href="@{/products(category=security)}" class="text-decoration-none">
-                <div class="card h-100 text-center product-card border-0 shadow-sm">
-                    <div class="card-body py-4">
-                        <i class="bi bi-lock-fill display-4 text-danger mb-3"></i>
-                        <h5 class="card-title fw-semibold">Security Doors</h5>
-                        <p class="card-text text-muted small">Maximum protection for your home or business.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col">
-            <a th:href="@{/products(category=interior)}" class="text-decoration-none">
-                <div class="card h-100 text-center product-card border-0 shadow-sm">
-                    <div class="card-body py-4">
-                        <i class="bi bi-house-heart-fill display-4 text-warning mb-3"></i>
-                        <h5 class="card-title fw-semibold">Interior Doors</h5>
-                        <p class="card-text text-muted small">Style every room inside your home.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col">
-            <a th:href="@{/products(category=exterior)}" class="text-decoration-none">
-                <div class="card h-100 text-center product-card border-0 shadow-sm">
-                    <div class="card-body py-4">
-                        <i class="bi bi-house-door-fill display-4 text-primary mb-3"></i>
-                        <h5 class="card-title fw-semibold">Exterior Doors</h5>
-                        <p class="card-text text-muted small">Make a bold first impression from the outside.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-    </div>
-
-    <!-- ===== WHY ASIAN DOOR ===== -->
-    <h2 class="section-title">Why Asian Door?</h2>
-    <div class="row g-4 mb-4">
-        <div class="col-md-4 text-center">
-            <i class="bi bi-box-seam-fill display-5 text-danger mb-2"></i>
-            <h5 class="fw-semibold">Wide Selection</h5>
-            <p class="text-muted small">Hundreds of door styles, materials, and sizes available in one place.</p>
-        </div>
-        <div class="col-md-4 text-center">
-            <i class="bi bi-truck display-5 text-danger mb-2"></i>
-            <h5 class="fw-semibold">Fast Delivery</h5>
-            <p class="text-muted small">Reliable shipping with real-time order tracking so you're always informed.</p>
-        </div>
-        <div class="col-md-4 text-center">
-            <i class="bi bi-headset display-5 text-danger mb-2"></i>
-            <h5 class="fw-semibold">Expert Support</h5>
-            <p class="text-muted small">Our team is ready to help you choose the right door for your needs.</p>
+            </div>
         </div>
     </div>
+</section>
 
-</div>
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Shop by Category</h2>
+            <p class="text-muted">Explore our wide selection of doors tailored to every need</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-2">
+                <a th:href="@{/products(category=wooden)}" class="text-decoration-none">
+                    <div class="category-card p-4 text-center">
+                        <i class="bi bi-tree category-icon mb-3 d-block"></i>
+                        <h6 class="fw-semibold" style="color:#1a1a1a;">Wooden</h6>
+                        <small class="text-muted">Classic &amp; Warm</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a th:href="@{/products(category=steel)}" class="text-decoration-none">
+                    <div class="category-card p-4 text-center">
+                        <i class="bi bi-shield-fill-check category-icon mb-3 d-block"></i>
+                        <h6 class="fw-semibold" style="color:#1a1a1a;">Steel</h6>
+                        <small class="text-muted">Strong &amp; Durable</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a th:href="@{/products(category=glass)}" class="text-decoration-none">
+                    <div class="category-card p-4 text-center">
+                        <i class="bi bi-sun category-icon mb-3 d-block"></i>
+                        <h6 class="fw-semibold" style="color:#1a1a1a;">Glass</h6>
+                        <small class="text-muted">Modern &amp; Light</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a th:href="@{/products(category=security)}" class="text-decoration-none">
+                    <div class="category-card p-4 text-center">
+                        <i class="bi bi-lock-fill category-icon mb-3 d-block"></i>
+                        <h6 class="fw-semibold" style="color:#1a1a1a;">Security</h6>
+                        <small class="text-muted">Safe &amp; Secure</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a th:href="@{/products(category=interior)}" class="text-decoration-none">
+                    <div class="category-card p-4 text-center">
+                        <i class="bi bi-house-door category-icon mb-3 d-block"></i>
+                        <h6 class="fw-semibold" style="color:#1a1a1a;">Interior</h6>
+                        <small class="text-muted">Elegant &amp; Stylish</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a th:href="@{/products(category=exterior)}" class="text-decoration-none">
+                    <div class="category-card p-4 text-center">
+                        <i class="bi bi-door-open category-icon mb-3 d-block"></i>
+                        <h6 class="fw-semibold" style="color:#1a1a1a;">Exterior</h6>
+                        <small class="text-muted">Grand &amp; Bold</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-strip py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3 feature-item">
+                <i class="bi bi-truck mb-3 d-block"></i>
+                <h6 class="fw-semibold">Free Delivery</h6>
+                <small class="text-muted">On orders above $500</small>
+            </div>
+            <div class="col-6 col-md-3 feature-item">
+                <i class="bi bi-patch-check mb-3 d-block"></i>
+                <h6 class="fw-semibold">Quality Assured</h6>
+                <small class="text-muted">ISO certified products</small>
+            </div>
+            <div class="col-6 col-md-3 feature-item">
+                <i class="bi bi-tools mb-3 d-block"></i>
+                <h6 class="fw-semibold">Installation Support</h6>
+                <small class="text-muted">Pro team available</small>
+            </div>
+            <div class="col-6 col-md-3 feature-item">
+                <i class="bi bi-headset mb-3 d-block"></i>
+                <h6 class="fw-semibold">24/7 Support</h6>
+                <small class="text-muted">Always here for you</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section py-5 text-white text-center">
+    <div class="container py-4">
+        <h2 class="fw-bold mb-3">Ready to Find Your Door?</h2>
+        <p class="lead text-muted mb-4">Join thousands of happy customers. Sign up today for exclusive deals.</p>
+        <a th:href="@{/register}" class="btn btn-gold btn-lg me-3">
+            <i class="bi bi-person-plus me-2"></i>Create Account
+        </a>
+        <a th:href="@{/products}" class="btn btn-outline-light btn-lg">
+            <i class="bi bi-grid me-2"></i>Browse Products
+        </a>
+    </div>
+</section>
+
+</main>
 </body>
 </html>

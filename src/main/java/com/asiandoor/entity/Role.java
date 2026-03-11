@@ -18,5 +18,5 @@ public class Role {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String name; // ROLE_SELLER (admin/seller), ROLE_BUYER (customer)
+    private String name; // ROLE_ADMIN (admin), ROLE_CUSTOMER (customer)
 }

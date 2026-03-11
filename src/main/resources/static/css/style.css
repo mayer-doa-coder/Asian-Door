@@ -4,9 +4,12 @@
 
 /* Root variables */
 :root {
-    --ad-primary: #1a1a2e;
-    --ad-accent:  #e63946;
-    --ad-light:   #f8f9fa;
+    --ad-primary:        #1a1a2e;
+    --ad-accent:         #e63946;
+    --ad-light:          #f8f9fa;
+    --skeleton-base:     #e2e5e8;
+    --skeleton-shine:    #f0f2f4;
+    --skeleton-radius:   0.45rem;
 }
 
 /* General */
@@ -97,60 +100,58 @@ body {
     color: #fff;
 }
 
-/* Product card */
+/* ── Product Cards ──────────────────────────────────────────── */
 .product-card {
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    background: #fff;
 }
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14) !important;
+    transform: translateY(-6px);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.13) !important;
 }
 
-/* Image wrapper — fixed-height crop */
+/* Image wrapper — fixed-height crop with overlay support */
 .product-card-img-wrapper {
     overflow: hidden;
     background: #e9ecef;
+    position: relative;
 }
 .product-card-img {
     object-fit: cover;
-    height: 220px;
+    height: 245px;
     width: 100%;
-    transition: transform 0.35s ease;
+    transition: transform 0.4s ease;
     display: block;
 }
 .product-card:hover .product-card-img {
-    transform: scale(1.04);
-}
-
-/* Product name */
-.product-name {
-    font-size: 0.95rem;
-    color: #1a1a2e;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Price */
-.product-price {
-    font-size: 1.05rem;
-    color: var(--ad-accent);
+    transform: scale(1.06);
 }
 
 /* Category badge */
 .category-badge {
     display: inline-block;
     font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    padding: 0.2em 0.6em;
-    border-radius: 0.3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 0.22em 0.65em;
+    border-radius: 0.35rem;
     text-transform: capitalize;
     background-color: #e9ecef;
     color: #495057;
 }
+
+/* Category badge — floating over image (top-left) */
+.category-badge-overlay {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.65rem;
+    z-index: 2;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+}
+
+/* Category colour variants */
 .category-badge-wooden   { background-color: #f0e6d3; color: #7a4a1e; }
 .category-badge-steel    { background-color: #dce8f5; color: #1a4a7a; }
 .category-badge-glass    { background-color: #d9f0f5; color: #0e6778; }
@@ -158,10 +159,122 @@ body {
 .category-badge-interior { background-color: #e8f5e9; color: #2e6b34; }
 .category-badge-exterior { background-color: #ede8f5; color: #4a2e8b; }
 
+/* Stock badge — floating over image (top-right) */
+.product-card-stock-badge {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    z-index: 2;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 0.28em 0.6em;
+    border-radius: 0.35rem;
+}
+
+/* Product name — ellipsis on overflow */
+.product-name {
+    font-size: 1rem;
+    color: #1a1a2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+/* Price */
+.product-price {
+    font-size: 1.2rem;
+    color: var(--ad-accent);
+    letter-spacing: -0.3px;
+}
+
+/* Card divider */
+.product-card-divider {
+    border-color: #efefef;
+    margin: 0.65rem 0;
+}
+
+/* View Details button inside card */
+.product-card-btn {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 0.38rem 0.9rem;
+    border-radius: 0.45rem;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.product-card-btn:hover {
+    background-color: var(--ad-accent);
+    border-color: var(--ad-accent);
+    transform: scale(1.04);
+}
+
 /* Page section headings */
 .section-title {
     font-weight: 700;
     border-left: 4px solid var(--ad-accent);
     padding-left: 0.75rem;
     margin-bottom: 1.5rem;
+}
+
+/* ── Skeleton / Shimmer placeholder cards ────────────────────────────── */
+
+/* Shimmer keyframe */
+@keyframes skeleton-shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+}
+
+/* Base shimmer element */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--skeleton-base)   25%,
+        var(--skeleton-shine)  50%,
+        var(--skeleton-base)   75%
+    );
+    background-size: 800px 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    border-radius: var(--skeleton-radius);
+}
+
+/* Skeleton card container */
+.skeleton-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Skeleton image placeholder — same height as real cards */
+.skeleton-img {
+    width: 100%;
+    height: 245px;
+    border-radius: 0;
+}
+
+/* Skeleton text lines */
+.skeleton-line {
+    height: 0.72rem;
+    border-radius: var(--skeleton-radius);
+}
+.skeleton-line.w-30 { width: 30%; }
+.skeleton-line.w-35 { width: 35%; }
+.skeleton-line.w-40 { width: 40%; }
+.skeleton-line.w-45 { width: 45%; }
+.skeleton-line.w-50 { width: 50%; }
+.skeleton-line.w-55 { width: 55%; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-65 { width: 65%; }
+.skeleton-line.w-70 { width: 70%; }
+.skeleton-line.w-75 { width: 75%; }
+.skeleton-line.w-80 { width: 80%; }
+
+/* Skeleton button placeholder */
+.skeleton-btn {
+    width: 90px;
+    height: 1.9rem;
+    border-radius: 0.45rem;
 }

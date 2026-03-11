@@ -48,9 +48,9 @@ public class SecurityConfig {
                 .requestMatchers("/", "/products", "/products/**",
                                  "/login", "/register", "/error", "/access-denied",
                                  "/css/**", "/js/**", "/images/**").permitAll()
-                // ── Seller (admin) only — first line of defence ─────────────
-                // Role stored in DB as "ROLE_SELLER"; hasRole() strips the prefix.
-                .requestMatchers("/admin/**").hasRole("SELLER")
+                // ── Admin only — first line of defence ──────────────────────
+                // Role stored in DB as "ROLE_ADMIN"; hasRole() strips the prefix.
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 // ── Everything else requires login ──────────────────────────
                 .anyRequest().authenticated()
             )

@@ -117,8 +117,8 @@
                         </ul>
                     </li>
 
-                    <!-- Seller / admin only -->
-                    <li class="nav-item" sec:authorize="hasRole('SELLER')">
+                    <!-- Admin only -->
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="btn btn-sm btn-outline-danger nav-admin-btn ms-1"
                            th:href="@{/admin}">
                             <i class="bi bi-shield-lock me-1"></i>Admin

@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * Spring Security calls this during login using the submitted email as the username.
-     * Maps the stored Role name (e.g. ROLE_SELLER, ROLE_BUYER) to a GrantedAuthority.
+     * Maps the stored Role name (e.g. ROLE_ADMIN, ROLE_CUSTOMER) to a GrantedAuthority.
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

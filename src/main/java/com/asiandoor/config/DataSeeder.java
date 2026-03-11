@@ -30,7 +30,7 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         seedRoles();
-        seedSellerAccount();
+        seedAdminAccount();
         seedProducts();
     }
 
@@ -39,8 +39,8 @@ public class DataSeeder implements CommandLineRunner {
     private void seedRoles() {
         if (roleRepository.count() > 0) return;
         roleRepository.saveAll(List.of(
-            role("ROLE_SELLER"),
-            role("ROLE_BUYER")
+            role("ROLE_ADMIN"),
+            role("ROLE_CUSTOMER")
         ));
     }
 
@@ -50,18 +50,18 @@ public class DataSeeder implements CommandLineRunner {
         return r;
     }
 
-    // ── Default seller / admin account ───────────────────────────────────────
+    // ── Default admin account ────────────────────────────────────────────────
 
-    private void seedSellerAccount() {
+    private void seedAdminAccount() {
         if (userRepository.findByEmail("admin@asiandoor.com").isPresent()) return;
-        Role sellerRole = roleRepository.findByName("ROLE_SELLER")
-                .orElseThrow(() -> new IllegalStateException("ROLE_SELLER not found"));
-        User seller = new User();
-        seller.setName("Asian Door Admin");
-        seller.setEmail("admin@asiandoor.com");
-        seller.setPassword(passwordEncoder.encode("admin1234"));
-        seller.setRole(sellerRole);
-        userRepository.save(seller);
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                .orElseThrow(() -> new IllegalStateException("ROLE_ADMIN not found"));
+        User admin = new User();
+        admin.setName("Asian Door Admin");
+        admin.setEmail("admin@asiandoor.com");
+        admin.setPassword(passwordEncoder.encode("admin1234"));
+        admin.setRole(adminRole);
+        userRepository.save(admin);
     }
 
     // ── Demo products ─────────────────────────────────────────────────────────

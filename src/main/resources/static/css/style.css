@@ -139,6 +139,25 @@ body {
     color: var(--ad-accent);
 }
 
+/* Category badge */
+.category-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    padding: 0.2em 0.6em;
+    border-radius: 0.3rem;
+    text-transform: capitalize;
+    background-color: #e9ecef;
+    color: #495057;
+}
+.category-badge-wooden   { background-color: #f0e6d3; color: #7a4a1e; }
+.category-badge-steel    { background-color: #dce8f5; color: #1a4a7a; }
+.category-badge-glass    { background-color: #d9f0f5; color: #0e6778; }
+.category-badge-security { background-color: #fce8e8; color: #8b1a1a; }
+.category-badge-interior { background-color: #e8f5e9; color: #2e6b34; }
+.category-badge-exterior { background-color: #ede8f5; color: #4a2e8b; }
+
 /* Page section headings */
 .section-title {
     font-weight: 700;

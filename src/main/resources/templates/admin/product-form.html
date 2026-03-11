@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+  admin/product-form.html — Shared create / edit form for products.
+  editMode=false → create  |  editMode=true → edit (POST /admin/products/{id})
+-->
+<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
+<head>
+    <title th:text="${editMode} ? 'Edit Product - Admin | Asian Door' : 'Add Product - Admin | Asian Door'">
+        Product Form - Admin | Asian Door
+    </title>
+    <style>
+        .form-label { font-weight: 600; font-size: 0.85rem; }
+        .field-hint  { font-size: 0.78rem; color: #6c757d; }
+        .required-star::after { content: ' *'; color: var(--ad-accent); }
+    </style>
+</head>
+<body>
+<main class="container py-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item">
+                <a th:href="@{/}" class="text-decoration-none text-secondary">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a th:href="@{/admin/products}" class="text-decoration-none text-secondary">Admin — Products</a>
+            </li>
+            <li class="breadcrumb-item active fw-semibold"
+                th:text="${editMode} ? 'Edit Product' : 'Add Product'">Form</li>
+        </ol>
+    </nav>
+
+    <!-- Page heading -->
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <i class="bi bi-shield-lock text-danger fs-5"></i>
+        <h4 class="mb-0 fw-bold"
+            th:text="${editMode} ? 'Edit Product' : 'Add New Product'">Product Form</h4>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <!-- Form: POST to /admin/products (create) or /admin/products/{id} (update) -->
+                    <form th:action="${editMode} ? @{/admin/products/{id}(id=${productDTO.id})} : @{/admin/products}"
+                          th:object="${productDTO}"
+                          method="post"
+                          novalidate>
+
+                        <!-- ── Row 1: Name ──────────────────────────────────── -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label required-star">Product Name</label>
+                            <input type="text" id="name" th:field="*{name}"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                                   placeholder="e.g. Pine Wood Entry Door" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
+                                 th:errors="*{name}"></div>
+                        </div>
+
+                        <!-- ── Row 2: Category + Material ──────────────────── -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6">
+                                <label for="category" class="form-label required-star">Category</label>
+                                <select id="category" th:field="*{category}"
+                                        class="form-select"
+                                        th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
+                                    <option value="">— Select category —</option>
+                                    <option value="wooden">Wooden Door</option>
+                                    <option value="steel">Steel Door</option>
+                                    <option value="glass">Glass Door</option>
+                                    <option value="security">Security Door</option>
+                                    <option value="interior">Interior Door</option>
+                                    <option value="exterior">Exterior Door</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}"
+                                     th:errors="*{category}"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="material" class="form-label required-star">Material</label>
+                                <input type="text" id="material" th:field="*{material}"
+                                       class="form-control"
+                                       th:classappend="${#fields.hasErrors('material')} ? 'is-invalid'"
+                                       placeholder="e.g. Mahogany Wood" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('material')}"
+                                     th:errors="*{material}"></div>
+                            </div>
+                        </div>
+
+                        <!-- ── Row 3: Price + Stock ────────────────────────── -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6">
+                                <label for="price" class="form-label required-star">Price (₱)</label>
+                                <input type="number" id="price" th:field="*{price}"
+                                       class="form-control"
+                                       th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'"
+                                       placeholder="0.00" step="0.01" min="0.01" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}"
+                                     th:errors="*{price}"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="stock" class="form-label required-star">Stock (units)</label>
+                                <input type="number" id="stock" th:field="*{stock}"
+                                       class="form-control"
+                                       th:classappend="${#fields.hasErrors('stock')} ? 'is-invalid'"
+                                       placeholder="0" min="0" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('stock')}"
+                                     th:errors="*{stock}"></div>
+                            </div>
+                        </div>
+
+                        <!-- ── Row 4: Dimensions ───────────────────────────── -->
+                        <div class="mb-3">
+                            <label for="dimensions" class="form-label">Dimensions</label>
+                            <input type="text" id="dimensions" th:field="*{dimensions}"
+                                   class="form-control"
+                                   placeholder="e.g. 210 × 90 cm" />
+                            <span class="field-hint">Optional — standard door sizes are 210 × 80–90 cm.</span>
+                        </div>
+
+                        <!-- ── Row 5: Image URL ────────────────────────────── -->
+                        <div class="mb-3">
+                            <label for="imageUrl" class="form-label">Image URL</label>
+                            <input type="text" id="imageUrl" th:field="*{imageUrl}"
+                                   class="form-control"
+                                   placeholder="e.g. /images/products/my-door.jpg" />
+                            <span class="field-hint">Relative path under <code>/images/products/</code> or a full URL.</span>
+                        </div>
+
+                        <!-- ── Row 6: Description ─────────────────────────── -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" th:field="*{description}"
+                                      class="form-control" rows="4"
+                                      placeholder="Describe the product's features, finish, and use cases…"></textarea>
+                        </div>
+
+                        <!-- ── Action buttons ─────────────────────────────── -->
+                        <div class="d-flex gap-2 justify-content-end flex-wrap">
+                            <a th:href="@{/admin/products}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-dark">
+                                <i class="bi bi-check-lg me-1"></i>
+                                <span th:text="${editMode} ? 'Save Changes' : 'Create Product'">Submit</span>
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

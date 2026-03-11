@@ -60,4 +60,11 @@ public class AuthController {
         }
         return "redirect:/login?registered";
     }
+
+    // Shown when Spring Security denies access (HTTP 403).
+    // Mapped as a forward target by SecurityConfig's AccessDeniedHandler.
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "access-denied";
+    }
 }

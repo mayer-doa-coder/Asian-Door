@@ -3,11 +3,13 @@ package com.asiandoor.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 
 import com.asiandoor.service.CustomUserDetailsService;
 
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity          // activates @PreAuthorize / @PostAuthorize on beans
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -34,16 +37,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // Custom 403 handler: sends the user to /access-denied instead of a blank error
+        AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
+        accessDeniedHandler.setErrorPage("/access-denied");
+
         http
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
-                // Public pages
+                // ── Public pages ────────────────────────────────────────────
                 .requestMatchers("/", "/products", "/products/**",
-                                 "/login", "/register", "/error",
+                                 "/login", "/register", "/error", "/access-denied",
                                  "/css/**", "/js/**", "/images/**").permitAll()
-                // Seller (admin) only
+                // ── Seller (admin) only — first line of defence ─────────────
+                // Role stored in DB as "ROLE_SELLER"; hasRole() strips the prefix.
                 .requestMatchers("/admin/**").hasRole("SELLER")
-                // Everything else requires login
+                // ── Everything else requires login ──────────────────────────
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -59,6 +67,9 @@ public class SecurityConfig {
             .rememberMe(rememberMe -> rememberMe
                 .key("asiandoor-remember-me")
                 .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
+            )
+            .exceptionHandling(ex -> ex
+                .accessDeniedHandler(accessDeniedHandler)
             );
 
         return http.build();

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+  fragments/product-card.html
+  ─────────────────────────────────────────────────────────────────────────────
+  Reusable product card fragment.
+
+  Usage (pass a ProductDTO as "product"):
+    <div th:replace="~{fragments/product-card :: card(product=${p})}"></div>
+
+  The fragment renders a fully styled Bootstrap card with:
+    • Fixed-height image with zoom-on-hover
+    • Category badge (colour-coded, top-left overlay on image)
+    • Stock badge (top-right overlay — Out of Stock / Low Stock)
+    • Product Name
+    • Material row
+    • Dimensions row (hidden when null/empty)
+    • Price + View Details row (bottom, flex)
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="card(product)" class="card h-100 product-card border-0 shadow-sm">
+
+    <!-- ── Image area ──────────────────────────────────────────────────── -->
+    <div class="product-card-img-wrapper position-relative">
+
+        <img th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}
+                         ? ${product.imageUrl}
+                         : '/images/country-house-door-pine-wood.jpg'"
+             th:alt="${product.name}"
+             class="card-img-top product-card-img" />
+
+        <!-- Category badge — top-left overlay -->
+        <span th:if="${product.category != null}"
+              th:text="${product.category}"
+              th:classappend="${'category-badge-' + product.category}"
+              class="category-badge category-badge-overlay text-capitalize"></span>
+
+        <!-- Stock badge — top-right overlay (only shown when low/out) -->
+        <span th:if="${product.stock != null and product.stock == 0}"
+              class="product-card-stock-badge badge bg-danger">
+            <i class="bi bi-x-circle-fill me-1"></i>Out of Stock
+        </span>
+        <span th:if="${product.stock != null and product.stock > 0 and product.stock <= 5}"
+              class="product-card-stock-badge badge bg-warning text-dark">
+            Only <span th:text="${product.stock}">0</span> left
+        </span>
+
+    </div>
+
+    <!-- ── Card body ───────────────────────────────────────────────────── -->
+    <div class="card-body d-flex flex-column p-3">
+
+        <!-- Product Name -->
+        <h6 class="card-title fw-bold mb-1 product-name"
+            th:text="${product.name}">Product Name</h6>
+
+        <!-- Material -->
+        <p class="card-text text-muted small mb-1">
+            <i class="bi bi-layers me-1"></i>
+            <span th:text="${product.material != null} ? ${product.material} : '—'">Material</span>
+        </p>
+
+        <!-- Dimensions (optional row) -->
+        <p class="card-text text-muted small mb-0"
+           th:if="${product.dimensions != null and !#strings.isEmpty(product.dimensions)}">
+            <i class="bi bi-rulers me-1"></i>
+            <span th:text="${product.dimensions}">Dimensions</span>
+        </p>
+
+        <!-- Price + View Details — pinned to card bottom -->
+        <div class="mt-auto">
+            <hr class="product-card-divider" />
+            <div class="d-flex align-items-center justify-content-between gap-2">
+
+                <div class="product-price fw-bold">
+                    ₱<span th:text="${product.price != null}
+                        ? ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}
+                        : '0.00'">0.00</span>
+                </div>
+
+                <a th:href="@{/products/{id}(id=${product.id})}"
+                   class="btn btn-dark btn-sm product-card-btn">
+                    <i class="bi bi-arrow-right me-1"></i>View Details
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

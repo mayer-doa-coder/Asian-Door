@@ -31,8 +31,8 @@ public class UserService {
             throw new IllegalArgumentException("Email is already registered.");
         }
 
-        Role buyerRole = roleRepository.findByName("ROLE_BUYER")
-                .orElseThrow(() -> new IllegalStateException("ROLE_BUYER not found — ensure roles are seeded."));
+        Role buyerRole = roleRepository.findByName("ROLE_CUSTOMER")
+                .orElseThrow(() -> new IllegalStateException("ROLE_CUSTOMER not found — ensure roles are seeded."));
 
         User user = new User();
         user.setName(request.getFullName());

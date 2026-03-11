@@ -1,5 +1,8 @@
 package com.asiandoor.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,45 +21,83 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Admin product management controller — /admin/**.
+ * Admin product management controller â€” /admin/**.
  *
  * Security: two layers of protection.
- *   1. URL-level  — SecurityConfig: .requestMatchers("/admin/**").hasRole("SELLER")
- *   2. Method-level — @PreAuthorize("hasRole('SELLER')") on this class (defence in depth)
+ *   1. URL-level  â€” SecurityConfig: .requestMatchers("/admin/**").hasRole("ADMIN")
+ *   2. Method-level â€” @PreAuthorize("hasRole('ADMIN')") on this class (defence in depth)
  *
  * Routes:
- *   GET  /admin                      → redirect to /admin/products
- *   GET  /admin/products             → product list
- *   GET  /admin/products/new         → create form
- *   POST /admin/products             → submit create
- *   GET  /admin/products/{id}/edit   → edit form
- *   POST /admin/products/{id}        → submit update
- *   POST /admin/products/{id}/delete → delete
+ *   GET  /admin                      â†’ admin dashboard
+ *   GET  /admin/products             â†’ product list
+ *   GET  /admin/products/new         â†’ create form
+ *   POST /admin/products             â†’ submit create
+ *   GET  /admin/products/{id}/edit   â†’ edit form
+ *   POST /admin/products/{id}        â†’ submit update
+ *   POST /admin/products/{id}/delete â†’ delete
  */
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('SELLER')")   // method-level guard — second line of defence
+@PreAuthorize("hasRole('ADMIN')")    // method-level guard â€” second line of defence
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-    // ── Admin root ────────────────────────────────────────────────────────────
+    // â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @GetMapping
-    public String adminRoot() {
-        return "redirect:/admin/products";
+    public String adminDashboard(Model model) {
+        List<ProductDTO> all = productService.getAllProductDTOs();
+
+        long lowStock    = all.stream()
+                .filter(p -> p.getStock() != null && p.getStock() > 0 && p.getStock() <= 5)
+                .count();
+        long outOfStock  = all.stream()
+                .filter(p -> p.getStock() != null && p.getStock() == 0)
+                .count();
+        long categories  = all.stream()
+                .filter(p -> p.getCategory() != null)
+                .map(ProductDTO::getCategory)
+                .distinct()
+                .count();
+
+        // Most-recent 5 additions shown in the Recent Products panel (list is ASC id, take last 5)
+        List<ProductDTO> recent = all.stream()
+                .skip(Math.max(0, all.size() - 5))
+                .collect(Collectors.toList());
+        java.util.Collections.reverse(recent);
+
+        model.addAttribute("totalProducts",  all.size());
+        model.addAttribute("lowStockCount",  lowStock);
+        model.addAttribute("outOfStockCount",outOfStock);
+        model.addAttribute("categoryCount",  categories);
+        model.addAttribute("recentProducts", recent);
+
+        return "admin/dashboard";
     }
 
-    // ── List ─────────────────────────────────────────────────────────────────
+    // â”€â”€ List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @GetMapping("/products")
     public String listProducts(Model model) {
-        model.addAttribute("products", productService.getAllProductDTOs());
+        List<ProductDTO> all = productService.getAllProductDTOs();
+
+        long lowStock   = all.stream()
+                .filter(p -> p.getStock() != null && p.getStock() > 0 && p.getStock() <= 5)
+                .count();
+        long outOfStock = all.stream()
+                .filter(p -> p.getStock() != null && p.getStock() == 0)
+                .count();
+
+        model.addAttribute("products",       all);
+        model.addAttribute("totalProducts",  all.size());
+        model.addAttribute("lowStockCount",  lowStock);
+        model.addAttribute("outOfStockCount",outOfStock);
         return "admin/products";
     }
 
-    // ── Create ────────────────────────────────────────────────────────────────
+    // â”€â”€ Create â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @GetMapping("/products/new")
     public String newProductForm(Model model) {
@@ -79,7 +120,7 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
-    // ── Edit / Update ─────────────────────────────────────────────────────────
+    // â”€â”€ Edit / Update â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @GetMapping("/products/{id}/edit")
     public String editProductForm(@PathVariable Long id, Model model) {
@@ -108,7 +149,7 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
-    // ── Delete ────────────────────────────────────────────────────────────────
+    // â”€â”€ Delete â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     @PostMapping("/products/{id}/delete")
     public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {

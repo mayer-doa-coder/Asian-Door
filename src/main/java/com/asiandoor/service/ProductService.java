@@ -36,6 +36,13 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public List<ProductDTO> getAllProductDTOs() {
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+                                .stream()
+                                .map(this::toDTO)
+                                .collect(Collectors.toList());
+    }
+
     public Optional<ProductDTO> getProductById(Long id) {
         return productRepository.findById(id).map(this::toDTO);
     }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+  access-denied.html — Shown when a logged-in user lacks the required role (HTTP 403).
+-->
+<html th:replace="~{layout :: layout(~{::title}, ~{}, ~{::main})}">
+<head>
+    <title>Access Denied - Asian Door</title>
+</head>
+<body>
+<main class="container py-5 text-center">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <i class="bi bi-shield-exclamation text-danger" style="font-size: 4rem;"></i>
+
+            <h2 class="fw-bold mt-3 mb-1">Access Denied</h2>
+            <p class="text-muted mb-4">
+                You don't have permission to view this page.
+                This area is restricted to administrators only.
+            </p>
+
+            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a th:href="@{/}" class="btn btn-dark btn-sm">
+                    <i class="bi bi-house me-1"></i>Go to Home
+                </a>
+                <a th:href="@{/products}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-grid me-1"></i>Browse Products
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

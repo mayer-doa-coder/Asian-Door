@@ -42,6 +42,9 @@ public class SecurityConfig {
         accessDeniedHandler.setErrorPage("/access-denied");
 
         http
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/cart/**", "/orders/**")
+            )
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
                 // ── Public pages ────────────────────────────────────────────

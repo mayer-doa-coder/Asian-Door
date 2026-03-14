@@ -47,7 +47,7 @@ public class SecurityConfig {
                 // ── Public pages ────────────────────────────────────────────
                 .requestMatchers("/", "/products", "/products/**",
                                  "/login", "/register", "/error", "/access-denied",
-                                 "/css/**", "/js/**", "/images/**").permitAll()
+                                 "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 // ── Admin only — first line of defence ──────────────────────
                 // Role stored in DB as "ROLE_ADMIN"; hasRole() strips the prefix.
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -56,7 +56,12 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true)
+                .successHandler((request, response, authentication) -> {
+                    boolean isAdmin = authentication.getAuthorities().stream()
+                            .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+                    String targetUrl = isAdmin ? "/admin" : "/";
+                    response.sendRedirect(request.getContextPath() + targetUrl);
+                })
                 .failureUrl("/login?error")
                 .permitAll()
             )

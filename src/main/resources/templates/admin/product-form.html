@@ -74,7 +74,10 @@
                     <form th:action="${editMode} ? @{/admin/products/{id}(id=${productDTO.id})} : @{/admin/products}"
                           th:object="${productDTO}"
                           method="post"
+                                                    enctype="multipart/form-data"
                           novalidate>
+
+                                                <input type="hidden" th:field="*{imageUrl}" />
 
                         <!-- ── Row 1: Name ──────────────────────────────────── -->
                         <div class="mb-3">
@@ -147,13 +150,21 @@
                             <span class="field-hint">Optional — standard door sizes are 210 × 80–90 cm.</span>
                         </div>
 
-                        <!-- ── Row 5: Image URL ────────────────────────────── -->
+                        <!-- ── Row 5: Image Upload ─────────────────────────── -->
                         <div class="mb-3">
-                            <label for="imageUrl" class="form-label">Image URL</label>
-                            <input type="text" id="imageUrl" th:field="*{imageUrl}"
-                                   class="form-control"
-                                   placeholder="e.g. /images/products/my-door.jpg" />
-                            <span class="field-hint">Relative path under <code>/images/products/</code> or a full URL.</span>
+                            <label for="imageFile" class="form-label">Product Photo</label>
+                            <input type="file" id="imageFile" name="imageFile"
+                                   class="form-control" accept="image/*" />
+                            <span class="field-hint">Upload JPG, JPEG, PNG, WEBP, or GIF. Leave empty to keep current photo.</span>
+                            <div class="text-danger small mt-1" th:if="${uploadError}" th:text="${uploadError}"></div>
+                        </div>
+
+                        <div class="mb-3" th:if="${productDTO.imageUrl != null and !#strings.isEmpty(productDTO.imageUrl)}">
+                            <label class="form-label">Current Photo</label>
+                            <div>
+                                <img th:src="${productDTO.imageUrl}" alt="Current product image"
+                                     class="img-thumbnail" style="max-width: 220px;" />
+                            </div>
                         </div>
 
                         <!-- ── Row 6: Description ─────────────────────────── -->

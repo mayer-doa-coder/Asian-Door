@@ -29,7 +29,17 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "No account found for email: " + email));
 
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
+        String roleName = user.getRole() != null ? user.getRole().getName() : null;
+        if (roleName == null || roleName.isBlank()) {
+            throw new UsernameNotFoundException("User has no role assigned: " + email);
+        }
+
+        String normalizedRole = roleName.trim().toUpperCase();
+        if (!normalizedRole.startsWith("ROLE_")) {
+            normalizedRole = "ROLE_" + normalizedRole;
+        }
+
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(normalizedRole);
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),

@@ -37,11 +37,12 @@ public class DataSeeder implements CommandLineRunner {
     // ── Roles ────────────────────────────────────────────────────────────────
 
     private void seedRoles() {
-        if (roleRepository.count() > 0) return;
-        roleRepository.saveAll(List.of(
-            role("ROLE_ADMIN"),
-            role("ROLE_CUSTOMER")
-        ));
+        if (roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
+            roleRepository.save(role("ROLE_ADMIN"));
+        }
+        if (roleRepository.findByName("ROLE_CUSTOMER").isEmpty()) {
+            roleRepository.save(role("ROLE_CUSTOMER"));
+        }
     }
 
     private Role role(String name) {
@@ -53,15 +54,29 @@ public class DataSeeder implements CommandLineRunner {
     // ── Default admin account ────────────────────────────────────────────────
 
     private void seedAdminAccount() {
-        if (userRepository.findByEmail("admin@asiandoor.com").isPresent()) return;
         Role adminRole = roleRepository.findByName("ROLE_ADMIN")
                 .orElseThrow(() -> new IllegalStateException("ROLE_ADMIN not found"));
-        User admin = new User();
-        admin.setName("Asian Door Admin");
-        admin.setEmail("admin@asiandoor.com");
-        admin.setPassword(passwordEncoder.encode("admin1234"));
-        admin.setRole(adminRole);
-        userRepository.save(admin);
+
+        userRepository.findByEmail("admin@asiandoor.com")
+                .ifPresentOrElse(existingAdmin -> {
+                    String existingRoleName = existingAdmin.getRole() != null
+                            ? existingAdmin.getRole().getName()
+                            : null;
+                    boolean hasAdminRole = "ROLE_ADMIN".equalsIgnoreCase(existingRoleName)
+                            || "ADMIN".equalsIgnoreCase(existingRoleName);
+
+                    if (!hasAdminRole) {
+                        existingAdmin.setRole(adminRole);
+                        userRepository.save(existingAdmin);
+                    }
+                }, () -> {
+                    User admin = new User();
+                    admin.setName("Asian Door Admin");
+                    admin.setEmail("admin@asiandoor.com");
+                    admin.setPassword(passwordEncoder.encode("admin1234"));
+                    admin.setRole(adminRole);
+                    userRepository.save(admin);
+                });
     }
 
     // ── Demo products ─────────────────────────────────────────────────────────

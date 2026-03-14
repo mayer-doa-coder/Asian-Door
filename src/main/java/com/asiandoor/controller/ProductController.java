@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.asiandoor.dto.ProductDTO;
+import com.asiandoor.service.ProductImageStorageService;
 import com.asiandoor.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -43,6 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductImageStorageService productImageStorageService;
 
     // â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -108,6 +112,7 @@ public class ProductController {
 
     @PostMapping("/products")
     public String createProduct(@Valid @ModelAttribute ProductDTO productDTO,
+                                @RequestParam(name = "imageFile", required = false) MultipartFile imageFile,
                                 BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
@@ -115,6 +120,18 @@ public class ProductController {
             model.addAttribute("editMode", false);
             return "admin/product-form";
         }
+
+        try {
+            String storedImageUrl = productImageStorageService.store(imageFile);
+            if (storedImageUrl != null) {
+                productDTO.setImageUrl(storedImageUrl);
+            }
+        } catch (IllegalArgumentException ex) {
+            model.addAttribute("editMode", false);
+            model.addAttribute("uploadError", ex.getMessage());
+            return "admin/product-form";
+        }
+
         productService.createProduct(productDTO);
         redirectAttributes.addFlashAttribute("successMessage", "Product \"" + productDTO.getName() + "\" created successfully.");
         return "redirect:/admin/products";
@@ -136,6 +153,7 @@ public class ProductController {
     @PostMapping("/products/{id}")
     public String updateProduct(@PathVariable Long id,
                                 @Valid @ModelAttribute ProductDTO productDTO,
+                                @RequestParam(name = "imageFile", required = false) MultipartFile imageFile,
                                 BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
@@ -144,6 +162,19 @@ public class ProductController {
             model.addAttribute("editMode", true);
             return "admin/product-form";
         }
+
+        try {
+            String storedImageUrl = productImageStorageService.store(imageFile);
+            if (storedImageUrl != null) {
+                productDTO.setImageUrl(storedImageUrl);
+            }
+        } catch (IllegalArgumentException ex) {
+            productDTO.setId(id);
+            model.addAttribute("editMode", true);
+            model.addAttribute("uploadError", ex.getMessage());
+            return "admin/product-form";
+        }
+
         productService.updateProduct(id, productDTO);
         redirectAttributes.addFlashAttribute("successMessage", "Product \"" + productDTO.getName() + "\" updated successfully.");
         return "redirect:/admin/products";

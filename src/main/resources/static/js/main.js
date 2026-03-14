@@ -261,8 +261,82 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         checkoutBtn.addEventListener('click', function () {
-            checkoutBtn.disabled = true;
-            checkoutBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Processing...';
+            window.location.href = '/checkout';
+        });
+
+        loadCart();
+    }
+
+    // Checkout page logic.
+    var checkoutPage = document.querySelector('[data-checkout-page="true"]');
+    if (checkoutPage) {
+        var checkoutItemsList = document.getElementById('checkoutItemsList');
+        var checkoutItemCount = document.getElementById('checkoutItemCount');
+        var checkoutTotalPrice = document.getElementById('checkoutTotalPrice');
+        var checkoutEmptyState = document.getElementById('checkoutEmptyState');
+        var confirmOrderBtn = document.getElementById('confirmOrderBtn');
+        var checkoutAlertHost = document.getElementById('checkoutAlertHost');
+
+        function renderCheckout(data) {
+            var items = Array.isArray(data.items) ? data.items : [];
+            var totalAmount = Number(data.totalAmount || 0);
+            var itemQty = items.reduce(function (sum, item) {
+                return sum + Number(item.quantity || 0);
+            }, 0);
+
+            checkoutItemCount.textContent = String(itemQty);
+            checkoutTotalPrice.textContent = formatCurrency(totalAmount);
+
+            if (items.length === 0) {
+                confirmOrderBtn.disabled = true;
+                checkoutEmptyState.classList.remove('d-none');
+                checkoutItemsList.innerHTML = '<div class="list-group-item text-muted text-center py-4">Cart is empty.</div>';
+                return;
+            }
+
+            confirmOrderBtn.disabled = false;
+            checkoutEmptyState.classList.add('d-none');
+
+            checkoutItemsList.innerHTML = items.map(function (item) {
+                return [
+                    '<div class="list-group-item">',
+                    '<div class="d-flex justify-content-between align-items-start gap-3">',
+                    '<div>',
+                    '<p class="checkout-item-title mb-1">' + (item.productName || 'Product') + '</p>',
+                    '<p class="checkout-item-meta mb-0">Qty: ' + Number(item.quantity || 0) + ' x ' + formatCurrency(item.unitPrice) + '</p>',
+                    '</div>',
+                    '<div class="fw-bold text-danger">' + formatCurrency(item.lineTotal) + '</div>',
+                    '</div>',
+                    '</div>'
+                ].join('');
+            }).join('');
+        }
+
+        function loadCheckout() {
+            return fetch('/cart', {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Unable to load checkout summary.');
+                    }
+                    return safeJsonResponse(response);
+                })
+                .then(function (data) {
+                    if (!data) {
+                        throw new Error('Checkout data format is invalid.');
+                    }
+                    renderCheckout(data);
+                })
+                .catch(function (error) {
+                    showAlert(checkoutAlertHost, 'danger', error.message || 'Unable to load checkout data.');
+                });
+        }
+
+        confirmOrderBtn.addEventListener('click', function () {
+            confirmOrderBtn.disabled = true;
+            confirmOrderBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Confirming...';
 
             fetch('/orders', {
                 method: 'POST',
@@ -271,25 +345,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(function (response) {
                     return safeJsonResponse(response).then(function (data) {
                         if (!response.ok || !data || data.success !== true) {
-                            var msg = data && data.message ? data.message : 'Checkout failed.';
+                            var msg = data && data.message ? data.message : 'Unable to place order.';
                             throw new Error(msg);
                         }
                         return data;
                     });
                 })
                 .then(function (data) {
-                    showAlert(alertHost, 'success', 'Order #' + data.orderId + ' created successfully.');
-                    return loadCart();
+                    window.location.href = '/orders/history?placed=' + encodeURIComponent(data.orderId);
                 })
                 .catch(function (error) {
-                    showAlert(alertHost, 'danger', error.message || 'Checkout failed.');
-                })
-                .finally(function () {
-                    checkoutBtn.innerHTML = '<i class="bi bi-bag-check-fill me-1"></i>Checkout';
+                    showAlert(checkoutAlertHost, 'danger', error.message || 'Unable to place order.');
+                    confirmOrderBtn.disabled = false;
+                    confirmOrderBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Confirm Order';
                 });
         });
 
-        loadCart();
+        loadCheckout();
     }
 
     refreshCartBadge();

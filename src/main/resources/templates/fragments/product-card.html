@@ -16,7 +16,8 @@
     • Dimensions row (hidden when null/empty)
     • Price + View Details row (bottom, flex)
 -->
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
 <div th:fragment="card(product)" class="card h-100 product-card border-0 shadow-sm">
@@ -79,10 +80,27 @@
                         : '0.00'">0.00</span>
                 </div>
 
-                <a th:href="@{/products/{id}(id=${product.id})}"
-                   class="btn btn-dark btn-sm product-card-btn">
-                    <i class="bi bi-arrow-right me-1"></i>View Details
-                </a>
+                <div class="d-flex gap-2">
+                    <button sec:authorize="isAuthenticated()"
+                            type="button"
+                            class="btn btn-outline-dark btn-sm product-card-btn js-add-to-cart"
+                            th:attr="data-product-id=${product.id},data-product-name=${product.name}"
+                            th:disabled="${product.stock != null and product.stock == 0}">
+                        <i class="bi bi-cart-plus me-1"></i>
+                        <span th:text="${product.stock != null and product.stock == 0} ? 'Out of Stock' : 'Add to Cart'">Add to Cart</span>
+                    </button>
+
+                    <a sec:authorize="!isAuthenticated()"
+                       th:href="@{/login}"
+                       class="btn btn-outline-dark btn-sm product-card-btn">
+                        <i class="bi bi-person-lock me-1"></i>Login to Add
+                    </a>
+
+                    <a th:href="@{/products/{id}(id=${product.id})}"
+                       class="btn btn-dark btn-sm product-card-btn">
+                        <i class="bi bi-arrow-right me-1"></i>View Details
+                    </a>
+                </div>
 
             </div>
         </div>

@@ -49,6 +49,25 @@ public class CartController {
         }
     }
 
+    @PostMapping("/remove/{productId}")
+    public ResponseEntity<Map<String, Object>> removeFromCart(@PathVariable Long productId,
+                                                               Authentication authentication) {
+        try {
+            Long userId = currentUserId(authentication);
+            cartService.removeFromCart(userId, productId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Product removed from cart.",
+                    "productId", productId
+            ));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", ex.getMessage()
+            ));
+        }
+    }
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> getCart(Authentication authentication) {
         Long userId = currentUserId(authentication);

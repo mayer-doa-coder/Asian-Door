@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
+<head>
+    <title>Cart - Asian Door</title>
+    <style>
+        .cart-hero {
+            background: radial-gradient(circle at 20% 20%, #2b2d42 0%, #1a1a2e 45%, #111827 100%);
+            padding: 2.75rem 0 2.25rem;
+            color: #fff;
+        }
+        .cart-hero .eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffb703;
+            font-weight: 700;
+        }
+        .cart-hero h1 {
+            font-size: clamp(1.7rem, 4vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+        }
+        .cart-hero p {
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 680px;
+            margin-bottom: 0;
+        }
+
+        .cart-table-wrap {
+            border-radius: 0.9rem;
+            overflow: hidden;
+        }
+
+        .cart-table thead th {
+            font-size: 0.74rem;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            background: #0f172a;
+            color: #fff;
+            border-bottom: 0;
+            white-space: nowrap;
+        }
+
+        .cart-product {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 260px;
+        }
+
+        .cart-product img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            background: #eef2f7;
+        }
+
+        .cart-product-name {
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.1rem;
+            line-height: 1.2;
+        }
+
+        .cart-qty-pill {
+            min-width: 3rem;
+            text-align: center;
+            font-weight: 700;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 0.22rem 0.5rem;
+            display: inline-block;
+        }
+
+        .cart-summary {
+            border-radius: 0.9rem;
+            border: 1px solid #e5e7eb;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .cart-summary .summary-title {
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .cart-summary .total-amount {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.4px;
+        }
+
+        .checkout-btn {
+            border: 0;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 0.65rem;
+            padding: 0.7rem 1rem;
+            width: 100%;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .checkout-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(220, 38, 38, 0.24);
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .cart-empty {
+            border: 1px dashed #cbd5e1;
+            border-radius: 0.8rem;
+            background: #fff;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .cart-empty i {
+            font-size: 2rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 991.98px) {
+            .cart-product {
+                min-width: 210px;
+            }
+        }
+    </style>
+</head>
+<body>
+<main data-cart-page="true">
+
+    <header class="cart-hero">
+        <div class="container">
+            <p class="eyebrow mb-2"><i class="bi bi-cart3 me-1"></i>Shopping Cart</p>
+            <h1 class="mb-2">Review Your Items Before Checkout</h1>
+            <p>Inspired by clean checkout flows used by major ecommerce stores: scan products quickly, verify totals at a glance, and place order in one focused step.</p>
+        </div>
+    </header>
+
+    <div class="container py-4 py-lg-5">
+        <div id="cartAlertHost" class="mb-3"></div>
+
+        <div class="row g-4 align-items-start">
+            <section class="col-xl-8">
+                <div class="card border-0 shadow-sm cart-table-wrap">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 cart-table" id="cartTable">
+                            <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Remove</th>
+                            </tr>
+                            </thead>
+                            <tbody id="cartTableBody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">Loading cart...</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="cartEmptyState" class="cart-empty mt-3 d-none">
+                    <i class="bi bi-cart-x"></i>
+                    <h5 class="mt-3 mb-1">Your cart is empty</h5>
+                    <p class="text-muted mb-3">Add products to continue to checkout.</p>
+                    <a th:href="@{/products}" class="btn btn-dark btn-sm">
+                        <i class="bi bi-grid me-1"></i>Browse Products
+                    </a>
+                </div>
+            </section>
+
+            <aside class="col-xl-4">
+                <div class="cart-summary p-3 p-lg-4 shadow-sm sticky-top" style="top: 88px;">
+                    <p class="summary-title mb-2">Order Summary</p>
+
+                    <div class="d-flex justify-content-between small text-muted mb-2">
+                        <span>Items</span>
+                        <span id="cartSummaryItems">0</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-semibold">Total</span>
+                        <span class="total-amount" id="cartSummaryTotal">PHP 0.00</span>
+                    </div>
+
+                    <button id="checkoutBtn" class="checkout-btn" disabled>
+                        <i class="bi bi-bag-check-fill me-1"></i>Checkout
+                    </button>
+
+                    <p class="small text-muted mt-3 mb-0">
+                        By checking out, your order is created with <strong>PENDING</strong> status and stock is reserved immediately.
+                    </p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

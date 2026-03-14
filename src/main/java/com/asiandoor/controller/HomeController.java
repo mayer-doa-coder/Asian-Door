@@ -51,4 +51,9 @@ public class HomeController {
                 })
                 .orElse("redirect:/products");
     }
+
+    @GetMapping("/cart/view")
+    public String cartView() {
+        return "cart";
+    }
 }

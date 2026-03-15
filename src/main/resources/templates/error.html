@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::title}, ~{}, ~{::main})}">
+<head>
+    <title>Error - Asian Door</title>
+</head>
+<body>
+<main class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <i class="bi bi-exclamation-octagon text-danger" style="font-size: 3.5rem;"></i>
+            <h2 class="fw-bold mt-3 mb-2" th:text="${status} + ' ' + ${error}">Error</h2>
+            <p class="text-muted mb-1" th:text="${message}">Something went wrong.</p>
+            <p class="small text-secondary mb-4" th:text="'Path: ' + ${path}">Path: /</p>
+
+            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a th:href="@{/}" class="btn btn-dark btn-sm">
+                    <i class="bi bi-house me-1"></i>Go to Home
+                </a>
+                <a th:href="@{/products}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-grid me-1"></i>Browse Products
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,8 +1,6 @@
 package com.asiandoor.controller;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,8 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiandoor.entity.Order;
-import com.asiandoor.entity.User;
+import com.asiandoor.dto.OrderDTO;
+import com.asiandoor.dto.OrderCreateResponseDTO;
+import com.asiandoor.dto.OrderListResponseDTO;
+import com.asiandoor.dto.UserDTO;
+import com.asiandoor.exception.ResourceNotFoundException;
 import com.asiandoor.service.OrderService;
 import com.asiandoor.service.UserService;
 
@@ -27,42 +28,25 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createOrder(Authentication authentication) {
-        try {
-            Long userId = currentUserId(authentication);
-            Order order = orderService.placeOrder(userId);
+    public ResponseEntity<OrderCreateResponseDTO> createOrder(Authentication authentication) {
+        Long userId = currentUserId(authentication);
+        OrderDTO order = orderService.placeOrder(userId);
 
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "orderId", order.getId(),
-                    "status", order.getStatus().name(),
-                    "totalPrice", order.getTotalPrice()
-            ));
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", ex.getMessage()
-            ));
-        }
+        OrderCreateResponseDTO response = new OrderCreateResponseDTO();
+        response.setSuccess(true);
+        response.setOrderId(order.getId());
+        response.setStatus(order.getStatus());
+        response.setTotalPrice(order.getTotalPrice());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/my")
-    public ResponseEntity<Map<String, Object>> myOrders(Authentication authentication) {
+    public ResponseEntity<OrderListResponseDTO> myOrders(Authentication authentication) {
         Long userId = currentUserId(authentication);
-        List<Order> orders = orderService.getOrdersByUser(userId);
-
-        List<Map<String, Object>> orderSummaries = orders.stream()
-                .map(order -> {
-                    Map<String, Object> row = new LinkedHashMap<>();
-                    row.put("id", order.getId());
-                    row.put("orderDate", order.getOrderDate());
-                    row.put("totalPrice", order.getTotalPrice());
-                    row.put("status", order.getStatus().name());
-                    return row;
-                })
-                .toList();
-
-        return ResponseEntity.ok(Map.of("orders", orderSummaries));
+        List<OrderDTO> orders = orderService.getOrdersByUser(userId);
+        OrderListResponseDTO response = new OrderListResponseDTO();
+        response.setOrders(orders);
+        return ResponseEntity.ok(response);
     }
 
     private Long currentUserId(Authentication authentication) {
@@ -70,8 +54,8 @@ public class OrderController {
             throw new IllegalArgumentException("Authenticated user is required.");
         }
 
-        User user = userService.findByEmail(authentication.getName())
-                .orElseThrow(() -> new IllegalArgumentException("User account not found."));
+        UserDTO user = userService.findUserDTOByEmail(authentication.getName())
+            .orElseThrow(() -> new ResourceNotFoundException("User account not found."));
 
         return user.getId();
     }

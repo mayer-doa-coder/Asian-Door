@@ -7,11 +7,13 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asiandoor.dto.OrderDTO;
 import com.asiandoor.entity.Order;
 import com.asiandoor.entity.OrderItem;
 import com.asiandoor.entity.OrderStatus;
 import com.asiandoor.entity.Product;
 import com.asiandoor.entity.User;
+import com.asiandoor.exception.ResourceNotFoundException;
 import com.asiandoor.repository.OrderRepository;
 import com.asiandoor.repository.ProductRepository;
 import com.asiandoor.repository.UserRepository;
@@ -28,13 +30,13 @@ public class OrderService {
     private final CartService cartService;
 
     @Transactional
-    public Order placeOrder(Long userId) {
+    public OrderDTO placeOrder(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("User ID is required.");
         }
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 
         Map<Long, Integer> cart = cartService.getCartSnapshot(userId);
         if (cart.isEmpty()) {
@@ -57,7 +59,7 @@ public class OrderService {
             }
 
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new IllegalArgumentException("Product not found: " + productId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productId));
 
             int stock = product.getStock() == null ? 0 : product.getStock();
             if (stock < quantity) {
@@ -89,19 +91,22 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(userId);
 
-        return savedOrder;
+        return toDTO(savedOrder);
     }
 
-    public List<Order> getOrdersByUser(Long userId) {
+    public List<OrderDTO> getOrdersByUser(Long userId) {
         if (userId == null) {
             return List.of();
         }
-        return orderRepository.findByUserIdOrderByOrderDateDesc(userId);
+        return orderRepository.findByUserIdOrderByOrderDateDesc(userId)
+                .stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
     }
 
     @Transactional
@@ -113,5 +118,15 @@ public class OrderService {
         Order order = getOrderById(orderId);
         order.setStatus(status);
         return orderRepository.save(order);
+    }
+
+    public OrderDTO toDTO(Order order) {
+        OrderDTO dto = new OrderDTO();
+        dto.setId(order.getId());
+        dto.setOrderDate(order.getOrderDate());
+        dto.setTotalPrice(order.getTotalPrice());
+        dto.setStatus(order.getStatus() != null ? order.getStatus().name() : null);
+        dto.setUserId(order.getUser() != null ? order.getUser().getId() : null);
+        return dto;
     }
 }

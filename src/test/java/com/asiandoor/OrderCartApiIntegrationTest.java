@@ -1,20 +1,30 @@
 package com.asiandoor;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -54,8 +64,12 @@ class OrderCartApiIntegrationTest {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+        @Autowired
+        private PasswordEncoder passwordEncoder;
+
     private User testUser;
     private Product testProduct;
+        private final String userRawPassword = "Password123!";
 
     @BeforeEach
     void setup() {
@@ -72,11 +86,13 @@ class OrderCartApiIntegrationTest {
         Optional<User> existing = userRepository.findByEmail("customer@test.com");
         if (existing.isPresent()) {
             testUser = existing.get();
+                        testUser.setPassword(passwordEncoder.encode(userRawPassword));
+                        testUser = userRepository.save(testUser);
         } else {
             User user = new User();
             user.setName("Test Customer");
             user.setEmail("customer@test.com");
-            user.setPassword("$2a$10$7EqJtq98hPqEX7fNZaFWoO.Hqf4v2y2Q/JY9hw3rroWAt4EvsC0f6");
+                        user.setPassword(passwordEncoder.encode(userRawPassword));
             user.setRole(customerRole);
             testUser = userRepository.save(user);
         }
@@ -94,30 +110,42 @@ class OrderCartApiIntegrationTest {
     }
 
     @Test
-    void shouldConvertCartToOrderAndPersistOrderTables() throws Exception {
-        SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor authUser =
-                SecurityMockMvcRequestPostProcessors.user("customer@test.com").roles("CUSTOMER");
+    void shouldRunCompletePurchaseWorkflowFromLoginToOrderHistory() throws Exception {
+        MvcResult loginResult = mockMvc.perform(formLogin("/login")
+                        .user(testUser.getEmail())
+                        .password(userRawPassword))
+                .andExpect(authenticated().withUsername(testUser.getEmail()))
+                .andExpect(redirectedUrl("/"))
+                .andReturn();
+
+        MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession(false);
+
+        mockMvc.perform(get("/products").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products"))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Integration Test Door")));
 
         mockMvc.perform(post("/cart/add/{productId}", testProduct.getId())
                         .param("quantity", "2")
-                        .with(authUser))
+                        .session(session))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true));
 
-        mockMvc.perform(get("/cart").with(authUser))
+        mockMvc.perform(get("/cart").session(session))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", hasSize(1)))
                 .andExpect(jsonPath("$.items[0].productId").value(testProduct.getId()))
                 .andExpect(jsonPath("$.items[0].quantity").value(2));
 
-        mockMvc.perform(post("/orders").with(authUser))
+        mockMvc.perform(post("/orders").session(session))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.status").value("PENDING"));
 
-        mockMvc.perform(get("/orders/my").with(authUser))
+        mockMvc.perform(get("/orders/my").session(session))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orders", hasSize(1)));
+                .andExpect(jsonPath("$.orders", hasSize(1)))
+                .andExpect(jsonPath("$.orders[0].status").value("PENDING"));
 
         var orders = orderRepository.findByUserId(testUser.getId());
         org.junit.jupiter.api.Assertions.assertEquals(1, orders.size());
@@ -130,8 +158,130 @@ class OrderCartApiIntegrationTest {
         Product updatedProduct = productRepository.findById(testProduct.getId()).orElseThrow();
         org.junit.jupiter.api.Assertions.assertEquals(8, updatedProduct.getStock());
 
-        mockMvc.perform(get("/cart").with(authUser))
+        mockMvc.perform(get("/cart").session(session))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", hasSize(0)));
     }
+
+    @Test
+    void shouldRunFullPurchaseWorkflowFromRegisterToOrderHistory() throws Exception {
+        String registeredEmail = "buyer+" + UUID.randomUUID() + "@test.com";
+        String registeredPassword = "BuyerPass123!";
+
+        mockMvc.perform(post("/register")
+                        .with(csrf())
+                        .param("fullName", "Integration Buyer")
+                        .param("email", registeredEmail)
+                        .param("phone", "09171234567")
+                        .param("password", registeredPassword)
+                        .param("confirmPassword", registeredPassword))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?registered"));
+
+        MvcResult loginResult = mockMvc.perform(formLogin("/login")
+                        .user(registeredEmail)
+                        .password(registeredPassword))
+                .andExpect(authenticated().withUsername(registeredEmail))
+                .andReturn();
+
+        MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession(false);
+
+        mockMvc.perform(get("/products").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products"))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Integration Test Door")));
+
+        mockMvc.perform(get("/products/{id}", testProduct.getId()).session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("product-detail"));
+
+        mockMvc.perform(post("/cart/add/{productId}", testProduct.getId())
+                        .param("quantity", "2")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true));
+
+        mockMvc.perform(get("/cart").session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items", hasSize(1)))
+                .andExpect(jsonPath("$.items[0].productId").value(testProduct.getId()))
+                .andExpect(jsonPath("$.items[0].quantity").value(2));
+
+        mockMvc.perform(post("/orders").session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.status").value("PENDING"));
+
+        mockMvc.perform(get("/orders/my").session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orders", hasSize(1)))
+                .andExpect(jsonPath("$.orders[0].status").value("PENDING"));
+
+        User registeredUser = userRepository.findByEmail(registeredEmail).orElseThrow();
+        var orders = orderRepository.findByUserId(registeredUser.getId());
+        org.junit.jupiter.api.Assertions.assertEquals(1, orders.size());
+
+        Order savedOrder = orders.get(0);
+        var orderItems = orderItemRepository.findByOrderId(savedOrder.getId());
+        org.junit.jupiter.api.Assertions.assertEquals(1, orderItems.size());
+        org.junit.jupiter.api.Assertions.assertEquals(2, orderItems.get(0).getQuantity());
+
+        Product updatedProduct = productRepository.findById(testProduct.getId()).orElseThrow();
+        org.junit.jupiter.api.Assertions.assertEquals(8, updatedProduct.getStock());
+
+        mockMvc.perform(get("/cart").session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items", hasSize(0)));
+    }
+
+    @Test
+    void shouldAllowAdminPagesOnlyForAdminUsers() throws Exception {
+        SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor customerUser =
+                SecurityMockMvcRequestPostProcessors.user("customer@test.com").roles("CUSTOMER");
+
+        mockMvc.perform(get("/admin").with(customerUser))
+                .andExpect(status().isForbidden());
+
+        MvcResult adminLogin = mockMvc.perform(formLogin("/login")
+                        .user("admin@asiandoor.com")
+                        .password("admin1234"))
+                .andExpect(authenticated().withUsername("admin@asiandoor.com"))
+                .andExpect(redirectedUrl("/admin"))
+                .andReturn();
+
+        MockHttpSession adminSession = (MockHttpSession) adminLogin.getRequest().getSession(false);
+
+        mockMvc.perform(get("/admin").session(adminSession))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/dashboard"));
+
+        mockMvc.perform(get("/admin/products").session(adminSession))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/products"));
+
+        mockMvc.perform(formLogin("/login")
+                        .user("customer@test.com")
+                        .password(userRawPassword))
+                .andExpect(authenticated().withUsername("customer@test.com"))
+                .andExpect(redirectedUrl("/"));
+    }
+
+        @Test
+        void shouldReturnNotFoundFromGlobalHandlerWhenAddingMissingProductToCart() throws Exception {
+                MvcResult loginResult = mockMvc.perform(formLogin("/login")
+                                                .user(testUser.getEmail())
+                                                .password(userRawPassword))
+                                .andExpect(authenticated().withUsername(testUser.getEmail()))
+                                .andReturn();
+
+                MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession(false);
+
+                mockMvc.perform(post("/cart/add/{productId}", 999999L)
+                                                .param("quantity", "1")
+                                                .session(session))
+                                .andExpect(status().isNotFound())
+                                .andExpect(jsonPath("$.status").value(404))
+                                .andExpect(jsonPath("$.error").value("Not Found"))
+                                .andExpect(jsonPath("$.message").value("Product not found: 999999"));
+        }
 }

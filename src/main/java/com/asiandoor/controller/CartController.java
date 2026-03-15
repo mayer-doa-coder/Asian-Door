@@ -1,8 +1,6 @@
 package com.asiandoor.controller;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiandoor.dto.CartActionResponseDTO;
 import com.asiandoor.dto.CartItemDTO;
-import com.asiandoor.entity.User;
+import com.asiandoor.dto.CartSummaryDTO;
+import com.asiandoor.dto.UserDTO;
+import com.asiandoor.exception.ResourceNotFoundException;
 import com.asiandoor.service.CartService;
 import com.asiandoor.service.UserService;
 
@@ -29,47 +30,33 @@ public class CartController {
     private final UserService userService;
 
     @PostMapping("/add/{productId}")
-    public ResponseEntity<Map<String, Object>> addToCart(@PathVariable Long productId,
-                                                         @RequestParam(defaultValue = "1") int quantity,
-                                                         Authentication authentication) {
-        try {
-            Long userId = currentUserId(authentication);
-            cartService.addToCart(userId, productId, quantity);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Product added to cart.",
-                    "productId", productId,
-                    "quantity", quantity
-            ));
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", ex.getMessage()
-            ));
-        }
+    public ResponseEntity<CartActionResponseDTO> addToCart(@PathVariable Long productId,
+                                                           @RequestParam(defaultValue = "1") int quantity,
+                                                           Authentication authentication) {
+        Long userId = currentUserId(authentication);
+        cartService.addToCart(userId, productId, quantity);
+        CartActionResponseDTO response = new CartActionResponseDTO();
+        response.setSuccess(true);
+        response.setMessage("Product added to cart.");
+        response.setProductId(productId);
+        response.setQuantity(quantity);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/remove/{productId}")
-    public ResponseEntity<Map<String, Object>> removeFromCart(@PathVariable Long productId,
-                                                               Authentication authentication) {
-        try {
-            Long userId = currentUserId(authentication);
-            cartService.removeFromCart(userId, productId);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Product removed from cart.",
-                    "productId", productId
-            ));
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", ex.getMessage()
-            ));
-        }
+    public ResponseEntity<CartActionResponseDTO> removeFromCart(@PathVariable Long productId,
+                                                                Authentication authentication) {
+        Long userId = currentUserId(authentication);
+        cartService.removeFromCart(userId, productId);
+        CartActionResponseDTO response = new CartActionResponseDTO();
+        response.setSuccess(true);
+        response.setMessage("Product removed from cart.");
+        response.setProductId(productId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getCart(Authentication authentication) {
+    public ResponseEntity<CartSummaryDTO> getCart(Authentication authentication) {
         Long userId = currentUserId(authentication);
         List<CartItemDTO> items = cartService.getCartItems(userId);
         double total = items.stream()
@@ -78,10 +65,10 @@ public class CartController {
                 .mapToDouble(Double::doubleValue)
                 .sum();
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("items", items);
-        response.put("totalAmount", total);
-        response.put("itemCount", items.size());
+        CartSummaryDTO response = new CartSummaryDTO();
+        response.setItems(items);
+        response.setTotalAmount(total);
+        response.setItemCount(items.size());
 
         return ResponseEntity.ok(response);
     }
@@ -91,8 +78,8 @@ public class CartController {
             throw new IllegalArgumentException("Authenticated user is required.");
         }
 
-        User user = userService.findByEmail(authentication.getName())
-                .orElseThrow(() -> new IllegalArgumentException("User account not found."));
+        UserDTO user = userService.findUserDTOByEmail(authentication.getName())
+            .orElseThrow(() -> new ResourceNotFoundException("User account not found."));
 
         return user.getId();
     }

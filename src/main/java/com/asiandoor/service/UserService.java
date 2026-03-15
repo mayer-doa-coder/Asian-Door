@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.asiandoor.dto.RegisterRequest;
+import com.asiandoor.dto.UserDTO;
 import com.asiandoor.entity.Role;
 import com.asiandoor.entity.User;
 import com.asiandoor.repository.RoleRepository;
@@ -26,7 +27,7 @@ public class UserService {
      *
      * @throws IllegalArgumentException if the email is already in use
      */
-    public User registerUser(RegisterRequest request) {
+    public UserDTO registerUser(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already registered.");
         }
@@ -40,7 +41,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(buyerRole);
 
-        return userRepository.save(user);
+        return toDTO(userRepository.save(user));
     }
 
     /**
@@ -48,5 +49,18 @@ public class UserService {
      */
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Optional<UserDTO> findUserDTOByEmail(String email) {
+        return userRepository.findByEmail(email).map(this::toDTO);
+    }
+
+    public UserDTO toDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole() != null ? user.getRole().getName() : null);
+        return dto;
     }
 }

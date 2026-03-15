@@ -36,7 +36,7 @@ public class OrderService {
         }
 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 
         Map<Long, Integer> cart = cartService.getCartSnapshot(userId);
         if (cart.isEmpty()) {

@@ -24,31 +24,31 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Admin product management controller â€” /admin/**.
+ * Admin product management controller under /admin/**.
  *
  * Security: two layers of protection.
- *   1. URL-level  â€” SecurityConfig: .requestMatchers("/admin/**").hasRole("ADMIN")
- *   2. Method-level â€” @PreAuthorize("hasRole('ADMIN')") on this class (defence in depth)
+ *   1. URL-level: SecurityConfig request matcher for /admin/** with ADMIN role
+ *   2. Method-level: @PreAuthorize("hasRole('ADMIN')") on this class
  *
  * Routes:
- *   GET  /admin                      â†’ admin dashboard
- *   GET  /admin/products             â†’ product list
- *   GET  /admin/products/new         â†’ create form
- *   POST /admin/products             â†’ submit create
- *   GET  /admin/products/{id}/edit   â†’ edit form
- *   POST /admin/products/{id}        â†’ submit update
- *   POST /admin/products/{id}/delete â†’ delete
+ *   GET  /admin                      -> admin dashboard
+ *   GET  /admin/products             -> product list
+ *   GET  /admin/products/new         -> create form
+ *   POST /admin/products             -> submit create
+ *   GET  /admin/products/{id}/edit   -> edit form
+ *   POST /admin/products/{id}        -> submit update
+ *   POST /admin/products/{id}/delete -> delete
  */
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('ADMIN')")    // method-level guard â€” second line of defence
+@PreAuthorize("hasRole('ADMIN')") // method-level guard, second line of defense
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
     private final ProductImageStorageService productImageStorageService;
 
-    // â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Dashboard
 
     @GetMapping
     public String adminDashboard(Model model) {
@@ -81,7 +81,7 @@ public class ProductController {
         return "admin/dashboard";
     }
 
-    // â”€â”€ List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // List
 
     @GetMapping("/products")
     public String listProducts(Model model) {
@@ -101,7 +101,7 @@ public class ProductController {
         return "admin/products";
     }
 
-    // â”€â”€ Create â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Create
 
     @GetMapping("/products/new")
     public String newProductForm(Model model) {
@@ -137,7 +137,7 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
-    // â”€â”€ Edit / Update â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Edit / Update
 
     @GetMapping("/products/{id}/edit")
     public String editProductForm(@PathVariable Long id, Model model) {
@@ -180,7 +180,7 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
-    // â”€â”€ Delete â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Delete
 
     @PostMapping("/products/{id}/delete")
     public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {

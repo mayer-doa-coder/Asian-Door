@@ -55,7 +55,7 @@ public class OrderController {
         }
 
         UserDTO user = userService.findUserDTOByEmail(authentication.getName())
-            .orElseThrow(() -> new ResourceNotFoundException("User account not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User account not found."));
 
         return user.getId();
     }

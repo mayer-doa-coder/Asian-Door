@@ -32,10 +32,6 @@ public class ProductService {
 
     // ── Read ─────────────────────────────────────────────────────────────────
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
-
     public List<ProductDTO> getAllProductDTOs() {
         return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
                                 .stream()

@@ -44,13 +44,6 @@ public class UserService {
         return toDTO(userRepository.save(user));
     }
 
-    /**
-     * Looks up a user by their email address.
-     */
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
     public Optional<UserDTO> findUserDTOByEmail(String email) {
         return userRepository.findByEmail(email).map(this::toDTO);
     }

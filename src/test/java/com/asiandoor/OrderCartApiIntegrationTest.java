@@ -266,22 +266,22 @@ class OrderCartApiIntegrationTest {
                 .andExpect(redirectedUrl("/"));
     }
 
-        @Test
-        void shouldReturnNotFoundFromGlobalHandlerWhenAddingMissingProductToCart() throws Exception {
-                MvcResult loginResult = mockMvc.perform(formLogin("/login")
-                                                .user(testUser.getEmail())
-                                                .password(userRawPassword))
-                                .andExpect(authenticated().withUsername(testUser.getEmail()))
-                                .andReturn();
+    @Test
+    void shouldReturnNotFoundFromGlobalHandlerWhenAddingMissingProductToCart() throws Exception {
+        MvcResult loginResult = mockMvc.perform(formLogin("/login")
+                        .user(testUser.getEmail())
+                        .password(userRawPassword))
+                .andExpect(authenticated().withUsername(testUser.getEmail()))
+                .andReturn();
 
-                MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession(false);
+        MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession(false);
 
-                mockMvc.perform(post("/cart/add/{productId}", 999999L)
-                                                .param("quantity", "1")
-                                                .session(session))
-                                .andExpect(status().isNotFound())
-                                .andExpect(jsonPath("$.status").value(404))
-                                .andExpect(jsonPath("$.error").value("Not Found"))
-                                .andExpect(jsonPath("$.message").value("Product not found: 999999"));
-        }
+        mockMvc.perform(post("/cart/add/{productId}", 999999L)
+                        .param("quantity", "1")
+                        .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Product not found: 999999"));
+    }
 }

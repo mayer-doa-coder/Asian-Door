@@ -25,11 +25,15 @@
     <!-- ── Image area ──────────────────────────────────────────────────── -->
     <div class="product-card-img-wrapper position-relative">
 
-        <img th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}
-                         ? ${product.imageUrl}
-                         : '/images/country-house-door-pine-wood.jpg'"
-             th:alt="${product.name}"
-             class="card-img-top product-card-img" />
+           <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+               th:src="${product.imageUrl}"
+               th:alt="${product.name}"
+               class="card-img-top product-card-img" />
+
+           <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+               th:src="@{/images/country-house-door-pine-wood.jpg}"
+               th:alt="${product.name}"
+               class="card-img-top product-card-img" />
 
         <!-- Category badge — top-left overlay -->
         <span th:if="${product.category != null}"

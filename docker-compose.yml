@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: asiandoor-app
+    ports:
+      - "8080:8081"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/asiandoor
+      DB_USER: asiandoor_user
+      DB_PASSWORD: asiandoor
+      SERVER_PORT: 8081
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: asiandoor-db
+    environment:
+      POSTGRES_DB: asiandoor
+      POSTGRES_USER: asiandoor_user
+      POSTGRES_PASSWORD: asiandoor
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

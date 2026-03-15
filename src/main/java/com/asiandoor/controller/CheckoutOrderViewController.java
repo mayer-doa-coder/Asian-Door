@@ -8,8 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.asiandoor.entity.Order;
-import com.asiandoor.entity.User;
+import com.asiandoor.dto.OrderDTO;
+import com.asiandoor.dto.UserDTO;
+import com.asiandoor.exception.ResourceNotFoundException;
 import com.asiandoor.service.OrderService;
 import com.asiandoor.service.UserService;
 
@@ -32,7 +33,7 @@ public class CheckoutOrderViewController {
                              Authentication authentication,
                              Model model) {
         Long userId = currentUserId(authentication);
-        List<Order> orders = orderService.getOrdersByUser(userId);
+        List<OrderDTO> orders = orderService.getOrdersByUser(userId);
         model.addAttribute("orders", orders);
         model.addAttribute("placedOrderId", placed);
         return "orders";
@@ -43,8 +44,8 @@ public class CheckoutOrderViewController {
             throw new IllegalArgumentException("Authenticated user is required.");
         }
 
-        User user = userService.findByEmail(authentication.getName())
-                .orElseThrow(() -> new IllegalArgumentException("User account not found."));
+        UserDTO user = userService.findUserDTOByEmail(authentication.getName())
+            .orElseThrow(() -> new ResourceNotFoundException("User account not found."));
 
         return user.getId();
     }

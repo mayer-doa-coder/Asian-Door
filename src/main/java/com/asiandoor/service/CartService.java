@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.asiandoor.dto.CartItemDTO;
 import com.asiandoor.entity.Product;
+import com.asiandoor.exception.ResourceNotFoundException;
 import com.asiandoor.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class CartService {
         }
 
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found: " + productId));
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productId));
 
         int stock = product.getStock() == null ? 0 : product.getStock();
         if (stock <= 0) {

@@ -80,7 +80,7 @@
                             th:text="${'PHP ' + #numbers.formatDecimal(order.totalPrice, 1, 'COMMA', 2, 'POINT')}">PHP 0.00</td>
                         <td>
                             <span class="status-pill"
-                                  th:classappend="${' status-' + #strings.toLowerCase(order.status.name())}"
+                                  th:classappend="${' status-' + #strings.toLowerCase(order.status)}"
                                   th:text="${order.status}">PENDING</span>
                         </td>
                     </tr>

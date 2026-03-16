@@ -23,6 +23,27 @@ document.addEventListener('DOMContentLoaded', function () {
         return contextPath + normalizedPath;
     }
 
+    function resolveImageUrl(url) {
+        if (!url || typeof url !== 'string') {
+            return appPath('/images/country-house-door-pine-wood.jpg');
+        }
+
+        var trimmed = url.trim();
+        if (trimmed === '') {
+            return appPath('/images/country-house-door-pine-wood.jpg');
+        }
+
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+            return trimmed;
+        }
+
+        if (contextPath !== '/' && trimmed.startsWith(contextPath + '/')) {
+            return trimmed;
+        }
+
+        return appPath(trimmed);
+    }
+
     var CURRENCY = new Intl.NumberFormat('en-PH', {
         style: 'currency',
         currency: 'PHP'
@@ -194,14 +215,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             emptyState.classList.add('d-none');
             tbody.innerHTML = items.map(function (item) {
-                var imageUrl = item.imageUrl && item.imageUrl.trim() !== ''
-                    ? item.imageUrl
-                    : appPath('/images/country-house-door-pine-wood.jpg');
+                var fallbackImage = appPath('/images/country-house-door-pine-wood.jpg');
+                var imageUrl = resolveImageUrl(item.imageUrl);
                 return [
                     '<tr>',
                     '<td>',
                     '<div class="cart-product">',
-                    '<img src="' + imageUrl + '" alt="' + (item.productName || 'Product') + '">',
+                    '<img src="' + imageUrl + '" alt="' + (item.productName || 'Product') + '" onerror="this.onerror=null;this.src=\'' + fallbackImage + '\'">',
                     '<div>',
                     '<p class="cart-product-name">' + (item.productName || 'Product') + '</p>',
                     '<span class="text-muted small">ID: ' + (item.productId || '-') + '</span>',

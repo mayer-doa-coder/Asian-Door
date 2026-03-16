@@ -26,8 +26,9 @@
     <div class="product-card-img-wrapper position-relative">
 
            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
-               th:src="${product.imageUrl}"
+               th:src="@{${product.imageUrl}}"
                th:alt="${product.name}"
+               th:attr="onerror=|this.onerror=null;this.src='@{/images/country-house-door-pine-wood.jpg}'|"
                class="card-img-top product-card-img" />
 
            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"

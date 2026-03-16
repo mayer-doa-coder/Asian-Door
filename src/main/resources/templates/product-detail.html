@@ -56,9 +56,14 @@
         <!-- ===== Left: Product Image ===== -->
         <div class="col-lg-5">
             <div class="product-card-img-wrapper rounded-3 shadow-sm overflow-hidden bg-light">
-                <img th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}
-                                 ? ${product.imageUrl}
-                                 : '/images/country-house-door-pine-wood.jpg'"
+                <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                     th:src="@{${product.imageUrl}}"
+                     th:alt="${product.name}"
+                     th:attr="onerror=|this.onerror=null;this.src='@{/images/country-house-door-pine-wood.jpg}'|"
+                     class="detail-hero-img" />
+
+                <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                     th:src="@{/images/country-house-door-pine-wood.jpg}"
                      th:alt="${product.name}"
                      class="detail-hero-img" />
             </div>

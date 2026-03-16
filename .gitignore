@@ -31,3 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment files ###
+.env
+.env.*
+!.env.example
+
+### Secret files ###
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+### Runtime uploads ###
+uploads/products/*
+!uploads/products/.gitkeep

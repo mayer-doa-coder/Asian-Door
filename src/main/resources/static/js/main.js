@@ -4,6 +4,46 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    var contextMeta = document.querySelector('meta[name="app-context-path"]');
+    var contextPath = contextMeta && contextMeta.getAttribute('content')
+        ? contextMeta.getAttribute('content')
+        : '/';
+    if (!contextPath.startsWith('/')) {
+        contextPath = '/' + contextPath;
+    }
+    if (contextPath.length > 1 && contextPath.endsWith('/')) {
+        contextPath = contextPath.slice(0, -1);
+    }
+
+    function appPath(path) {
+        var normalizedPath = path.startsWith('/') ? path : '/' + path;
+        if (contextPath === '/') {
+            return normalizedPath;
+        }
+        return contextPath + normalizedPath;
+    }
+
+    function resolveImageUrl(url) {
+        if (!url || typeof url !== 'string') {
+            return appPath('/images/country-house-door-pine-wood.jpg');
+        }
+
+        var trimmed = url.trim();
+        if (trimmed === '') {
+            return appPath('/images/country-house-door-pine-wood.jpg');
+        }
+
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+            return trimmed;
+        }
+
+        if (contextPath !== '/' && trimmed.startsWith(contextPath + '/')) {
+            return trimmed;
+        }
+
+        return appPath(trimmed);
+    }
+
     var CURRENCY = new Intl.NumberFormat('en-PH', {
         style: 'currency',
         currency: 'PHP'
@@ -40,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function refreshCartBadge() {
-        return fetch('/cart', {
+        return fetch(appPath('/cart'), {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         })
@@ -84,6 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Active nav link — highlight based on current path
     var path = window.location.pathname;
+    if (contextPath !== '/' && path.startsWith(contextPath)) {
+        path = path.slice(contextPath.length) || '/';
+    }
     document.querySelectorAll('[data-nav-path]').forEach(function (link) {
         var navPath = link.getAttribute('data-nav-path');
         var isActive = navPath === '/'
@@ -108,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.disabled = true;
         button.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Adding...';
 
-        fetch('/cart/add/' + productId + '?quantity=1', {
+        fetch(appPath('/cart/add/' + productId + '?quantity=1'), {
             method: 'POST',
             headers: { 'Accept': 'application/json' }
         })
@@ -172,14 +215,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             emptyState.classList.add('d-none');
             tbody.innerHTML = items.map(function (item) {
-                var imageUrl = item.imageUrl && item.imageUrl.trim() !== ''
-                    ? item.imageUrl
-                    : '/images/country-house-door-pine-wood.jpg';
+                var fallbackImage = appPath('/images/country-house-door-pine-wood.jpg');
+                var imageUrl = resolveImageUrl(item.imageUrl);
                 return [
                     '<tr>',
                     '<td>',
                     '<div class="cart-product">',
-                    '<img src="' + imageUrl + '" alt="' + (item.productName || 'Product') + '">',
+                    '<img src="' + imageUrl + '" alt="' + (item.productName || 'Product') + '" onerror="this.onerror=null;this.src=\'' + fallbackImage + '\'">',
                     '<div>',
                     '<p class="cart-product-name">' + (item.productName || 'Product') + '</p>',
                     '<span class="text-muted small">ID: ' + (item.productId || '-') + '</span>',
@@ -201,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function loadCart() {
             tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Loading cart...</td></tr>';
-            return fetch('/cart', {
+            return fetch(appPath('/cart'), {
                 method: 'GET',
                 headers: { 'Accept': 'application/json' }
             })
@@ -236,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             button.disabled = true;
 
-            fetch('/cart/remove/' + productId, {
+            fetch(appPath('/cart/remove/' + productId), {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' }
             })
@@ -261,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         checkoutBtn.addEventListener('click', function () {
-            window.location.href = '/checkout';
+            window.location.href = appPath('/checkout');
         });
 
         loadCart();
@@ -313,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function loadCheckout() {
-            return fetch('/cart', {
+            return fetch(appPath('/cart'), {
                 method: 'GET',
                 headers: { 'Accept': 'application/json' }
             })
@@ -338,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function () {
             confirmOrderBtn.disabled = true;
             confirmOrderBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Confirming...';
 
-            fetch('/orders', {
+            fetch(appPath('/orders'), {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' }
             })
@@ -352,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 })
                 .then(function (data) {
-                    window.location.href = '/orders/history?placed=' + encodeURIComponent(data.orderId);
+                    window.location.href = appPath('/orders/history') + '?placed=' + encodeURIComponent(data.orderId);
                 })
                 .catch(function (error) {
                     showAlert(checkoutAlertHost, 'danger', error.message || 'Unable to place order.');

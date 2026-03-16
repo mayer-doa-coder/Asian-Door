@@ -34,10 +34,31 @@ class ControllerEndpointIntegrationTest {
     }
 
     @Test
+    void shouldReturnHomePageForPublicUsers() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("home"));
+    }
+
+    @Test
     void shouldReturnProductsPageForPublicUsers() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products"));
+    }
+
+    @Test
+    void shouldReturnCartPageForAuthenticatedUsers() throws Exception {
+        mockMvc.perform(get("/cart/view").with(user("customer@test.com").roles("CUSTOMER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("cart"));
+    }
+
+    @Test
+    void shouldRedirectAnonymousUserToLoginWhenAccessingOrdersHistoryPage() throws Exception {
+        mockMvc.perform(get("/orders/history"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test

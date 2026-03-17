@@ -48,12 +48,13 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
                 // ── Public pages ────────────────────────────────────────────
-                .requestMatchers("/", "/products", "/products/**",
+                .requestMatchers("/", "/about", "/products", "/products/**",
                                  "/login", "/register", "/error", "/access-denied",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 // ── Admin only — first line of defence ──────────────────────
                 // Role stored in DB as "ROLE_ADMIN"; hasRole() strips the prefix.
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/profile").authenticated()
                 // ── Everything else requires login ──────────────────────────
                 .anyRequest().authenticated()
             )

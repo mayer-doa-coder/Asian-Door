@@ -1,198 +1,609 @@
-﻿<!DOCTYPE html>
-<!--
-  home.html — delegates structure to layout.html.
-  Passes: page title, page-specific styles, and <main> content.
--->
-<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Asian Door - Premium Doors</title>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <title>Asian Door | Home</title>
+
     <style th:inline="css">
-        .hero-section {
-            min-height: 100vh;
-            background-image: url([[@{/images/hero_bg.png}]]);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        .figma-home {
+            color: #2f2f2f;
+            background: #fff;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .figma-home a {
+            text-decoration: none;
+        }
+
+        .figma-home .section-title {
+            font-size: 2rem;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: .5rem;
+        }
+
+        .figma-home .section-subtitle {
+            color: #8a8a8a;
+            max-width: 760px;
+            margin-inline: auto;
+        }
+
+        .figma-home .btn-outline-figma {
+            border: 1px solid currentColor;
+            border-radius: 0;
+            padding: .65rem 1.25rem;
+            font-size: .875rem;
+            letter-spacing: .02em;
+            display: inline-flex;
+            align-items: center;
+            gap: .55rem;
+            transition: all .2s ease;
+        }
+
+        .figma-home .btn-outline-figma:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, .12);
+        }
+
+        .figma-home .hero {
+            position: relative;
+            min-height: 720px;
+            background: linear-gradient(rgba(0, 0, 0, .28), rgba(0, 0, 0, .28)),
+                        url([[@{/images/home-figma/hero-bg.jpg}]]) center/cover no-repeat;
+            color: #fff;
+        }
+
+        .figma-home .hero-nav {
+            padding-top: 1.6rem;
+            padding-bottom: 1rem;
+        }
+
+        .figma-home .brand {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: .02em;
+        }
+
+        .figma-home .hero-nav-links a {
+            color: #f2f2f2;
+            font-size: .95rem;
+            margin-right: 1.4rem;
+            opacity: .95;
+        }
+
+        .figma-home .hero-icons a {
+            color: #fff;
+            margin-left: 1rem;
+            font-size: 1rem;
+        }
+
+        .figma-home .hero-avatar-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.35);
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin-left: 1rem;
+        }
+
+        .figma-home .hero-avatar-btn i {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .figma-home .hero-account-action {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.35);
+            background: transparent;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1rem;
+            padding: 0;
+        }
+
+        .figma-home .hero-body {
+            min-height: 610px;
             display: flex;
             align-items: center;
-            position: relative;
+            justify-content: center;
+            text-align: center;
         }
-        .hero-section::before {
-            content: '';
+
+        .figma-home .hero-title {
+            text-transform: uppercase;
+            font-size: clamp(2.1rem, 5vw, 3.3rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+        }
+
+        .figma-home .hero-text {
+            color: #e6e6e6;
+            max-width: 760px;
+            margin-inline: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .figma-home .hero-arrow {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 100%);
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 96px;
+            background: rgba(238, 238, 238, .9);
+            color: #666;
+            display: grid;
+            place-items: center;
         }
-        .hero-content { position: relative; z-index: 1; }
-        .btn-gold {
-            background: linear-gradient(135deg, #c9a84c, #f0c040);
-            color: #1a1a1a; border: none; font-weight: 600;
-            letter-spacing: 0.05em; padding: 0.75rem 2rem;
-            border-radius: 4px; transition: all 0.3s ease;
+
+        .figma-home .hero-arrow.left { left: 0; }
+        .figma-home .hero-arrow.right { right: 0; }
+
+        .figma-home .product-week {
+            padding: 5.2rem 0;
         }
-        .btn-gold:hover {
-            background: linear-gradient(135deg, #b8973e, #d4a832);
-            color: #1a1a1a; transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(201,168,76,0.4);
+
+        .figma-home .week-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
         }
-        .btn-outline-gold {
-            border: 2px solid #c9a84c; color: #f0c040;
-            background: transparent; font-weight: 600;
-            letter-spacing: 0.05em; padding: 0.75rem 2rem;
-            border-radius: 4px; transition: all 0.3s ease;
+
+        .figma-home .week-card .meta {
+            font-size: .82rem;
+            color: #878686;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: .65rem;
         }
-        .btn-outline-gold:hover {
-            background: rgba(201,168,76,0.15);
-            border-color: #f0c040; color: #f0c040;
-            transform: translateY(-2px);
+
+        .figma-home .week-card h5 {
+            margin-top: .35rem;
+            margin-bottom: .2rem;
+            text-transform: capitalize;
+            font-size: 1.05rem;
+            font-weight: 700;
         }
-        .category-card {
-            border: none; border-radius: 12px; overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+        .figma-home .week-card p {
+            color: #929292;
+            margin: 0;
         }
-        .category-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+
+        .figma-home .promo-banner {
+            position: relative;
+            min-height: 280px;
+            color: #fff;
+            background: linear-gradient(rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
+                        url([[@{/images/home-figma/banner.jpg}]]) center/cover no-repeat;
+            display: flex;
+            align-items: center;
         }
-        .category-icon { font-size: 3rem; color: #c9a84c; }
-        .features-strip { background: #1a1a1a; color: #fff; }
-        .feature-item i { font-size: 2rem; color: #c9a84c; }
-        .cta-section { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); }
+
+        .figma-home .split-section {
+            padding: 5rem 0;
+        }
+
+        .figma-home .split-section img {
+            width: 100%;
+            height: 390px;
+            object-fit: cover;
+        }
+
+        .figma-home .split-copy {
+            color: #8a8a8a;
+            margin: .8rem 0 1.35rem;
+            max-width: 520px;
+        }
+
+        .figma-home .note-strip {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+            margin: .6rem 0 0;
+            text-align: center;
+            color: #555;
+        }
+
+        .figma-home .features {
+            background: #efefef;
+            padding: 3.2rem 0;
+            margin-top: 3.3rem;
+        }
+
+        .figma-home .feature-item i {
+            font-size: 1.4rem;
+            color: #444;
+            margin-bottom: .75rem;
+            display: inline-block;
+        }
+
+        .figma-home .feature-item h6 {
+            font-weight: 700;
+            margin-bottom: .4rem;
+        }
+
+        .figma-home .feature-item p {
+            color: #8a8a8a;
+            font-size: .92rem;
+            margin-bottom: 0;
+        }
+
+        .figma-home .blog {
+            padding: 4.2rem 0 2.5rem;
+        }
+
+        .figma-home .blog-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .figma-home .blog-card .date {
+            color: #777;
+            font-size: .92rem;
+            margin-top: .8rem;
+            margin-bottom: .4rem;
+        }
+
+        .figma-home .blog-card h6 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: .6rem;
+        }
+
+        .figma-home .blog-card a {
+            color: #555;
+            font-size: .9rem;
+            text-decoration: underline;
+        }
+
+        .figma-home .quote {
+            text-align: center;
+            padding: 2rem 0 3.5rem;
+        }
+
+        .figma-home .quote img {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: .9rem;
+        }
+
+        .figma-home .quote p {
+            max-width: 700px;
+            margin-inline: auto;
+            color: #6f6f6f;
+        }
+
+        .figma-home .footer-dark {
+            background: #262626;
+            color: #e6e6e6;
+            padding: 3rem 0;
+        }
+
+        .figma-home .footer-dark h6 {
+            font-weight: 700;
+            margin-bottom: .85rem;
+            color: #fff;
+        }
+
+        .figma-home .footer-dark a,
+        .figma-home .footer-dark p,
+        .figma-home .footer-dark li {
+            color: #b9b9b9;
+            font-size: .9rem;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .figma-home .footer-dark ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        @media (max-width: 992px) {
+            .figma-home .hero-nav-links {
+                margin-top: .8rem;
+                margin-bottom: .7rem;
+            }
+
+            .figma-home .hero-body {
+                min-height: 520px;
+            }
+
+            .figma-home .split-section img {
+                height: 300px;
+                margin-top: 1.5rem;
+            }
+
+            .figma-home .hero-arrow {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
-<main>
-<section class="hero-section">
-    <div class="container hero-content text-white">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <h1 class="display-3 fw-bold mb-3"
-                    style="text-shadow:2px 2px 8px rgba(0,0,0,0.6);">
-                    Find Your Perfect Door
-                </h1>
-                <p class="lead mb-4"
-                   style="font-size:1.25rem;color:rgba(255,255,255,0.88);text-shadow:1px 1px 4px rgba(0,0,0,0.5);">
-                    Premium quality doors crafted for every style &mdash; wooden, steel, glass, and more.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                    <a th:href="@{/products}" class="btn btn-gold btn-lg">
-                        <i class="bi bi-grid me-2"></i>Browse Doors
+<main class="figma-home">
+    <section class="hero">
+        <div class="container hero-nav">
+            <div class="row align-items-center">
+                <div class="col-6 col-lg-2">
+                    <a class="brand" th:href="@{/}">soudemy</a>
+                </div>
+                <div class="col-lg-7 d-none d-lg-block">
+                    <nav class="hero-nav-links">
+                        <a th:href="@{/}">Home</a>
+                        <a th:href="@{/products}">Shop</a>
+                        <a th:href="@{/about}">About us</a>
+                        <a href="#blog">Blog</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-3 text-end hero-icons">
+                    <a th:href="@{/products}"><i class="bi bi-search"></i></a>
+                    <a th:href="@{/cart/view}"><i class="bi bi-bag"></i></a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/login}" onclick="alert('Please login first. Redirecting to login page.');"><i class="bi bi-person-circle"></i></a>
+                    <a sec:authorize="isAuthenticated()" class="hero-avatar-btn" th:href="@{/profile}" aria-label="My Profile">
+                        <i class="bi bi-person-circle"></i>
                     </a>
-                    <a th:href="@{/register}" class="btn btn-outline-gold btn-lg">
-                        <i class="bi bi-person-plus me-2"></i>Get Started
+                    <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="d-inline-block m-0">
+                        <button type="submit" class="hero-account-action" aria-label="Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-body container">
+            <div>
+                <h1 class="hero-title">All for your home</h1>
+                <p class="hero-text">
+                    Build a warm and modern interior with curated furniture essentials and decor picks crafted for everyday living.
+                </p>
+                <a class="btn-outline-figma text-white" th:href="@{/products}">
+                    View more <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-arrow left"><i class="bi bi-chevron-left"></i></div>
+        <div class="hero-arrow right"><i class="bi bi-chevron-right"></i></div>
+    </section>
+
+    <section class="product-week">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="section-title">Products of the week</h2>
+                <p class="section-subtitle">
+                    Explore our highlighted collection with clean lines, modern texture, and practical comfort for every space.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <a class="week-card d-block" th:href="@{/products(search='pot')}">
+                        <img th:src="@{/images/home-figma/product-1.jpg}" alt="Decor pot"/>
+                        <div class="meta">Sale</div>
+                        <h5>Pot</h5>
+                        <p>$223.00</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="week-card d-block" th:href="@{/products(search='lamp')}">
+                        <img th:src="@{/images/home-figma/product-2.jpg}" alt="Pendant lamp"/>
+                        <div class="meta">New</div>
+                        <h5>Lamp</h5>
+                        <p>$223.00</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="week-card d-block" th:href="@{/products(search='chair')}">
+                        <img th:src="@{/images/home-figma/product-3.jpg}" alt="Chair"/>
+                        <div class="meta">Sold</div>
+                        <h5>Chair</h5>
+                        <p>$223.00</p>
                     </a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Shop by Category</h2>
-            <p class="text-muted">Explore our wide selection of doors tailored to every need</p>
+    <section class="promo-banner">
+        <div class="container text-end">
+            <h3 class="section-title text-white mb-2">Designed to comfort your life</h3>
+            <p class="ms-auto mb-4" style="max-width:580px;color:#e9e9e9;">
+                Discover timeless furniture silhouettes built around simplicity, function, and premium materials.
+            </p>
+            <a class="btn-outline-figma text-white" th:href="@{/products}">
+                View more <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
-        <div class="row g-4">
-            <div class="col-6 col-md-4 col-lg-2">
-                <a th:href="@{/products(category=wooden)}" class="text-decoration-none">
-                    <div class="category-card p-4 text-center">
-                        <i class="bi bi-tree category-icon mb-3 d-block"></i>
-                        <h6 class="fw-semibold" style="color:#1a1a1a;">Wooden</h6>
-                        <small class="text-muted">Classic &amp; Warm</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a th:href="@{/products(category=steel)}" class="text-decoration-none">
-                    <div class="category-card p-4 text-center">
-                        <i class="bi bi-shield-fill-check category-icon mb-3 d-block"></i>
-                        <h6 class="fw-semibold" style="color:#1a1a1a;">Steel</h6>
-                        <small class="text-muted">Strong &amp; Durable</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a th:href="@{/products(category=glass)}" class="text-decoration-none">
-                    <div class="category-card p-4 text-center">
-                        <i class="bi bi-sun category-icon mb-3 d-block"></i>
-                        <h6 class="fw-semibold" style="color:#1a1a1a;">Glass</h6>
-                        <small class="text-muted">Modern &amp; Light</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a th:href="@{/products(category=security)}" class="text-decoration-none">
-                    <div class="category-card p-4 text-center">
-                        <i class="bi bi-lock-fill category-icon mb-3 d-block"></i>
-                        <h6 class="fw-semibold" style="color:#1a1a1a;">Security</h6>
-                        <small class="text-muted">Safe &amp; Secure</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a th:href="@{/products(category=interior)}" class="text-decoration-none">
-                    <div class="category-card p-4 text-center">
-                        <i class="bi bi-house-door category-icon mb-3 d-block"></i>
-                        <h6 class="fw-semibold" style="color:#1a1a1a;">Interior</h6>
-                        <small class="text-muted">Elegant &amp; Stylish</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a th:href="@{/products(category=exterior)}" class="text-decoration-none">
-                    <div class="category-card p-4 text-center">
-                        <i class="bi bi-door-open category-icon mb-3 d-block"></i>
-                        <h6 class="fw-semibold" style="color:#1a1a1a;">Exterior</h6>
-                        <small class="text-muted">Grand &amp; Bold</small>
-                    </div>
-                </a>
+    </section>
+
+    <section id="about" class="split-section">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5">
+                    <h3 class="section-title">Stylish chairs</h3>
+                    <p class="split-copy">
+                        Shape your corners with ergonomic chairs that blend soft textures and modern proportions.
+                    </p>
+                    <a class="btn-outline-figma" style="color:#2a2a2a;border-color:#2a2a2a;" th:href="@{/products(search='chair')}">
+                        View more <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-7">
+                    <img th:src="@{/images/home-figma/chair-main.jpg}" alt="Stylish chair"/>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="features-strip py-5">
-    <div class="container">
-        <div class="row g-4 text-center">
-            <div class="col-6 col-md-3 feature-item">
-                <i class="bi bi-truck mb-3 d-block"></i>
-                <h6 class="fw-semibold">Free Delivery</h6>
-                <small class="text-muted">On orders above $500</small>
-            </div>
-            <div class="col-6 col-md-3 feature-item">
-                <i class="bi bi-patch-check mb-3 d-block"></i>
-                <h6 class="fw-semibold">Quality Assured</h6>
-                <small class="text-muted">ISO certified products</small>
-            </div>
-            <div class="col-6 col-md-3 feature-item">
-                <i class="bi bi-tools mb-3 d-block"></i>
-                <h6 class="fw-semibold">Installation Support</h6>
-                <small class="text-muted">Pro team available</small>
-            </div>
-            <div class="col-6 col-md-3 feature-item">
-                <i class="bi bi-headset mb-3 d-block"></i>
-                <h6 class="fw-semibold">24/7 Support</h6>
-                <small class="text-muted">Always here for you</small>
+    <section class="split-section pt-0">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7 order-2 order-lg-1">
+                    <img th:src="@{/images/home-figma/table-main.jpg}" alt="Table collection"/>
+                </div>
+                <div class="col-lg-5 order-1 order-lg-2">
+                    <h3 class="section-title">Table</h3>
+                    <p class="split-copy">
+                        Add crafted wooden tables that balance utility and sculptural detail for your interior.
+                    </p>
+                    <a class="btn-outline-figma" style="color:#2a2a2a;border-color:#2a2a2a;" th:href="@{/products(search='table')}">
+                        View more <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="cta-section py-5 text-white text-center">
-    <div class="container py-4">
-        <h2 class="fw-bold mb-3">Ready to Find Your Door?</h2>
-        <p class="lead text-muted mb-4">Join thousands of happy customers. Sign up today for exclusive deals.</p>
-        <a th:href="@{/register}" class="btn btn-gold btn-lg me-3">
-            <i class="bi bi-person-plus me-2"></i>Create Account
-        </a>
-        <a th:href="@{/products}" class="btn btn-outline-light btn-lg">
-            <i class="bi bi-grid me-2"></i>Browse Products
-        </a>
-    </div>
-</section>
+    <section class="split-section pt-0">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5">
+                    <h3 class="section-title">Contemporary lamps</h3>
+                    <p class="split-copy">
+                        Elevate atmosphere with contemporary lighting that creates gentle tone and visual warmth.
+                    </p>
+                    <a class="btn-outline-figma" style="color:#2a2a2a;border-color:#2a2a2a;" th:href="@{/products(search='lamp')}">
+                        View more <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-7">
+                    <img th:src="@{/images/home-figma/lamp-main.jpg}" alt="Contemporary lamp"/>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <div class="note-strip">
+        <div class="container d-flex align-items-center justify-content-center gap-4 flex-wrap">
+            <span>Order now for an express delivery in 24h!</span>
+            <a class="btn-outline-figma" style="color:#2a2a2a;border-color:#2a2a2a;" th:href="@{/products}">
+                View more <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <section class="features">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-6 col-lg-3 feature-item">
+                    <i class="bi bi-truck"></i>
+                    <h6>Shop online</h6>
+                    <p>Browse and place your order in minutes from any device.</p>
+                </div>
+                <div class="col-6 col-lg-3 feature-item">
+                    <i class="bi bi-credit-card"></i>
+                    <h6>Free shipping</h6>
+                    <p>Enjoy fast and safe delivery with transparent tracking.</p>
+                </div>
+                <div class="col-6 col-lg-3 feature-item">
+                    <i class="bi bi-arrow-repeat"></i>
+                    <h6>Return policy</h6>
+                    <p>Simple product returns and support for every order.</p>
+                </div>
+                <div class="col-6 col-lg-3 feature-item">
+                    <i class="bi bi-headset"></i>
+                    <h6>Payment</h6>
+                    <p>Secure payment flow with reliable checkout protection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <article class="blog-card">
+                        <img th:src="@{/images/home-figma/blog-1.jpg}" alt="Blog article 1"/>
+                        <p class="date">29 Sep, 2022 / by Soroush Norozy</p>
+                        <h6>Your office should have only natural materials</h6>
+                        <a th:href="@{/products}">Read more</a>
+                    </article>
+                </div>
+                <div class="col-lg-6">
+                    <article class="blog-card">
+                        <img th:src="@{/images/home-figma/blog-2.jpg}" alt="Blog article 2"/>
+                        <p class="date">29 Sep, 2022 / by Soroush Norozy</p>
+                        <h6>Your office should have only natural materials</h6>
+                        <a th:href="@{/products}">Read more</a>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote">
+        <div class="container">
+            <img th:src="@{/images/home-figma/avatar.jpg}" alt="Customer avatar"/>
+            <p>
+                “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio malesuada at condimentum adipiscing iaculis semper.”
+            </p>
+            <small class="text-muted d-block mb-3">A random person</small>
+            <div class="d-flex justify-content-center gap-4 text-muted">
+                <span><i class="bi bi-chevron-left"></i></span>
+                <span><i class="bi bi-chevron-right"></i></span>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer" class="footer-dark">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <h6>Soudemy</h6>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio malesuada at condimentum.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h6>About us</h6>
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li><a th:href="@{/products}">Shop</a></li>
+                        <li><a th:href="@{/login}">Login</a></li>
+                        <li><a th:href="@{/register}">Register</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Useful</h6>
+                    <ul>
+                        <li><a th:href="@{/cart/view}">Cart</a></li>
+                        <li><a th:href="@{/products}">Products</a></li>
+                        <li><a th:href="@{/orders/history}">My orders</a></li>
+                        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}">Admin panel</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Contact</h6>
+                    <ul>
+                        <li>(808) 555-0111</li>
+                        <li>michelle.rivera@example.com</li>
+                        <li>support@asiandoor.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 </main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
 </body>
 </html>

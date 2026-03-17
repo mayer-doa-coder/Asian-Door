@@ -1,6 +1,8 @@
 package com.asiandoor.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.asiandoor.dto.ProductDTO;
 import com.asiandoor.service.ProductService;
+import com.asiandoor.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,10 +20,16 @@ import lombok.RequiredArgsConstructor;
 public class HomeController {
 
     private final ProductService productService;
+    private final UserService userService;
 
     @GetMapping("/")
     public String home() {
         return "home";
+    }
+
+    @GetMapping("/about")
+    public String about() {
+        return "about";
     }
 
     @GetMapping("/products")
@@ -55,5 +64,14 @@ public class HomeController {
     @GetMapping("/cart/view")
     public String cartView() {
         return "cart";
+    }
+
+    @GetMapping("/profile")
+    public String profile(@AuthenticationPrincipal UserDetails principal, Model model) {
+        String email = principal != null ? principal.getUsername() : null;
+        if (email != null) {
+            userService.findUserDTOByEmail(email).ifPresent(user -> model.addAttribute("user", user));
+        }
+        return "profile";
     }
 }

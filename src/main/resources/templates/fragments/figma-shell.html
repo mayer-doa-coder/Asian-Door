@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<th:block th:fragment="topNav(activePage, footerTarget)">
+    <header class="topbar">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-6 col-lg-2">
+                    <a class="brand" th:href="@{/}">soudemy</a>
+                </div>
+                <div class="col-lg-7 d-none d-lg-block nav-links">
+                    <a th:href="@{/}" th:classappend="${activePage == 'home'} ? 'active' : ''">Home</a>
+                    <a th:href="@{/products}" th:classappend="${activePage == 'shop'} ? 'active' : ''">Shop</a>
+                    <a th:href="@{/about}" th:classappend="${activePage == 'about'} ? 'active' : ''">About us</a>
+                    <a th:href="@{/#blog}">Blog</a>
+                </div>
+                <div class="col-6 col-lg-3 text-end nav-icons">
+                    <a th:href="@{/products}"><i class="bi bi-search"></i></a>
+                    <a th:href="@{/cart/view}"><i class="bi bi-bag"></i></a>
+                    <a th:href="@{/login}" sec:authorize="!isAuthenticated()" onclick="alert('Please login first. Redirecting to login page.');"><i class="bi bi-person-circle"></i></a>
+                    <a class="topbar-avatar-btn" th:href="@{/profile}" sec:authorize="isAuthenticated()" aria-label="My Profile">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <form th:action="@{/logout}" method="post" class="d-inline" sec:authorize="isAuthenticated()">
+                        <button type="submit" class="topbar-account-action" aria-label="Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+</th:block>
+
+<footer th:fragment="darkFooter(footerId)" class="footer-dark" th:attr="id=${footerId}">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <h6 class="brand">Soudemy</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus vitae congue id ipsum sed neque et dui accumsan.</p>
+            </div>
+            <div class="col-md-3">
+                <h6>About Us</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus vitae congue id ipsum sed neque et dui accumsan.</p>
+            </div>
+            <div class="col-md-3">
+                <h6>Useful</h6>
+                <ul>
+                    <li><a th:href="@{/products}">Download product</a></li>
+                    <li><a th:href="@{/products}">Download product</a></li>
+                    <li><a th:href="@{/products}">Download product</a></li>
+                    <li><a th:href="@{/products}">Download product</a></li>
+                    <li><a th:href="@{/products}">Download product</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6>Call Center</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus vitae</p>
+                <p class="mt-2">soroushnorozyui@gmail.com</p>
+                <p class="mt-1">+1 333 555</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,150 +1,392 @@
 <!DOCTYPE html>
-<!--
-  product-detail.html — single product detail page.
-  Delegates structure to layout.html.
--->
-<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title th:text="${product.name + ' - Asian Door'}">Product Detail - Asian Door</title>
-    <style>
-        .detail-hero-img {
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
+    <title th:text="${product.name + ' | Asian Door'}">Product Detail | Asian Door</title>
+
+    <style th:inline="css">
+        .figma-detail {
+            background: #f6f6f6;
+            color: #2f2f2f;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .figma-detail a {
+            text-decoration: none;
+        }
+
+
+        .figma-detail .crumb {
+            color: #7e7e7e;
+            font-size: .9rem;
+            margin-top: .8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .figma-detail .main-section {
+            padding-bottom: 3rem;
+        }
+
+        .figma-detail .thumb-col {
+            display: grid;
+            gap: 12px;
+        }
+
+        .figma-detail .thumb-item {
+            background: #ddd;
+            height: 132px;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        .figma-detail .thumb-item.active {
+            border-color: #7f7f7f;
+        }
+
+        .figma-detail .thumb-item img,
+        .figma-detail .hero-img img {
             width: 100%;
-            max-height: 480px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 0.75rem;
+            display: block;
         }
-        .detail-price {
-            font-size: 2rem;
+
+        .figma-detail .hero-img {
+            background: #ddd;
+            height: 564px;
+            overflow: hidden;
+        }
+
+        .figma-detail .detail-title {
+            font-size: clamp(1.45rem, 3vw, 2.1rem);
             font-weight: 700;
-            color: var(--ad-accent);
+            margin-bottom: .55rem;
+            color: #2b2b2b;
         }
-        .detail-meta dt {
-            font-size: 0.78rem;
+
+        .figma-detail .rating-row {
+            color: #a8a8a8;
+            font-size: .85rem;
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            margin-bottom: .85rem;
+        }
+
+        .figma-detail .price-row {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            margin-bottom: 1.05rem;
+        }
+
+        .figma-detail .old-price {
+            font-size: .9rem;
+            color: #8c8c8c;
+            text-decoration: line-through;
+        }
+
+        .figma-detail .new-price {
+            font-size: 1.25rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #6c757d;
+            color: #323232;
         }
-        .detail-meta dd {
-            font-size: 0.95rem;
-            color: #212529;
-            margin-bottom: 0.8rem;
+
+        .figma-detail .desc {
+            color: #9b9b9b;
+            line-height: 1.45;
+            margin-bottom: 1.2rem;
+            max-width: 420px;
         }
-        .divider {
-            border-color: #e9ecef;
+
+        .figma-detail .cart-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .figma-detail .qty-box {
+            border: 1px solid #a3a3a3;
+            width: 158px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 .75rem;
+            color: #8d8d8d;
+            font-size: .95rem;
+            background: #f6f6f6;
+        }
+
+        .figma-detail .btn-add {
+            background: #393939;
+            color: #f2f2f2;
+            border: 0;
+            border-radius: 0;
+            min-width: 158px;
+            height: 46px;
+            font-size: .92rem;
+            font-weight: 600;
+            transition: opacity .2s ease;
+        }
+
+        .figma-detail .btn-add:hover {
+            opacity: .92;
+            color: #fff;
+        }
+
+        .figma-detail .wishlist {
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            color: #9b9b9b;
+            margin-bottom: 1rem;
+        }
+
+        .figma-detail .meta {
+            color: #9b9b9b;
+            font-size: .92rem;
+            margin-bottom: .42rem;
+        }
+
+        .figma-detail .meta a {
+            color: #7f7f7f;
+            text-decoration: underline;
+            margin-left: .3rem;
+        }
+
+        .figma-detail .tab-row {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-top: 1.35rem;
+            margin-bottom: .8rem;
+            flex-wrap: wrap;
+        }
+
+        .figma-detail .tab-row a {
+            color: #535353;
+            font-size: .95rem;
+        }
+
+        .figma-detail .tab-row a.active {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .figma-detail .tab-content {
+            color: #978e8e;
+            max-width: 430px;
+            line-height: 1.45;
+        }
+
+        .figma-detail .related {
+            margin-top: .4rem;
+            margin-bottom: 2.4rem;
+        }
+
+        .figma-detail .related h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 1.35rem;
+            color: #2b2b2b;
+        }
+
+        .figma-detail .related-card {
+            text-align: center;
+            color: #2f2f2f;
+            display: block;
+        }
+
+        .figma-detail .related-card .img-wrap {
+            background: #ddd;
+            aspect-ratio: 1.08 / 1;
+            overflow: hidden;
+            margin-bottom: .7rem;
+        }
+
+        .figma-detail .related-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .figma-detail .related-card h6 {
+            margin-bottom: .4rem;
+            font-size: .98rem;
+            font-weight: 700;
+            color: #2b2b2b;
+        }
+
+        .figma-detail .stars {
+            color: #a6a6a6;
+            font-size: .82rem;
+            letter-spacing: .08em;
+        }
+
+        @media (max-width: 992px) {
+            .figma-detail .hero-img {
+                height: 360px;
+            }
+
+            .figma-detail .thumb-item {
+                height: 90px;
+            }
         }
     </style>
 </head>
 <body>
-<main class="container py-5">
+<main class="figma-detail">
+    <th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#detail-footer')}"></th:block>
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb small">
-            <li class="breadcrumb-item">
-                <a th:href="@{/}" class="text-decoration-none text-secondary">Home</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a th:href="@{/products}" class="text-decoration-none text-secondary">Products</a>
-            </li>
-            <li class="breadcrumb-item active fw-semibold" th:text="${product.name}">Product</li>
-        </ol>
-    </nav>
-
-    <div class="row g-5 align-items-start">
-
-        <!-- ===== Left: Product Image ===== -->
-        <div class="col-lg-5">
-            <div class="product-card-img-wrapper rounded-3 shadow-sm overflow-hidden bg-light">
-                <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
-                     th:src="@{${product.imageUrl}}"
-                     th:alt="${product.name}"
-                     th:attr="onerror=|this.onerror=null;this.src='@{/images/country-house-door-pine-wood.jpg}'|"
-                     class="detail-hero-img" />
-
-                <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
-                     th:src="@{/images/country-house-door-pine-wood.jpg}"
-                     th:alt="${product.name}"
-                     class="detail-hero-img" />
-            </div>
-        </div>
-
-        <!-- ===== Right: Product Info ===== -->
-        <div class="col-lg-7">
-
-            <!-- Category badge + stock indicator -->
-            <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                <span th:if="${product.category != null}"
-                      th:text="${#strings.capitalize(product.category)}"
-                      th:classappend="${'category-badge-' + product.category}"
-                      class="category-badge"></span>
-                <span th:if="${product.stock != null and product.stock > 5}"
-                      class="badge bg-success" style="font-size:0.72rem;">In Stock</span>
-                <span th:if="${product.stock != null and product.stock > 0 and product.stock <= 5}"
-                      class="badge bg-warning text-dark" style="font-size:0.72rem;">
-                    Only <span th:text="${product.stock}"></span> left
-                </span>
-                <span th:if="${product.stock != null and product.stock == 0}"
-                      class="badge bg-danger" style="font-size:0.72rem;">Out of Stock</span>
-            </div>
-
-            <!-- Name -->
-            <h2 class="fw-bold mb-1 lh-sm" th:text="${product.name}">Product Name</h2>
-
-            <!-- Price -->
-            <p class="detail-price mb-3">
-                ₱<span th:text="${product.price != null}
-                    ? ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}
-                    : '0.00'">0.00</span>
-            </p>
-
-            <hr class="divider my-3" />
-
-            <!-- Description -->
-            <p class="text-muted lh-lg mb-4"
-               th:if="${product.description != null and !#strings.isEmpty(product.description)}"
-               th:text="${product.description}">
-                Product description.
-            </p>
-
-            <!-- Specifications -->
-            <h6 class="fw-bold text-uppercase small text-muted mb-3" style="letter-spacing:0.6px;">
-                Specifications
-            </h6>
-            <dl class="detail-meta row mb-4">
-                <dt class="col-sm-4">Material</dt>
-                <dd class="col-sm-8"
-                    th:text="${product.material != null} ? ${product.material} : '—'">—</dd>
-
-                <dt class="col-sm-4">Dimensions</dt>
-                <dd class="col-sm-8"
-                    th:text="${product.dimensions != null} ? ${product.dimensions} : '—'">—</dd>
-
-                <dt class="col-sm-4">Category</dt>
-                <dd class="col-sm-8"
-                    th:text="${product.category != null} ? ${#strings.capitalize(product.category) + ' Door'} : '—'">—</dd>
-
-                <dt class="col-sm-4">Stock</dt>
-                <dd class="col-sm-8"
-                    th:text="${product.stock != null} ? ${product.stock + ' units available'} : '—'">—</dd>
-            </dl>
-
-            <hr class="divider my-3" />
-
-            <!-- Action buttons -->
-            <div class="d-flex gap-2 flex-wrap">
-                <a th:href="@{/products(category=${product.category})}"
-                   class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-grid me-1"></i> More in this Category
-                </a>
-                <a th:href="@{/products}" class="btn btn-outline-dark btn-sm">
-                    <i class="bi bi-arrow-left me-1"></i> All Products
-                </a>
-            </div>
-
-        </div>
+    <div class="container">
+        <p class="crumb mb-0">
+            <a th:href="@{/products}" class="text-muted">shope</a> /
+            <span th:text="${product.name}">sofa code 234</span>
+        </p>
     </div>
 
+    <section class="container main-section">
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-7">
+                <div class="row g-3">
+                    <div class="col-3 thumb-col">
+                        <div class="thumb-item active">
+                            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{${product.imageUrl}}"
+                                 th:alt="${product.name}"
+                                 th:attr="onerror=|this.onerror=null;this.src='@{/images/product-detail-figma/main.jpg}'|" />
+                            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{/images/product-detail-figma/main.jpg}"
+                                 th:alt="${product.name}" />
+                        </div>
+                        <div class="thumb-item"><img th:src="@{/images/product-detail-figma/main.jpg}" alt="Preview 2"/></div>
+                        <div class="thumb-item"><img th:src="@{/images/product-detail-figma/main.jpg}" alt="Preview 3"/></div>
+                        <div class="thumb-item"><img th:src="@{/images/product-detail-figma/main.jpg}" alt="Preview 4"/></div>
+                    </div>
+                    <div class="col-9">
+                        <div class="hero-img">
+                            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{${product.imageUrl}}"
+                                 th:alt="${product.name}"
+                                 th:attr="onerror=|this.onerror=null;this.src='@{/images/product-detail-figma/main.jpg}'|" />
+                            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{/images/product-detail-figma/main.jpg}"
+                                 th:alt="${product.name}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <h1 class="detail-title" th:text="${product.name}">Sofa code 234</h1>
+
+                <div class="rating-row">
+                    <span class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i></span>
+                    <span>( top )</span>
+                </div>
+
+                <div class="price-row">
+                    <span class="old-price">$
+                        <span th:text="${product.price != null ? #numbers.formatDecimal(product.price * 2, 1, 'COMMA', 2, 'POINT') : '256.00'}">256.00</span>
+                    </span>
+                    <span class="new-price">$
+                        <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '125.00'}">125.00</span>
+                    </span>
+                </div>
+
+                <p class="desc" th:text="${product.description != null and !#strings.isEmpty(product.description) ? product.description : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Enim et volutpat lobortis enim donec adipiscing nibh. Consectetur in ac elementum aliquam imperdiet tellus.'}">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+
+                <div class="cart-row">
+                    <div class="qty-box" aria-label="quantity selector">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>1</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+
+                    <button sec:authorize="isAuthenticated()"
+                            type="button"
+                            class="btn-add js-add-to-cart"
+                            th:attr="data-product-id=${product.id},data-product-name=${product.name}"
+                            th:disabled="${product.stock != null and product.stock == 0}">
+                        <span th:text="${product.stock != null and product.stock == 0} ? 'Out of stock' : 'Add to cart'">Add to cart</span>
+                    </button>
+
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn-add d-inline-flex align-items-center justify-content-center">
+                        Login to add
+                    </a>
+                </div>
+
+                <div class="wishlist">
+                    <i class="bi bi-heart"></i>
+                    <span>Add to wishlist</span>
+                </div>
+
+                <p class="meta">Sku: <span th:text="${product.id != null ? product.id : '02'}">02</span></p>
+                <p class="meta">Category:
+                    <span th:text="${product.category != null ? product.category : 'sofa'}">sofa</span>
+                </p>
+                <p class="meta">tag:
+                    <a href="#">sofa</a>
+                    <a href="#">clean</a>
+                </p>
+
+                <div class="tab-row">
+                    <a href="#" class="active">Description</a>
+                    <a href="#">Additional information</a>
+                    <a href="#">Preview</a>
+                </div>
+
+                <p class="tab-content" th:text="${product.description != null and !#strings.isEmpty(product.description) ? product.description : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Enim et volutpat lobortis enim donec adipiscing nibh. Consectetur in ac elementum aliquam imperdiet tellus.'}">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container related">
+        <h3>Related products</h3>
+        <div class="row g-3">
+            <div class="col-6 col-lg-3">
+                <a class="related-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-1.jpg}" alt="Related product 1"/></div>
+                    <h6>Modern sofa</h6>
+                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="related-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-2.jpg}" alt="Related product 2"/></div>
+                    <h6>Modern sofa</h6>
+                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="related-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-3.jpg}" alt="Related product 3"/></div>
+                    <h6>Modern sofa</h6>
+                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a class="related-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-4.jpg}" alt="Related product 4"/></div>
+                    <h6>Modern sofa</h6>
+                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="~{fragments/figma-shell :: darkFooter('detail-footer')}"></footer>
 </main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
 </body>
 </html>

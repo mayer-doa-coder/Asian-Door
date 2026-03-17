@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
+    <title>Asian Door | About</title>
+
+    <style th:inline="css">
+        .figma-about {
+            background: #f6f6f6;
+            color: #2f2f2f;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .figma-about a { text-decoration: none; }
+
+
+        .figma-about .hero {
+            background: #ddd;
+            height: 290px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .figma-about .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .figma-about .hero h1 {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: #3f3f3f;
+            margin: 0;
+        }
+
+        .figma-about .features {
+            padding: 2rem 0 1.2rem;
+        }
+
+        .figma-about .feature-item i {
+            font-size: 1.35rem;
+            color: #444;
+            margin-right: .55rem;
+        }
+
+        .figma-about .feature-item h6 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #353535;
+            margin-bottom: .35rem;
+        }
+
+        .figma-about .feature-item p {
+            color: #ababab;
+            margin: 0;
+            line-height: 1.35;
+            font-size: .95rem;
+        }
+
+        .figma-about .video-banner {
+            margin-top: 1.4rem;
+            margin-bottom: 2.1rem;
+            height: 350px;
+            background: #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .figma-about .video-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .figma-about .play-btn {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+        }
+
+        .figma-about .play-btn span {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .28);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1.25rem;
+        }
+
+        .figma-about .performance {
+            padding: .3rem 0 2.2rem;
+        }
+
+        .figma-about .performance h2 {
+            font-size: clamp(1.9rem, 4vw, 2.65rem);
+            color: #353535;
+            font-weight: 700;
+            margin-bottom: .95rem;
+            line-height: 1.1;
+        }
+
+        .figma-about .performance .copy {
+            color: #898989;
+            line-height: 1.45;
+            max-width: 580px;
+        }
+
+        .figma-about .skill {
+            margin-bottom: 1.3rem;
+        }
+
+        .figma-about .skill-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .45rem;
+            color: #353535;
+            font-weight: 700;
+        }
+
+        .figma-about .skill-head span:last-child {
+            font-size: .86rem;
+        }
+
+        .figma-about .skill-track {
+            width: 100%;
+            height: 3px;
+            background: #6f6f6f;
+            position: relative;
+        }
+
+        .figma-about .skill-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: #2b2b2b;
+        }
+
+        .figma-about .blog {
+            padding: 1rem 0 2.6rem;
+        }
+
+        .figma-about .blog-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+
+        .figma-about .blog-head h3 {
+            font-size: 1.65rem;
+            color: #2b2b2b;
+            font-weight: 700;
+            margin: 0;
+            text-transform: lowercase;
+        }
+
+        .figma-about .blog-card {
+            text-align: center;
+            color: #303030;
+            display: block;
+        }
+
+        .figma-about .blog-card .img-wrap {
+            background: #d9d9d9;
+            aspect-ratio: 1.08 / 1;
+            overflow: hidden;
+            margin-bottom: .8rem;
+        }
+
+        .figma-about .blog-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .figma-about .blog-card .date {
+            color: #9e9e9e;
+            font-size: .8rem;
+            margin-bottom: .45rem;
+        }
+
+        .figma-about .blog-card .title {
+            color: #303030;
+            font-size: .92rem;
+            margin-bottom: .45rem;
+            line-height: 1.35;
+        }
+
+        .figma-about .blog-card .read {
+            color: #303030;
+            font-size: .86rem;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        @media (max-width: 992px) {
+            .figma-about .hero { height: 220px; }
+            .figma-about .video-banner { height: 260px; }
+        }
+    </style>
+</head>
+<body>
+<main class="figma-about">
+    <th:block th:replace="~{fragments/figma-shell :: topNav('about', '#about-footer')}"></th:block>
+
+    <section class="container">
+        <div class="hero">
+            <img th:src="@{/images/about-figma/hero.jpg}" alt="About hero"/>
+            <h1>About us</h1>
+        </div>
+    </section>
+
+    <section class="container features">
+        <div class="row g-4">
+            <div class="col-6 col-lg-3 feature-item">
+                <h6><i class="bi bi-clock"></i>Shope oline</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+            </div>
+            <div class="col-6 col-lg-3 feature-item">
+                <h6><i class="bi bi-bag"></i>Free shipping</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+            </div>
+            <div class="col-6 col-lg-3 feature-item">
+                <h6><i class="bi bi-credit-card"></i>Return policy</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+            </div>
+            <div class="col-6 col-lg-3 feature-item">
+                <h6><i class="bi bi-currency-dollar"></i>PAYMENT</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+            </div>
+        </div>
+
+        <div class="video-banner">
+            <img th:src="@{/images/about-figma/video-banner.jpg}" alt="Video section"/>
+            <div class="play-btn"><span><i class="bi bi-play-fill"></i></span></div>
+        </div>
+    </section>
+
+    <section class="container performance">
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-6">
+                <h2>
+                    Functionality<br/>
+                    meets perfection
+                </h2>
+                <p class="copy">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse massa libero, mattis volutpat id.
+                    Egestas adipiscing placerat eleifend a nascetur. Mattis proin enim, nam porttitor vitae.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <div class="skill">
+                    <div class="skill-head"><span>Creativity</span><span>72 %</span></div>
+                    <div class="skill-track"><span class="skill-fill" style="width:72%;"></span></div>
+                </div>
+                <div class="skill">
+                    <div class="skill-head"><span>Advertising</span><span>84 %</span></div>
+                    <div class="skill-track"><span class="skill-fill" style="width:84%;"></span></div>
+                </div>
+                <div class="skill mb-0">
+                    <div class="skill-head"><span>Design</span><span>72 %</span></div>
+                    <div class="skill-track"><span class="skill-fill" style="width:72%;"></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container blog" id="blog">
+        <div class="blog-head">
+            <h3>last blog post</h3>
+            <div class="text-muted small"><i class="bi bi-chevron-left"></i> <i class="bi bi-chevron-right ms-2"></i></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <a class="blog-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-1.jpg}" alt="Blog post 1"/></div>
+                    <p class="date">Sep 26, 2022</p>
+                    <p class="title">Paint your office in natural<br/>colors only</p>
+                    <span class="read">Read more</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="blog-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-2.jpg}" alt="Blog post 2"/></div>
+                    <p class="date">Sep 26, 2022</p>
+                    <p class="title">Paint your office in natural<br/>colors only</p>
+                    <span class="read">Read more</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="blog-card" th:href="@{/products}">
+                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-3.jpg}" alt="Blog post 3"/></div>
+                    <p class="date">Sep 26, 2022</p>
+                    <p class="title">Paint your office in natural<br/>colors only</p>
+                    <span class="read">Read more</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="~{fragments/figma-shell :: darkFooter('about-footer')}"></footer>
+</main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
+</body>
+</html>

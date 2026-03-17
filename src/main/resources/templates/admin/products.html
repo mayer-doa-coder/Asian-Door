@@ -1,246 +1,98 @@
 <!DOCTYPE html>
-<!--
-  admin/products.html — Admin product management list.
-  Requires ROLE_ADMIN (enforced by SecurityConfig + @PreAuthorize).
-
-  Model attributes expected:
-    products        (List<ProductDTO>)
-    totalProducts   (int)
-    lowStockCount   (long)
-    outOfStockCount (long)
-    successMessage  (String, optional flash)
--->
-<html th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::main})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/admin-figma.css}"/>
     <title>Manage Products - Admin | Asian Door</title>
-    <style>
-        /* ── Admin hero (shared style — same as dashboard) ─────────── */
-        .admin-hero {
-            background: linear-gradient(135deg, #1a1a2e 0%, #12122a 55%, #0a0a1f 100%);
-            border-bottom: 3px solid var(--ad-accent);
-            padding: 2.4rem 0 2rem;
-        }
-        .admin-hero .admin-eyebrow {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--ad-accent);
-        }
-        .admin-hero h1 {
-            font-size: clamp(1.4rem, 3vw, 2rem);
-            font-weight: 800;
-            color: #fff;
-        }
-        .admin-hero p { color: rgba(255,255,255,0.55); font-size: 0.88rem; }
-        .admin-hero .breadcrumb-item a { color: rgba(255,255,255,0.45); text-decoration: none; }
-        .admin-hero .breadcrumb-item a:hover { color: #fff; }
-        .admin-hero .breadcrumb-item.active { color: rgba(255,255,255,0.8); }
-        .admin-hero .breadcrumb-item + .breadcrumb-item::before { color: rgba(255,255,255,0.25); }
-
-        /* ── Inline stat pills inside hero ─────────────────────────── */
-        .hero-stat-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 2rem;
-            padding: 0.3em 0.85em;
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.8);
-        }
-        .hero-stat-pill .pill-num {
-            font-weight: 800;
-            color: #fff;
-        }
-
-        /* ── Product table ──────────────────────────────────────────── */
-        .admin-table th {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-        .admin-table td { vertical-align: middle; }
-        .admin-action-icon {
-            width: 2rem;
-            height: 2rem;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.45rem;
-            font-size: 0.88rem;
-        }
-    </style>
 </head>
-<body>
-
-<!-- ═══════════════════════════════════════ ADMIN HERO ══════════════════════ -->
-<main>
-<header class="admin-hero">
-    <div class="container">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb mb-0 small">
-                <li class="breadcrumb-item">
-                    <a th:href="@{/}"><i class="bi bi-house-door me-1"></i>Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a th:href="@{/admin}">Admin Dashboard</a>
-                </li>
-                <li class="breadcrumb-item active">Products</li>
-            </ol>
-        </nav>
-
-        <!-- Title + action -->
-        <div class="d-flex align-items-end justify-content-between flex-wrap gap-3">
-            <div>
-                <p class="admin-eyebrow mb-1">
-                    <i class="bi bi-shield-lock-fill me-1"></i>Admin Panel
-                </p>
-                <h1 class="mb-2">Product Management</h1>
-                <!-- Live stock stats -->
-                <div class="d-flex flex-wrap gap-2">
-                    <span class="hero-stat-pill">
-                        <i class="bi bi-box-seam"></i>
-                        <span class="pill-num" th:text="${totalProducts}">0</span> total
-                    </span>
-                    <span class="hero-stat-pill" th:if="${lowStockCount > 0}">
-                        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-                        <span class="pill-num text-warning" th:text="${lowStockCount}">0</span> low stock
-                    </span>
-                    <span class="hero-stat-pill" th:if="${outOfStockCount > 0}">
-                        <i class="bi bi-x-circle-fill text-danger"></i>
-                        <span class="pill-num text-danger" th:text="${outOfStockCount}">0</span> out of stock
-                    </span>
-                    <span class="hero-stat-pill" th:if="${lowStockCount == 0 and outOfStockCount == 0}">
-                        <i class="bi bi-check-circle-fill text-success"></i>
-                        <span class="text-success">All in stock</span>
-                    </span>
-                </div>
+<body class="admin-figma">
+<nav th:replace="~{header :: header}"></nav>
+<main th:replace="~{fragments/admin-shell :: adminPage('products', 'Dashboard', ~{::productsContent})}">
+    <th:block th:fragment="productsContent">
+        <section class="panel-card">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h2 class="mb-0">Products</h2>
+                <a th:href="@{/admin/products/new}" class="create-btn"><i class="bi bi-plus-lg me-1"></i>Create Product</a>
             </div>
-            <a th:href="@{/admin/products/new}" class="btn btn-danger fw-semibold px-4">
-                <i class="bi bi-plus-lg me-2"></i>Add New Product
-            </a>
-        </div>
-    </div>
-</header>
 
-<!-- ═══════════════════════════════════ MAIN CONTENT ════════════════════════ -->
-<div class="container py-4">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge-soft">Total: <strong th:text="${totalProducts}">0</strong></span>
+                <span class="badge-soft">Low Stock: <strong th:text="${lowStockCount}">0</strong></span>
+                <span class="badge-soft">Out of Stock: <strong th:text="${outOfStockCount}">0</strong></span>
+            </div>
 
-    <!-- Flash success message -->
-    <div th:if="${successMessage}"
-         class="alert alert-success alert-dismissible fade show py-2 small mb-3" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i>
-        <span th:text="${successMessage}"></span>
-        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+            <div th:if="${successMessage}" class="alert alert-success py-2 mt-2 mb-2" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${successMessage}"></span>
+            </div>
 
-    <!-- Product table card -->
-    <div class="card border-0 shadow-sm" style="border-radius:0.9rem; overflow:hidden;">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 admin-table">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="ps-3" style="width:50px;">#</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Material</th>
-                            <th class="text-end">Price (₱)</th>
-                            <th class="text-center" style="width:80px;">Stock</th>
-                            <th class="text-center" style="width:110px;">Actions</th>
-                        </tr>
+            <div class="table-responsive admin-table">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th class="ps-3" style="width:64px;">ID</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th class="text-end">Price (₱)</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-center" style="width:128px;">Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <!-- Data rows -->
-                        <tr th:each="product : ${products}">
-                            <td class="ps-3 text-muted small" th:text="${product.id}">1</td>
-                            <td>
-                                <a th:href="@{/products/{id}(id=${product.id})}"
-                                   class="fw-semibold text-dark text-decoration-none"
-                                   th:text="${product.name}" target="_blank">Product Name</a>
-                                <div class="text-muted" style="font-size:0.72rem;"
-                                     th:if="${product.dimensions != null and !#strings.isEmpty(product.dimensions)}"
-                                     th:text="${product.dimensions}"></div>
-                            </td>
-                            <td>
-                                <span th:if="${product.category != null}"
-                                      th:text="${#strings.capitalize(product.category)}"
-                                      th:classappend="${'category-badge-' + product.category}"
-                                      class="category-badge"></span>
-                            </td>
-                            <td class="text-muted small"
-                                th:text="${product.material != null} ? ${product.material} : '—'">—</td>
-                            <td class="text-end fw-semibold"
-                                th:text="${product.price != null}
-                                    ? ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}
-                                    : '0.00'">0.00</td>
-                            <td class="text-center">
-                                <span th:text="${product.stock}" class="small fw-bold"
-                                      th:classappend="${product.stock == 0}  ? 'text-danger'
-                                                    : (${product.stock <= 5} ? 'text-warning'
-                                                    : 'text-success')">0</span>
-                            </td>
-                            <td class="text-center">
-                                <div class="d-flex gap-1 justify-content-center">
-                                    <!-- Edit -->
-                                    <a th:href="@{/admin/products/{id}/edit(id=${product.id})}"
-                                       class="btn btn-outline-secondary admin-action-icon"
-                                       title="Edit product">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <!-- Delete -->
-                                    <form th:action="@{/admin/products/{id}/delete(id=${product.id})}"
-                                          method="post"
-                                          onsubmit="return confirm('Delete \'' + this.dataset.name + '\'?\nThis cannot be undone.');"
-                                          th:data-name="${product.name}">
-                                        <button type="submit"
-                                                class="btn btn-outline-danger admin-action-icon"
-                                                title="Delete product">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
+                    <tr th:each="product : ${products}">
+                        <td class="ps-3 text-muted small" th:text="${product.id}">1</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)} ? ${product.imageUrl} : @{/images/country-house-door-pine-wood.jpg}"
+                                     alt="Product image"
+                                     style="width:42px;height:32px;object-fit:cover;border-radius:.25rem;"/>
+                                <div>
+                                    <a th:href="@{/products/{id}(id=${product.id})}" target="_blank"
+                                       class="fw-semibold text-dark text-decoration-none"
+                                       th:text="${product.name}">Product Name</a>
+                                    <p class="mb-0 text-muted small" th:text="${product.material != null ? product.material : '—'}">Material</p>
                                 </div>
-                            </td>
-                        </tr>
-
-                        <!-- Empty state row -->
-                        <tr th:if="${products == null or #lists.isEmpty(products)}">
-                            <td colspan="7" class="text-center py-5 text-muted">
-                                <i class="bi bi-inbox display-5 d-block mb-3 opacity-50"></i>
-                                <p class="mb-2 fw-semibold">No products yet</p>
-                                <a th:href="@{/admin/products/new}"
-                                   class="btn btn-danger btn-sm">
-                                    <i class="bi bi-plus-lg me-1"></i>Add your first product
+                            </div>
+                        </td>
+                        <td><span class="category-pill" th:text="${product.category != null ? #strings.capitalize(product.category) : '—'}">Category</span></td>
+                        <td class="text-end fw-semibold"
+                            th:text="${product.price != null}
+                                ? ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}
+                                : '0.00'">0.00</td>
+                        <td class="text-center">
+                            <span th:text="${product.stock}"
+                                  th:classappend="${product.stock == 0} ? 'stock-out' : (${product.stock <= 5} ? 'stock-low' : 'stock-ok')">0</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-inline-flex gap-1">
+                                <a th:href="@{/admin/products/{id}/edit(id=${product.id})}" class="btn btn-outline-secondary action-btn" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
                                 </a>
-                            </td>
-                        </tr>
+                                <form th:action="@{/admin/products/{id}/delete(id=${product.id})}" method="post"
+                                      onsubmit="return confirm('Delete ' + this.dataset.name + '?');"
+                                      th:data-name="${product.name}">
+                                    <button type="submit" class="btn btn-outline-danger action-btn" title="Delete">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${products == null or #lists.isEmpty(products)}">
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                            <p class="mb-2 fw-semibold">No products available</p>
+                            <a th:href="@{/admin/products/new}" class="btn btn-primary btn-sm">Create first product</a>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
-        </div>
-        <!-- Table footer: count -->
-        <div class="card-footer bg-transparent text-muted small py-2 px-3 border-top"
-             th:if="${products != null and !#lists.isEmpty(products)}">
-            <i class="bi bi-box-seam me-1"></i>
-            <span th:text="${#lists.size(products)}">0</span> product(s) total
-            <span th:if="${lowStockCount > 0 or outOfStockCount > 0}">
-                &nbsp;·&nbsp;
-                <span th:if="${lowStockCount > 0}">
-                    <span class="text-warning fw-semibold" th:text="${lowStockCount}">0</span> low stock
-                </span>
-                <span th:if="${outOfStockCount > 0}">
-                    <span class="text-danger fw-semibold" th:text="${outOfStockCount}">0</span> out of stock
-                </span>
-            </span>
-        </div>
-    </div>
-
-</div><!-- /.container -->
+        </section>
+    </th:block>
 </main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
 </body>
 </html>

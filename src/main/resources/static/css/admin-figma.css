@@ -1,0 +1,394 @@
+.admin-figma {
+    background: #f6f6f6;
+    color: #2f2f2f;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-figma .admin-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-figma .admin-sidebar {
+    width: 250px;
+    background: #ffffff;
+    border-right: 1px solid #ececec;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+.admin-figma .admin-brand {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #2f2f2f;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.admin-figma .admin-brand::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #138d3c;
+    margin-right: .55rem;
+}
+
+.admin-figma .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.admin-figma .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    color: #3d3d3d;
+    text-decoration: none;
+    padding: .62rem .7rem;
+    border-radius: .5rem;
+    font-size: .95rem;
+    font-weight: 500;
+}
+
+.admin-figma .sidebar-nav a:hover,
+.admin-figma .sidebar-nav a.active {
+    background: #f3f3f3;
+    color: #1f1f1f;
+}
+
+.admin-figma .sidebar-nav i {
+    font-size: 1.05rem;
+}
+
+.admin-figma .sidebar-footer {
+    margin-top: auto;
+    border-top: 1px solid #eceff4;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.admin-figma .sidebar-footer a,
+.admin-figma .sidebar-footer button {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    color: #3d3d3d;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    padding: .52rem .65rem;
+    border-radius: .5rem;
+    font-size: .92rem;
+    width: 100%;
+    text-align: left;
+}
+
+.admin-figma .sidebar-footer a:hover,
+.admin-figma .sidebar-footer button:hover {
+    background: #f3f3f3;
+    color: #1f1f1f;
+}
+
+.admin-figma .sidebar-footer button {
+    color: #b14141;
+}
+
+.admin-figma .admin-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-figma .admin-topbar {
+    height: 92px;
+    background: #ffffff;
+    border-bottom: 1px solid #ececec;
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.admin-figma .topbar-search {
+    flex: 1;
+    max-width: 560px;
+    background: #f5f5f5;
+    border: 1px solid #ececec;
+    border-radius: .55rem;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    padding: 0 .8rem;
+}
+
+.admin-figma .topbar-search i {
+    color: #696969;
+}
+
+.admin-figma .topbar-search input {
+    border: 0;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    color: #2f2f2f;
+    font-size: .92rem;
+}
+
+.admin-figma .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.admin-figma .create-btn {
+    background: #3e6be0;
+    color: #fff;
+    border: 0;
+    border-radius: .4rem;
+    padding: .5rem 1rem;
+    font-size: .88rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.admin-figma .create-btn:hover {
+    background: #3157ba;
+    color: #fff;
+}
+
+.admin-figma .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: .45rem;
+    border: 1px solid #ececec;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #363636;
+    text-decoration: none;
+}
+
+.admin-figma .icon-btn:hover {
+    background: #f6f6f6;
+    color: #1f1f1f;
+}
+
+.admin-figma .topbar-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ececec;
+}
+
+.admin-figma .admin-content {
+    padding: 1.3rem;
+}
+
+.admin-figma .content-head {
+    margin-bottom: 1rem;
+}
+
+.admin-figma .content-head h1 {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: 800;
+}
+
+.admin-figma .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 1rem;
+}
+
+.admin-figma .panel-card {
+    background: #fff;
+    border: 1px solid #ededed;
+    border-radius: .55rem;
+    padding: 1rem;
+}
+
+.admin-figma .panel-card h2 {
+    font-size: 1.08rem;
+    margin: 0;
+    font-weight: 800;
+}
+
+.admin-figma .overview-row {
+    margin-top: .8rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .7rem;
+}
+
+.admin-figma .stat-box {
+    background: #f5f5f5;
+    border-radius: .5rem;
+    padding: .8rem;
+}
+
+.admin-figma .stat-label {
+    font-size: .82rem;
+    color: #666;
+}
+
+.admin-figma .stat-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.admin-figma .admin-table {
+    margin-top: .85rem;
+    border-radius: .5rem;
+    overflow: hidden;
+    border: 1px solid #ededed;
+}
+
+.admin-figma .admin-table thead th {
+    font-size: .72rem;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    border-bottom-width: 1px;
+    background: #f7f7f7;
+}
+
+.admin-figma .admin-table tbody td {
+    vertical-align: middle;
+}
+
+.admin-figma .badge-soft {
+    font-size: .75rem;
+    background: #f2f2f2;
+    color: #353535;
+    border-radius: 999px;
+    padding: .2rem .62rem;
+}
+
+.admin-figma .category-pill {
+    display: inline-block;
+    background: #f4f4f4;
+    border-radius: 999px;
+    font-size: .74rem;
+    color: #444;
+    padding: .21rem .62rem;
+}
+
+.admin-figma .stock-ok { color: #138d3c; font-weight: 700; }
+.admin-figma .stock-low { color: #bd7f15; font-weight: 700; }
+.admin-figma .stock-out { color: #c03f3f; font-weight: 700; }
+
+.admin-figma .action-btn {
+    border-radius: .45rem;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-figma .popular-product-item {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .55rem 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.admin-figma .popular-product-item:last-child {
+    border-bottom: 0;
+}
+
+.admin-figma .popular-product-item img {
+    width: 44px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: .22rem;
+}
+
+.admin-figma .popular-product-item .name {
+    font-weight: 700;
+    font-size: .9rem;
+    margin: 0;
+}
+
+.admin-figma .popular-product-item .sub {
+    margin: 0;
+    font-size: .8rem;
+    color: #707070;
+}
+
+.admin-figma .popular-product-item .amount {
+    margin-left: auto;
+    font-weight: 700;
+}
+
+.admin-figma .product-form-card {
+    background: #fff;
+    border: 1px solid #ededed;
+    border-radius: .55rem;
+    padding: 1rem;
+}
+
+.admin-figma .product-form-card .form-label {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #666;
+    font-weight: 700;
+}
+
+.admin-figma .product-form-card .form-control,
+.admin-figma .product-form-card .form-select,
+.admin-figma .product-form-card .btn {
+    border-radius: .5rem;
+}
+
+@media (max-width: 1199px) {
+    .admin-figma .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 992px) {
+    .admin-figma .admin-shell {
+        flex-direction: column;
+    }
+
+    .admin-figma .admin-sidebar {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid #ececec;
+    }
+
+    .admin-figma .overview-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-figma .admin-topbar {
+        flex-wrap: wrap;
+        height: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-figma .overview-row {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-figma .topbar-search {
+        max-width: none;
+    }
+}

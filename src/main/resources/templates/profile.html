@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
+    <title>Asian Door | Buyer Profile</title>
+    <style>
+        .figma-profile {
+            background: #f6f6f6;
+            color: #2f2f2f;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .figma-profile a {
+            text-decoration: none !important;
+        }
+
+        .figma-profile .profile-layout {
+            padding: 1.2rem 0 2.5rem;
+        }
+
+        .figma-profile .side-card {
+            background: #fff;
+            border: 1px solid #dedede;
+            border-radius: .65rem;
+            box-shadow: 0 18px 36px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .figma-profile .buyer-card {
+            padding: .7rem;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .figma-profile .buyer-head {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            border: 1px solid #c4c4c4;
+            border-radius: .5rem;
+            padding: .5rem;
+        }
+
+        .figma-profile .buyer-head img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .figma-profile .buyer-name {
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .figma-profile .buyer-role {
+            margin: 0;
+            color: #7d7d7d;
+            font-size: .82rem;
+        }
+
+        .figma-profile .profile-nav a,
+        .figma-profile .profile-nav form button {
+            width: 100%;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            text-decoration: none;
+            color: #4a4a4a;
+            padding: .75rem .95rem;
+            border-bottom: 1px solid #ececec;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-weight: 500;
+        }
+
+        .figma-profile .profile-nav a.active {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .profile-nav a:hover,
+        .figma-profile .profile-nav form button:hover {
+            background: #f4f4f4;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .profile-nav a.active:hover {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .support-bar {
+            background: #585858;
+            color: #fff;
+            padding: .82rem .95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+        }
+
+        .figma-profile .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: .8rem;
+        }
+
+        .figma-profile .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: .95rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .figma-profile .product-card {
+            background: #fff;
+            border: 1px solid #ededed;
+            box-shadow: 0 8px 16px rgba(0,0,0,.07);
+            padding: .8rem;
+            display: flex;
+            gap: .7rem;
+            min-height: 172px;
+        }
+
+        .figma-profile .product-card img {
+            width: 128px;
+            height: 138px;
+            object-fit: cover;
+            background: #e7e7e7;
+        }
+
+        .figma-profile .product-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .figma-profile .product-desc {
+            margin: .2rem 0 .45rem;
+            color: #595959;
+            font-size: .93rem;
+        }
+
+        .figma-profile .price-row {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            margin-bottom: .15rem;
+        }
+
+        .figma-profile .price-new {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .figma-profile .price-old {
+            color: #8d8d8d;
+            text-decoration: line-through;
+            font-size: .93rem;
+        }
+
+        .figma-profile .save-note {
+            color: #3f60d8;
+            font-size: .95rem;
+            margin-bottom: .2rem;
+        }
+
+        .figma-profile .rating {
+            color: #f0a500;
+            font-size: .8rem;
+            letter-spacing: .05em;
+        }
+
+        @media (max-width: 991px) {
+            .figma-profile .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="figma-profile">
+    <th:block th:replace="~{fragments/figma-shell :: topNav('profile', '#')}"></th:block>
+
+    <section class="profile-layout">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-lg-3">
+                    <aside class="side-card">
+                        <div class="buyer-card">
+                            <div class="buyer-head">
+                                <img th:src="@{/images/profile-figma/buyer-avatar.png}" alt="Buyer avatar" />
+                                <div>
+                                    <p class="buyer-name" th:text="${(user != null and user.name != null) ? user.name : 'Buyer User'}">Buyer User</p>
+                                    <p class="buyer-role">Customer</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <nav class="profile-nav">
+                            <a class="active" th:href="@{/profile}"><i class="bi bi-speedometer2"></i>Dashboard</a>
+                            <a th:href="@{/orders/history}"><i class="bi bi-cart3"></i>Order History</a>
+                            <a th:href="@{/orders/history}"><i class="bi bi-receipt"></i>All Transactions</a>
+                            <a th:href="@{/cart/view}"><i class="bi bi-bookmark-heart"></i>Saved Items</a>
+                            <a th:href="@{/profile}"><i class="bi bi-person-gear"></i>Update Profile</a>
+                            <form th:action="@{/logout}" method="post" class="m-0">
+                                <button type="submit"><i class="bi bi-box-arrow-right"></i>Logout</button>
+                            </form>
+                        </nav>
+
+                        <div class="support-bar"><i class="bi bi-headset"></i>Contact Support</div>
+                    </aside>
+                </div>
+
+                <div class="col-lg-9">
+                    <h2 class="section-title">Popular Products</h2>
+                    <div class="products-grid">
+                        <article class="product-card">
+                            <img th:src="@{/images/profile-figma/product-book.png}" alt="Book Dairy"/>
+                            <div>
+                                <p class="product-name">Book Dairy</p>
+                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
+                                <div class="price-row"><span class="price-new">$0.99</span><span class="price-old">$1.99</span></div>
+                                <div class="save-note">You save $1</div>
+                                <div class="rating">★★★★☆</div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <img th:src="@{/images/admin-figma/popular-product-c.png}" alt="Simple Headphone"/>
+                            <div>
+                                <p class="product-name">Simple Headphone</p>
+                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
+                                <div class="price-row"><span class="price-new">$1.80</span><span class="price-old">$2.00</span></div>
+                                <div class="save-note">You save $0.20</div>
+                                <div class="rating">★★★☆☆</div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <img th:src="@{/images/profile-figma/product-watch.png}" alt="Company Watch"/>
+                            <div>
+                                <p class="product-name">Company Watch</p>
+                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
+                                <div class="price-row"><span class="price-new">$3.99</span><span class="price-old">$5.99</span></div>
+                                <div class="save-note">You save $2</div>
+                                <div class="rating">★★★★★</div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <img th:src="@{/images/profile-figma/product-cup.png}" alt="Coffee Cup"/>
+                            <div>
+                                <p class="product-name">Coffee Cup</p>
+                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
+                                <div class="price-row"><span class="price-new">$0.70</span><span class="price-old">$1.00</span></div>
+                                <div class="save-note">You save $0.30</div>
+                                <div class="rating">★★★☆☆</div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <h2 class="section-title">Recommended Products</h2>
+                    <div class="products-grid mb-0">
+                        <article class="product-card">
+                            <img th:src="@{/images/profile-figma/product-laptop.png}" alt="App NetComputer"/>
+                            <div>
+                                <p class="product-name">App NetComputer</p>
+                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
+                                <div class="price-row"><span class="price-new">$399.99</span><span class="price-old">$499.99</span></div>
+                                <div class="save-note">You save $100</div>
+                                <div class="rating">★★★★★</div>
+                            </div>
+                        </article>
+
+                        <article class="product-card">
+                            <img th:src="@{/images/profile-figma/product-shirt.png}" alt="T-Shirt Black"/>
+                            <div>
+                                <p class="product-name">T-Shirt Black</p>
+                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
+                                <div class="price-row"><span class="price-new">$3.99</span><span class="price-old">$4.99</span></div>
+                                <div class="save-note">You save $1.00</div>
+                                <div class="rating">★★★☆☆</div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
+</body>
+</html>

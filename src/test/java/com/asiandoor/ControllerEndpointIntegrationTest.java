@@ -48,10 +48,38 @@ class ControllerEndpointIntegrationTest {
     }
 
     @Test
+    void shouldReturnAboutPageForPublicUsers() throws Exception {
+        mockMvc.perform(get("/about"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("about"));
+    }
+
+    @Test
     void shouldReturnCartPageForAuthenticatedUsers() throws Exception {
         mockMvc.perform(get("/cart/view").with(user("customer@test.com").roles("CUSTOMER")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart"));
+    }
+
+    @Test
+    void shouldReturnProfilePageForAuthenticatedUsers() throws Exception {
+        mockMvc.perform(get("/profile").with(user("customer@test.com").roles("CUSTOMER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("profile"));
+    }
+
+    @Test
+    void shouldRedirectAnonymousUserToLoginWhenAccessingProfilePage() throws Exception {
+        mockMvc.perform(get("/profile"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+    }
+
+    @Test
+    void shouldAllowAdminAccessToProfilePage() throws Exception {
+        mockMvc.perform(get("/profile").with(user("admin@test.com").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("profile"));
     }
 
     @Test

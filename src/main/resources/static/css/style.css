@@ -15,7 +15,23 @@
 /* General */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
     background-color: #f5f5f5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+}
+
+p, li, span, a, small, label, input, button, textarea, th, td {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+}
+
+strong, b {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
 }
 
 /* ── Navbar — glassmorphism ── */
@@ -59,8 +75,42 @@ body {
 .navbar .nav-link:hover {
     color: #fff !important;
 }
-.navbar .nav-link.active {
-    border-bottom: 2px solid var(--ad-accent);
+
+.navbar-glass .navbar-collapse {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-avatar-link,
+.nav-avatar-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.nav-avatar-link:hover,
+.nav-avatar-btn:hover {
+    background: rgba(255, 255, 255, 0.24);
+    color: #fff;
+}
+
+.avatar-dropdown-toggle::after {
+    display: none;
+}
+
+.nav-avatar-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 /* Cart badge */
@@ -98,6 +148,17 @@ body {
     background-color: var(--ad-accent);
     border-color: var(--ad-accent);
     color: #fff;
+}
+
+@media (max-width: 991px) {
+    .navbar-glass .navbar-collapse {
+        margin-top: .55rem;
+        gap: .6rem;
+    }
+
+    .navbar-glass .navbar-nav {
+        width: 100%;
+    }
 }
 
 /* ── Product Cards ──────────────────────────────────────────── */
@@ -214,8 +275,6 @@ body {
 /* Page section headings */
 .section-title {
     font-weight: 700;
-    border-left: 4px solid var(--ad-accent);
-    padding-left: 0.75rem;
     margin-bottom: 1.5rem;
 }
 

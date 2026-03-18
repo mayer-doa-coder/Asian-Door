@@ -3,6 +3,10 @@
 :is(.figma-products, .figma-detail, .figma-about, .figma-flow, .figma-auth, .figma-profile) .topbar {
     background: #f6f6f6;
     padding: 1.7rem 0 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    border-bottom: 1px solid #e9e9e9;
 }
 
 :is(.figma-products, .figma-detail, .figma-about, .figma-flow, .figma-auth, .figma-profile) .brand {

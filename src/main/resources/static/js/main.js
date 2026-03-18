@@ -44,13 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return appPath(trimmed);
     }
 
-    var CURRENCY = new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP'
+    var CURRENCY = new Intl.NumberFormat('en-BD', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
 
     function formatCurrency(value) {
-        return CURRENCY.format(Number(value || 0));
+        return 'Tk ' + CURRENCY.format(Number(value || 0));
     }
 
     function setCartBadgeCount(count) {

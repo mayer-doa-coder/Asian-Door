@@ -139,7 +139,7 @@
                             <span th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy')}">01 Jan 2026</span>
                             <div class="small text-muted" th:text="${#temporals.format(order.orderDate, 'hh:mm a')}">10:00 AM</div>
                         </td>
-                        <td class="fw-bold" style="color:#2f2f2f;" th:text="${'PHP ' + #numbers.formatDecimal(order.totalPrice, 1, 'COMMA', 2, 'POINT')}">PHP 0.00</td>
+                        <td class="fw-bold" style="color:#2f2f2f;" th:text="${'Tk ' + #numbers.formatDecimal(order.totalPrice, 1, 'COMMA', 2, 'POINT')}">Tk 0.00</td>
                         <td class="pe-3">
                             <span class="status-pill" th:classappend="${' status-' + #strings.toLowerCase(order.status)}" th:text="${order.status}">PENDING</span>
                         </td>

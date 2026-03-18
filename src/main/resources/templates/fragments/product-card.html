@@ -80,7 +80,7 @@
             <div class="d-flex align-items-center justify-content-between gap-2">
 
                 <div class="product-price fw-bold">
-                    ₱<span th:text="${product.price != null}
+                    Tk <span th:text="${product.price != null}
                         ? ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}
                         : '0.00'">0.00</span>
                 </div>

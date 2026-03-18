@@ -148,65 +148,6 @@
             background: #2b2b2b;
         }
 
-        .figma-about .blog {
-            padding: 1rem 0 2.6rem;
-        }
-
-        .figma-about .blog-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.2rem;
-        }
-
-        .figma-about .blog-head h3 {
-            font-size: 1.65rem;
-            color: #2b2b2b;
-            font-weight: 700;
-            margin: 0;
-            text-transform: lowercase;
-        }
-
-        .figma-about .blog-card {
-            text-align: center;
-            color: #303030;
-            display: block;
-        }
-
-        .figma-about .blog-card .img-wrap {
-            background: #d9d9d9;
-            aspect-ratio: 1.08 / 1;
-            overflow: hidden;
-            margin-bottom: .8rem;
-        }
-
-        .figma-about .blog-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .figma-about .blog-card .date {
-            color: #9e9e9e;
-            font-size: .8rem;
-            margin-bottom: .45rem;
-        }
-
-        .figma-about .blog-card .title {
-            color: #303030;
-            font-size: .92rem;
-            margin-bottom: .45rem;
-            line-height: 1.35;
-        }
-
-        .figma-about .blog-card .read {
-            color: #303030;
-            font-size: .86rem;
-            text-decoration: underline;
-            text-underline-offset: 2px;
-        }
-
         @media (max-width: 992px) {
             .figma-about .hero { height: 220px; }
             .figma-about .video-banner { height: 260px; }
@@ -239,7 +180,7 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
             </div>
             <div class="col-6 col-lg-3 feature-item">
-                <h6><i class="bi bi-currency-dollar"></i>PAYMENT</h6>
+                <h6><i class="bi bi-cash-coin"></i>PAYMENT</h6>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
             </div>
         </div>
@@ -275,40 +216,6 @@
                     <div class="skill-head"><span>Design</span><span>72 %</span></div>
                     <div class="skill-track"><span class="skill-fill" style="width:72%;"></span></div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container blog" id="blog">
-        <div class="blog-head">
-            <h3>last blog post</h3>
-            <div class="text-muted small"><i class="bi bi-chevron-left"></i> <i class="bi bi-chevron-right ms-2"></i></div>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-md-4">
-                <a class="blog-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-1.jpg}" alt="Blog post 1"/></div>
-                    <p class="date">Sep 26, 2022</p>
-                    <p class="title">Paint your office in natural<br/>colors only</p>
-                    <span class="read">Read more</span>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="blog-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-2.jpg}" alt="Blog post 2"/></div>
-                    <p class="date">Sep 26, 2022</p>
-                    <p class="title">Paint your office in natural<br/>colors only</p>
-                    <span class="read">Read more</span>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="blog-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-3.jpg}" alt="Blog post 3"/></div>
-                    <p class="date">Sep 26, 2022</p>
-                    <p class="title">Paint your office in natural<br/>colors only</p>
-                    <span class="read">Read more</span>
-                </a>
             </div>
         </div>
     </section>

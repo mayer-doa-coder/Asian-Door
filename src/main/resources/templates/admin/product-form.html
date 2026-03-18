@@ -61,7 +61,7 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="price" class="form-label">Price (₱)</label>
+                            <label for="price" class="form-label">Price (Tk)</label>
                             <input type="number" id="price" th:field="*{price}" class="form-control"
                                    th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'"
                                    step="0.01" min="0.01" placeholder="0.00" />

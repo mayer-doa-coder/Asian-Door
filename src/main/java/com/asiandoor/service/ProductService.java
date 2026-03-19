@@ -2,12 +2,15 @@ package com.asiandoor.service;
 
 import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,7 +19,9 @@ import org.springframework.util.StringUtils;
 
 import com.asiandoor.dto.ProductDTO;
 import com.asiandoor.entity.Product;
+import com.asiandoor.repository.OrderItemRepository;
 import com.asiandoor.repository.ProductRepository;
+import com.asiandoor.repository.ProductReviewRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +32,8 @@ public class ProductService {
     private static final int PAGE_SIZE = 9;
 
     private final ProductRepository productRepository;
+    private final ProductReviewRepository productReviewRepository;
+    private final OrderItemRepository orderItemRepository;
 
     // ── Create ───────────────────────────────────────────────────────────────
 
@@ -80,6 +87,104 @@ public class ProductService {
         return related;
     }
 
+    public List<ProductDTO> getPopularProducts(int limit) {
+        if (limit <= 0) {
+            return List.of();
+        }
+
+        List<Object[]> topRatedStats = productReviewRepository.findTopRatedProductStats(PageRequest.of(0, limit));
+        if (topRatedStats.isEmpty()) {
+            return getFilteredProducts(null, null, 0, "newest", null, null)
+                    .getContent()
+                    .stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+        }
+
+        List<Long> orderedProductIds = topRatedStats.stream()
+                .map(row -> ((Number) row[0]).longValue())
+                .collect(Collectors.toList());
+
+        Map<Long, Product> productById = productRepository.findAllById(orderedProductIds)
+                .stream()
+                .collect(Collectors.toMap(Product::getId, product -> product));
+
+        Map<Long, Object[]> statsByProductId = topRatedStats.stream()
+                .collect(Collectors.toMap(row -> ((Number) row[0]).longValue(), row -> row));
+
+        return orderedProductIds.stream()
+                .map(productById::get)
+                .filter(product -> product != null)
+                .map(this::toDTO)
+                .peek(dto -> {
+                    Object[] stats = statsByProductId.get(dto.getId());
+                    double average = stats != null && stats[1] != null ? ((Number) stats[1]).doubleValue() : 0.0;
+                    long total = stats != null && stats[2] != null ? ((Number) stats[2]).longValue() : 0L;
+                    dto.setAverageRating(average);
+                    dto.setTotalReviews(total);
+                })
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductDTO> getRecommendedProductsForUser(Long userId, int limit) {
+        if (userId == null || limit <= 0) {
+            return List.of();
+        }
+
+        List<Object[]> categoryPreferences = orderItemRepository.findPurchasedCategoryCountsByUserId(userId);
+        if (categoryPreferences.isEmpty()) {
+            return getFilteredProducts(null, null, 0, "newest", null, null)
+                    .getContent()
+                    .stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+        }
+
+        Set<Long> purchasedProductIds = new LinkedHashSet<>(orderItemRepository.findDistinctPurchasedProductIdsByUserId(userId));
+        List<ProductDTO> recommended = new java.util.ArrayList<>();
+        Set<Long> selectedIds = new LinkedHashSet<>();
+
+        for (Object[] preference : categoryPreferences) {
+            if (recommended.size() >= limit) {
+                break;
+            }
+
+            String category = preference[0] != null ? preference[0].toString() : null;
+            if (!StringUtils.hasText(category)) {
+                continue;
+            }
+
+            List<ProductDTO> categoryProducts = getFilteredProducts(category, null, 0, "newest", null, null).getContent();
+            for (ProductDTO product : categoryProducts) {
+                if (recommended.size() >= limit) {
+                    break;
+                }
+                if (purchasedProductIds.contains(product.getId()) || selectedIds.contains(product.getId())) {
+                    continue;
+                }
+                recommended.add(product);
+                selectedIds.add(product.getId());
+            }
+        }
+
+        if (recommended.size() < limit) {
+            List<ProductDTO> fallback = getFilteredProducts(null, null, 0, "newest", null, null).getContent();
+            for (ProductDTO product : fallback) {
+                if (recommended.size() >= limit) {
+                    break;
+                }
+                if (selectedIds.contains(product.getId()) || purchasedProductIds.contains(product.getId())) {
+                    continue;
+                }
+                recommended.add(product);
+                selectedIds.add(product.getId());
+            }
+        }
+
+        return recommended;
+    }
+
     /**
      * Returns a page of DTOs filtered by optional category and/or keyword.
      * Results are sorted by id descending (newest first).
@@ -129,7 +234,44 @@ public class ProductService {
             spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), normalizedMaxPrice));
         }
 
-        return productRepository.findAll(spec, pageable).map(this::toDTO);
+        Page<Product> productPage = productRepository.findAll(spec, pageable);
+        List<ProductDTO> productDTOs = productPage.getContent()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+
+        applyReviewStats(productDTOs);
+
+        return new PageImpl<>(productDTOs, pageable, productPage.getTotalElements());
+    }
+
+    private void applyReviewStats(List<ProductDTO> products) {
+        if (products == null || products.isEmpty()) {
+            return;
+        }
+
+        List<Long> productIds = products.stream()
+                .map(ProductDTO::getId)
+                .collect(Collectors.toList());
+
+        Map<Long, Object[]> statsByProductId = productReviewRepository.findReviewStatsByProductIds(productIds)
+                .stream()
+                .collect(Collectors.toMap(row -> ((Number) row[0]).longValue(), row -> row));
+
+        for (ProductDTO product : products) {
+            Object[] stats = statsByProductId.get(product.getId());
+            if (stats == null) {
+                product.setAverageRating(0.0);
+                product.setTotalReviews(0L);
+                continue;
+            }
+
+            double average = stats[1] != null ? ((Number) stats[1]).doubleValue() : 0.0;
+            long total = stats[2] != null ? ((Number) stats[2]).longValue() : 0L;
+
+            product.setAverageRating(average);
+            product.setTotalReviews(total);
+        }
     }
 
     public Map<String, Long> getCategoryCounts() {

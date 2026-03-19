@@ -42,11 +42,16 @@
             padding: .5rem;
         }
 
-        .figma-profile .buyer-head img {
+        .figma-profile .buyer-icon {
             width: 46px;
             height: 46px;
             border-radius: 50%;
-            object-fit: cover;
+            background: #ececec;
+            color: #5b5b5b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
         }
 
         .figma-profile .buyer-name {
@@ -193,7 +198,7 @@
                     <aside class="side-card">
                         <div class="buyer-card">
                             <div class="buyer-head">
-                                <img th:src="@{/images/profile-figma/buyer-avatar.png}" alt="Buyer avatar" />
+                                <span class="buyer-icon"><i class="bi bi-person"></i></span>
                                 <div>
                                     <p class="buyer-name" th:text="${(user != null and user.name != null) ? user.name : 'Buyer User'}">Buyer User</p>
                                     <p class="buyer-role">Customer</p>
@@ -206,7 +211,7 @@
                             <a th:href="@{/orders/history}"><i class="bi bi-cart3"></i>Order History</a>
                             <a th:href="@{/orders/history}"><i class="bi bi-receipt"></i>All Transactions</a>
                             <a th:href="@{/cart/view}"><i class="bi bi-bookmark-heart"></i>Saved Items</a>
-                            <a th:href="@{/profile}"><i class="bi bi-person-gear"></i>Update Profile</a>
+                            <a th:href="@{/profile/update}"><i class="bi bi-person-gear"></i>Update Profile</a>
                             <form th:action="@{/logout}" method="post" class="m-0">
                                 <button type="submit"><i class="bi bi-box-arrow-right"></i>Logout</button>
                             </form>
@@ -218,76 +223,54 @@
 
                 <div class="col-lg-9">
                     <h2 class="section-title">Popular Products</h2>
-                    <div class="products-grid">
-                        <article class="product-card">
-                            <img th:src="@{/images/profile-figma/product-book.png}" alt="Book Dairy"/>
+                    <div class="products-grid" th:if="${popularProducts != null and !#lists.isEmpty(popularProducts)}">
+                        <a class="product-card" th:each="product : ${popularProducts}" th:href="@{/products/{id}(id=${product.id})}">
+                            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{${product.imageUrl}}"
+                                 th:alt="${product.name}"
+                                 th:attr="onerror=|this.onerror=null;this.src='@{/images/products-figma/product-1.jpg}'|"/>
+                            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{/images/products-figma/product-1.jpg}"
+                                 th:alt="${product.name}"/>
                             <div>
-                                <p class="product-name">Book Dairy</p>
-                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
-                                <div class="price-row"><span class="price-new">Tk 0.99</span><span class="price-old">Tk 1.99</span></div>
-                                <div class="save-note">You save Tk 1</div>
-                                <div class="rating">★★★★☆</div>
+                                <p class="product-name" th:text="${product.name}">Door Product</p>
+                                <p class="product-desc" th:text="${product.description != null and !#strings.isEmpty(product.description) ? #strings.abbreviate(product.description, 55) : 'Top-rated door based on customer reviews.'}">Top-rated door</p>
+                                <div class="price-row"><span class="price-new">Tk <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span></span></div>
+                                <div class="save-note" th:text="${(product.totalReviews != null ? product.totalReviews : 0) + ' reviews'}">0 reviews</div>
+                                <div class="rating" th:with="roundedRating=${product.averageRating != null ? T(java.lang.Math).round(product.averageRating) : 0}">
+                                    <th:block th:each="i : ${#numbers.sequence(1,5)}">
+                                        <i th:class="${i <= roundedRating ? 'bi bi-star-fill' : 'bi bi-star'}"></i>
+                                    </th:block>
+                                </div>
                             </div>
-                        </article>
-
-                        <article class="product-card">
-                            <img th:src="@{/images/admin-figma/popular-product-c.png}" alt="Simple Headphone"/>
-                            <div>
-                                <p class="product-name">Simple Headphone</p>
-                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
-                                <div class="price-row"><span class="price-new">Tk 1.80</span><span class="price-old">Tk 2.00</span></div>
-                                <div class="save-note">You save Tk 0.20</div>
-                                <div class="rating">★★★☆☆</div>
-                            </div>
-                        </article>
-
-                        <article class="product-card">
-                            <img th:src="@{/images/profile-figma/product-watch.png}" alt="Company Watch"/>
-                            <div>
-                                <p class="product-name">Company Watch</p>
-                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
-                                <div class="price-row"><span class="price-new">Tk 3.99</span><span class="price-old">Tk 5.99</span></div>
-                                <div class="save-note">You save Tk 2</div>
-                                <div class="rating">★★★★★</div>
-                            </div>
-                        </article>
-
-                        <article class="product-card">
-                            <img th:src="@{/images/profile-figma/product-cup.png}" alt="Coffee Cup"/>
-                            <div>
-                                <p class="product-name">Coffee Cup</p>
-                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
-                                <div class="price-row"><span class="price-new">Tk 0.70</span><span class="price-old">Tk 1.00</span></div>
-                                <div class="save-note">You save Tk 0.30</div>
-                                <div class="rating">★★★☆☆</div>
-                            </div>
-                        </article>
+                        </a>
                     </div>
+                    <div class="text-muted small mb-4" th:if="${popularProducts == null or #lists.isEmpty(popularProducts)}">No rated products available yet.</div>
 
                     <h2 class="section-title">Recommended Products</h2>
-                    <div class="products-grid mb-0">
-                        <article class="product-card">
-                            <img th:src="@{/images/profile-figma/product-laptop.png}" alt="App NetComputer"/>
+                    <div class="products-grid mb-0" th:if="${recommendedProducts != null and !#lists.isEmpty(recommendedProducts)}">
+                        <a class="product-card" th:each="product : ${recommendedProducts}" th:href="@{/products/{id}(id=${product.id})}">
+                            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{${product.imageUrl}}"
+                                 th:alt="${product.name}"
+                                 th:attr="onerror=|this.onerror=null;this.src='@{/images/products-figma/product-1.jpg}'|"/>
+                            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                                 th:src="@{/images/products-figma/product-1.jpg}"
+                                 th:alt="${product.name}"/>
                             <div>
-                                <p class="product-name">App NetComputer</p>
-                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
-                                <div class="price-row"><span class="price-new">Tk 399.99</span><span class="price-old">Tk 499.99</span></div>
-                                <div class="save-note">You save Tk 100</div>
-                                <div class="rating">★★★★★</div>
+                                <p class="product-name" th:text="${product.name}">Door Product</p>
+                                <p class="product-desc" th:text="${'Recommended from your ' + (product.category != null ? product.category : 'recent') + ' purchase pattern.'}">Recommended door</p>
+                                <div class="price-row"><span class="price-new">Tk <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span></span></div>
+                                <div class="save-note" th:text="${product.category != null ? #strings.capitalize(product.category) + ' category' : 'Category match'}">Category match</div>
+                                <div class="rating" th:with="roundedRating=${product.averageRating != null ? T(java.lang.Math).round(product.averageRating) : 0}">
+                                    <th:block th:each="i : ${#numbers.sequence(1,5)}">
+                                        <i th:class="${i <= roundedRating ? 'bi bi-star-fill' : 'bi bi-star'}"></i>
+                                    </th:block>
+                                </div>
                             </div>
-                        </article>
-
-                        <article class="product-card">
-                            <img th:src="@{/images/profile-figma/product-shirt.png}" alt="T-Shirt Black"/>
-                            <div>
-                                <p class="product-name">T-Shirt Black</p>
-                                <p class="product-desc">Lorem ipsum dolor sit amet</p>
-                                <div class="price-row"><span class="price-new">Tk 3.99</span><span class="price-old">Tk 4.99</span></div>
-                                <div class="save-note">You save Tk 1.00</div>
-                                <div class="rating">★★★☆☆</div>
-                            </div>
-                        </article>
+                        </a>
                     </div>
+                    <div class="text-muted small" th:if="${recommendedProducts == null or #lists.isEmpty(recommendedProducts)}">No personalized recommendations yet. Place more orders to improve category matching.</div>
                 </div>
             </div>
         </div>

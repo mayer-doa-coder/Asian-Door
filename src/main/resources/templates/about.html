@@ -17,11 +17,12 @@
 
         .figma-about .hero {
             background: #ddd;
-            width: 100%;
-            max-width: 1200px;
-            aspect-ratio: 1200 / 630;
-            height: auto;
-            margin: 0 auto;
+            width: 100vw;
+            max-width: none;
+            height: clamp(180px, 28vw, 360px);
+            margin: 0;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
             overflow: hidden;
             position: relative;
         }
@@ -60,12 +61,11 @@
         .figma-about .video-banner {
             margin-top: 1.4rem;
             margin-bottom: 2.1rem;
-            width: 100%;
-            max-width: 1200px;
-            aspect-ratio: 1200 / 630;
-            height: auto;
-            margin-left: auto;
-            margin-right: auto;
+            width: 100vw;
+            max-width: none;
+            height: clamp(180px, 28vw, 360px);
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
             background: #ddd;
             position: relative;
             overflow: hidden;

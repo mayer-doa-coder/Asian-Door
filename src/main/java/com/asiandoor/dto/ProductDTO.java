@@ -39,4 +39,8 @@ public class ProductDTO {
     private String imageUrl;
 
     private String description;
+
+    private Double averageRating = 0.0;
+
+    private Long totalReviews = 0L;
 }

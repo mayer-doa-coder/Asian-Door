@@ -84,6 +84,12 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="lockSystem" class="form-label">Lock System</label>
+                        <input type="text" id="lockSystem" th:field="*{lockSystem}" class="form-control"
+                               placeholder="e.g. Multi-point lock" />
+                    </div>
+
+                    <div class="mb-3">
                         <label for="imageFile" class="form-label">Product Photo</label>
                         <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
                         <div class="text-danger small mt-1" th:if="${uploadError}" th:text="${uploadError}"></div>

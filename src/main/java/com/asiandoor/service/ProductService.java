@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +45,39 @@ public class ProductService {
 
     public Optional<ProductDTO> getProductById(Long id) {
         return productRepository.findById(id).map(this::toDTO);
+    }
+
+    public List<ProductDTO> getRelatedProductDTOs(Long currentProductId, String category, int limit) {
+        if (limit <= 0) {
+            return List.of();
+        }
+
+        List<Product> allProducts = productRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+
+        Stream<Product> sameCategory = allProducts.stream()
+                .filter(product -> !product.getId().equals(currentProductId))
+                .filter(product -> StringUtils.hasText(product.getImageUrl()))
+                .filter(product -> StringUtils.hasText(category)
+                        && StringUtils.hasText(product.getCategory())
+                        && product.getCategory().equalsIgnoreCase(category));
+
+        List<ProductDTO> related = sameCategory
+                .limit(limit)
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+
+        if (related.size() < limit) {
+            List<Long> selectedIds = related.stream().map(ProductDTO::getId).collect(Collectors.toList());
+            allProducts.stream()
+                    .filter(product -> !product.getId().equals(currentProductId))
+                    .filter(product -> StringUtils.hasText(product.getImageUrl()))
+                    .filter(product -> !selectedIds.contains(product.getId()))
+                    .limit(limit - related.size())
+                    .map(this::toDTO)
+                    .forEach(related::add);
+        }
+
+        return related;
     }
 
     /**
@@ -135,6 +169,7 @@ public class ProductService {
         existing.setMaterial(dto.getMaterial());
         existing.setPrice(dto.getPrice());
         existing.setDimensions(dto.getDimensions());
+        existing.setLockSystem(dto.getLockSystem());
         existing.setStock(dto.getStock());
         existing.setImageUrl(dto.getImageUrl());
         existing.setDescription(dto.getDescription());
@@ -157,6 +192,7 @@ public class ProductService {
         dto.setMaterial(p.getMaterial());
         dto.setPrice(p.getPrice());
         dto.setDimensions(p.getDimensions());
+        dto.setLockSystem(p.getLockSystem());
         dto.setStock(p.getStock());
         dto.setImageUrl(p.getImageUrl());
         dto.setDescription(p.getDescription());
@@ -170,6 +206,7 @@ public class ProductService {
         p.setMaterial(dto.getMaterial());
         p.setPrice(dto.getPrice());
         p.setDimensions(dto.getDimensions());
+        p.setLockSystem(dto.getLockSystem());
         p.setStock(dto.getStock());
         p.setImageUrl(dto.getImageUrl());
         p.setDescription(dto.getDescription());

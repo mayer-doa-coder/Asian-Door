@@ -66,6 +66,7 @@ public class HomeController {
         return productService.getProductById(id)
                 .map(product -> {
                     model.addAttribute("product", product);
+                    model.addAttribute("relatedProducts", productService.getRelatedProductDTOs(product.getId(), product.getCategory(), 4));
                     return "product-detail";
                 })
                 .orElse("redirect:/products");

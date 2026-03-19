@@ -15,36 +15,11 @@
         .figma-detail a {
             text-decoration: none;
         }
-
-
-        .figma-detail .crumb {
-            color: #7e7e7e;
-            font-size: .9rem;
-            margin-top: .8rem;
-            margin-bottom: 1.2rem;
-        }
-
         .figma-detail .main-section {
+            padding-top: 1.2rem;
             padding-bottom: 3rem;
         }
 
-        .figma-detail .thumb-col {
-            display: grid;
-            gap: 12px;
-        }
-
-        .figma-detail .thumb-item {
-            background: #ddd;
-            height: 132px;
-            overflow: hidden;
-            border: 1px solid transparent;
-        }
-
-        .figma-detail .thumb-item.active {
-            border-color: #7f7f7f;
-        }
-
-        .figma-detail .thumb-item img,
         .figma-detail .hero-img img {
             width: 100%;
             height: 100%;
@@ -66,7 +41,7 @@
         }
 
         .figma-detail .rating-row {
-            color: #a8a8a8;
+            color: #5f5f5f;
             font-size: .85rem;
             display: flex;
             align-items: center;
@@ -77,27 +52,14 @@
         .figma-detail .price-row {
             display: flex;
             align-items: center;
-            gap: .7rem;
+            gap: .3rem;
             margin-bottom: 1.05rem;
-        }
-
-        .figma-detail .old-price {
-            font-size: .9rem;
-            color: #8c8c8c;
-            text-decoration: line-through;
         }
 
         .figma-detail .new-price {
             font-size: 1.25rem;
             font-weight: 700;
             color: #323232;
-        }
-
-        .figma-detail .desc {
-            color: #9b9b9b;
-            line-height: 1.45;
-            margin-bottom: 1.2rem;
-            max-width: 420px;
         }
 
         .figma-detail .cart-row {
@@ -121,6 +83,40 @@
             background: #f6f6f6;
         }
 
+        .figma-detail .qty-box button {
+            border: 0;
+            background: transparent;
+            color: #6f6f6f;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .figma-detail .qty-box button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        .figma-detail .qty-value {
+            width: 44px;
+            text-align: center;
+            border: 0;
+            background: transparent;
+            color: #666;
+            font-size: .95rem;
+            pointer-events: none;
+        }
+
+        .figma-detail .stock-info {
+            color: #636363;
+            font-size: .92rem;
+            margin-bottom: .8rem;
+            font-weight: 600;
+        }
+
         .figma-detail .btn-add {
             background: #393939;
             color: #f2f2f2;
@@ -138,18 +134,10 @@
             color: #fff;
         }
 
-        .figma-detail .wishlist {
-            display: inline-flex;
-            align-items: center;
-            gap: .45rem;
-            color: #9b9b9b;
-            margin-bottom: 1rem;
-        }
-
         .figma-detail .meta {
-            color: #9b9b9b;
+            color: #646464;
             font-size: .92rem;
-            margin-bottom: .42rem;
+            margin-bottom: .32rem;
         }
 
         .figma-detail .meta a {
@@ -178,9 +166,113 @@
         }
 
         .figma-detail .tab-content {
-            color: #978e8e;
+            color: #666;
             max-width: 430px;
             line-height: 1.45;
+        }
+
+        .figma-detail .reviews-layout {
+            margin-top: .4rem;
+            margin-bottom: 2rem;
+        }
+
+        .figma-detail .reviews-column {
+            border-top: 1px solid #e1e1e1;
+            padding-top: 1rem;
+        }
+
+        .figma-detail .review-summary {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            color: #4f4f4f;
+            margin-bottom: .8rem;
+            font-size: .95rem;
+        }
+
+        .figma-detail .review-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #303030;
+            margin-bottom: .7rem;
+        }
+
+        .figma-detail .review-stars-input {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            margin-bottom: .6rem;
+        }
+
+        .figma-detail .review-stars-input button {
+            border: 0;
+            background: transparent;
+            color: #aaaaaa;
+            padding: 0;
+            font-size: 1.1rem;
+        }
+
+        .figma-detail .review-stars-input button.active {
+            color: #d39a1a;
+        }
+
+        .figma-detail .review-form textarea {
+            width: 100%;
+            border: 1px solid #d4d4d4;
+            background: #fff;
+            color: #474747;
+            font-size: .92rem;
+            padding: .65rem .75rem;
+            min-height: 88px;
+        }
+
+        .figma-detail .review-form textarea:focus {
+            outline: none;
+            border-color: #8f8f8f;
+        }
+
+        .figma-detail .review-list {
+            margin-top: .4rem;
+            display: grid;
+            gap: .7rem;
+        }
+
+        .figma-detail .review-item {
+            padding: .5rem 0 .7rem;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .figma-detail .review-item .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: .7rem;
+            color: #525252;
+            font-size: .9rem;
+            margin-bottom: .25rem;
+        }
+
+        .figma-detail .review-item p {
+            margin: 0;
+            color: #666;
+            font-size: .9rem;
+            line-height: 1.4;
+        }
+
+        .figma-detail .animate-in {
+            opacity: 0;
+            transform: translateY(12px);
+            animation: detailFadeIn .6s ease forwards;
+        }
+
+        .figma-detail .animate-in.delay-1 { animation-delay: .08s; }
+        .figma-detail .animate-in.delay-2 { animation-delay: .16s; }
+
+        @keyframes detailFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .figma-detail .related {
@@ -233,8 +325,8 @@
                 height: 360px;
             }
 
-            .figma-detail .thumb-item {
-                height: 90px;
+            .figma-detail .reviews-column {
+                border-top: 1px solid #e1e1e1;
             }
         }
     </style>
@@ -243,77 +335,53 @@
 <main class="figma-detail">
     <th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#detail-footer')}"></th:block>
 
-    <div class="container">
-        <p class="crumb mb-0">
-            <a th:href="@{/products}" class="text-muted">shope</a> /
-            <span th:text="${product.name}">sofa code 234</span>
-        </p>
-    </div>
-
     <section class="container main-section">
         <div class="row g-4 align-items-start">
-            <div class="col-lg-7">
-                <div class="row g-3">
-                    <div class="col-3 thumb-col">
-                        <div class="thumb-item active">
-                            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
-                                 th:src="@{${product.imageUrl}}"
-                                 th:alt="${product.name}"
-                                 th:attr="onerror=|this.onerror=null;this.src='@{/images/product-detail-figma/main.jpg}'|" />
-                            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
-                                 th:src="@{/images/product-detail-figma/main.jpg}"
-                                 th:alt="${product.name}" />
-                        </div>
-                        <div class="thumb-item"><img th:src="@{/images/product-detail-figma/main.jpg}" alt="Preview 2"/></div>
-                        <div class="thumb-item"><img th:src="@{/images/product-detail-figma/main.jpg}" alt="Preview 3"/></div>
-                        <div class="thumb-item"><img th:src="@{/images/product-detail-figma/main.jpg}" alt="Preview 4"/></div>
-                    </div>
-                    <div class="col-9">
-                        <div class="hero-img">
-                            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
-                                 th:src="@{${product.imageUrl}}"
-                                 th:alt="${product.name}"
-                                 th:attr="onerror=|this.onerror=null;this.src='@{/images/product-detail-figma/main.jpg}'|" />
-                            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
-                                 th:src="@{/images/product-detail-figma/main.jpg}"
-                                 th:alt="${product.name}" />
-                        </div>
+            <div class="col-lg-7 animate-in">
+                <div class="hero-img">
+                    <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                         th:src="@{${product.imageUrl}}"
+                         th:alt="${product.name}" />
+                    <div th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                         class="d-flex h-100 align-items-center justify-content-center text-muted">
+                        Product image unavailable
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-5">
+            <div class="col-lg-5 animate-in delay-1">
                 <h1 class="detail-title" th:text="${product.name}">Sofa code 234</h1>
 
                 <div class="rating-row">
-                    <span class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i></span>
-                    <span>( top )</span>
+                    <span class="stars" id="avgStars" aria-hidden="true"><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i></span>
+                    <span id="avgRatingText">0.0 (0 reviews)</span>
                 </div>
 
                 <div class="price-row">
-                    <span class="old-price">$
-                        <span th:text="${product.price != null ? #numbers.formatDecimal(product.price * 2, 1, 'COMMA', 2, 'POINT') : '256.00'}">256.00</span>
-                    </span>
-                    <span class="new-price">$
+                    <span class="new-price">Tk
                         <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '125.00'}">125.00</span>
                     </span>
                 </div>
 
-                <p class="desc" th:text="${product.description != null and !#strings.isEmpty(product.description) ? product.description : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Enim et volutpat lobortis enim donec adipiscing nibh. Consectetur in ac elementum aliquam imperdiet tellus.'}">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
+                <p class="stock-info" th:text="${'Available stock: ' + (product.stock != null ? product.stock : 0)}">Available stock: 0</p>
 
                 <div class="cart-row">
                     <div class="qty-box" aria-label="quantity selector">
-                        <i class="bi bi-chevron-left"></i>
-                        <span>1</span>
-                        <i class="bi bi-chevron-right"></i>
+                        <button type="button" class="js-qty-decrease" aria-label="Decrease quantity"
+                                th:disabled="${product.stock == null or product.stock <= 0}">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <input id="detailQty" class="qty-value" type="text" value="1" readonly />
+                        <button type="button" class="js-qty-increase" aria-label="Increase quantity"
+                                th:disabled="${product.stock == null or product.stock <= 0}">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
                     </div>
 
                     <button sec:authorize="isAuthenticated()"
                             type="button"
                             class="btn-add js-add-to-cart"
-                            th:attr="data-product-id=${product.id},data-product-name=${product.name}"
+                            th:attr="data-product-id=${product.id},data-product-name=${product.name},data-max-stock=${product.stock},data-quantity-input='detailQty'"
                             th:disabled="${product.stock != null and product.stock == 0}">
                         <span th:text="${product.stock != null and product.stock == 0} ? 'Out of stock' : 'Add to cart'">Add to cart</span>
                     </button>
@@ -323,19 +391,17 @@
                     </a>
                 </div>
 
-                <div class="wishlist">
-                    <i class="bi bi-heart"></i>
-                    <span>Add to wishlist</span>
-                </div>
+                <p class="meta">Door Size:
+                    <span th:text="${product.dimensions != null and !#strings.isEmpty(product.dimensions) ? product.dimensions : 'Standard 210 × 90 cm'}">Standard 210 × 90 cm</span>
+                </p>
+                <p class="meta">Door Lock System:
+                    <span th:text="${product.lockSystem != null and !#strings.isEmpty(product.lockSystem) ? product.lockSystem : 'Standard mortise lock'}">Standard mortise lock</span>
+                </p>
 
-                <p class="meta">Sku: <span th:text="${product.id != null ? product.id : '02'}">02</span></p>
                 <p class="meta">Category:
-                    <span th:text="${product.category != null ? product.category : 'sofa'}">sofa</span>
+                    <span th:text="${product.category != null ? product.category : 'door'}">door</span>
                 </p>
-                <p class="meta">tag:
-                    <a href="#">sofa</a>
-                    <a href="#">clean</a>
-                </p>
+
 
                 <div class="tab-row">
                     <a href="#" class="active">Description</a>
@@ -350,36 +416,51 @@
         </div>
     </section>
 
+    <section class="container reviews-layout animate-in delay-2">
+        <div class="row g-4">
+            <div class="col-lg-6 reviews-column">
+                <h3 class="review-title">Customer reviews</h3>
+                <div id="reviewSummary" class="review-summary">No reviews yet.</div>
+
+                <form sec:authorize="isAuthenticated()" id="reviewForm" class="review-form">
+                    <div id="reviewStarsInput" class="review-stars-input">
+                        <span class="small text-muted">Your rating:</span>
+                        <button type="button" data-star="1"><i class="bi bi-star-fill"></i></button>
+                        <button type="button" data-star="2"><i class="bi bi-star-fill"></i></button>
+                        <button type="button" data-star="3"><i class="bi bi-star-fill"></i></button>
+                        <button type="button" data-star="4"><i class="bi bi-star-fill"></i></button>
+                        <button type="button" data-star="5"><i class="bi bi-star-fill"></i></button>
+                    </div>
+                    <textarea id="reviewComment" maxlength="1200" placeholder="Write your review for this door..."></textarea>
+                    <div class="mt-2">
+                        <button type="submit" class="btn-add">Submit review</button>
+                    </div>
+                </form>
+
+                <div sec:authorize="!isAuthenticated()" class="small text-muted">
+                    <a th:href="@{/login}">Login</a> to rate and review this door.
+                </div>
+            </div>
+
+            <div class="col-lg-6 reviews-column">
+                <h3 class="review-title">Recent reviews</h3>
+                <div id="reviewList" class="review-list"></div>
+            </div>
+        </div>
+    </section>
+
     <section class="container related">
         <h3>Related products</h3>
         <div class="row g-3">
-            <div class="col-6 col-lg-3">
-                <a class="related-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-1.jpg}" alt="Related product 1"/></div>
-                    <h6>Modern sofa</h6>
+            <div class="col-6 col-lg-3" th:each="rp : ${relatedProducts}">
+                <a class="related-card" th:href="@{/products/{id}(id=${rp.id})}">
+                    <div class="img-wrap"><img th:src="@{${rp.imageUrl}}" th:alt="${rp.name}"/></div>
+                    <h6 th:text="${rp.name}">Door Product</h6>
                     <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                 </a>
             </div>
-            <div class="col-6 col-lg-3">
-                <a class="related-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-2.jpg}" alt="Related product 2"/></div>
-                    <h6>Modern sofa</h6>
-                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-3">
-                <a class="related-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-3.jpg}" alt="Related product 3"/></div>
-                    <h6>Modern sofa</h6>
-                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                </a>
-            </div>
-            <div class="col-6 col-lg-3">
-                <a class="related-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/product-detail-figma/related-4.jpg}" alt="Related product 4"/></div>
-                    <h6>Modern sofa</h6>
-                    <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                </a>
+            <div class="col-12" th:if="${relatedProducts == null or #lists.isEmpty(relatedProducts)}">
+                <p class="text-muted mb-0">No related door products available right now.</p>
             </div>
         </div>
     </section>
@@ -388,5 +469,145 @@
 </main>
 
 <th:block th:replace="~{footer :: scripts}"></th:block>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const productId = /*[[${product.id}]]*/ 0;
+        const reviewSummary = document.getElementById('reviewSummary');
+        const reviewList = document.getElementById('reviewList');
+        const avgRatingText = document.getElementById('avgRatingText');
+        const avgStars = document.getElementById('avgStars');
+
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewComment = document.getElementById('reviewComment');
+        const reviewStarsInput = document.getElementById('reviewStarsInput');
+
+        let selectedRating = 0;
+
+        function renderStars(value) {
+            const rounded = Math.round(value || 0);
+            return Array.from({ length: 5 }).map((_, index) => {
+                return `<i class="bi ${index < rounded ? 'bi-star-fill' : 'bi-star'}"></i>`;
+            }).join(' ');
+        }
+
+        function formatDate(dateText) {
+            if (!dateText) return '';
+            const date = new Date(dateText);
+            if (Number.isNaN(date.getTime())) return '';
+            return date.toLocaleDateString('en-BD', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function renderReviewList(reviews) {
+            if (!reviewList) {
+                return;
+            }
+
+            if (!reviews || reviews.length === 0) {
+                reviewList.innerHTML = '<div class="text-muted small">No reviews yet. Be the first to review this door.</div>';
+                return;
+            }
+
+            reviewList.innerHTML = reviews.map(review => `
+                <article class="review-item">
+                    <div class="head">
+                        <strong>${review.reviewerName || 'Customer'}</strong>
+                        <span>${renderStars(review.rating)} · ${formatDate(review.createdAt)}</span>
+                    </div>
+                    <p>${review.comment || ''}</p>
+                </article>
+            `).join('');
+        }
+
+        function applySummary(summary) {
+            const average = Number(summary.averageRating || 0);
+            const total = Number(summary.totalReviews || 0);
+
+            if (avgRatingText) {
+                avgRatingText.textContent = `${average.toFixed(1)} (${total} review${total === 1 ? '' : 's'})`;
+            }
+            if (avgStars) {
+                avgStars.innerHTML = renderStars(average);
+            }
+            if (reviewSummary) {
+                reviewSummary.textContent = total > 0
+                    ? `Average rating ${average.toFixed(1)} from ${total} customer review${total === 1 ? '' : 's'}.`
+                    : 'No reviews yet.';
+            }
+            renderReviewList(summary.reviews || []);
+        }
+
+        function loadReviews() {
+            fetch(`/products/${productId}/reviews`, { headers: { 'Accept': 'application/json' } })
+                .then(response => response.ok ? response.json() : null)
+                .then(data => {
+                    if (data) {
+                        applySummary(data);
+                    }
+                })
+                .catch(() => {
+                    // Keep latest rendered state
+                });
+        }
+
+        if (reviewStarsInput) {
+            reviewStarsInput.querySelectorAll('button[data-star]').forEach(button => {
+                button.addEventListener('click', () => {
+                    selectedRating = Number(button.getAttribute('data-star') || 0);
+                    reviewStarsInput.querySelectorAll('button[data-star]').forEach(starButton => {
+                        const starValue = Number(starButton.getAttribute('data-star') || 0);
+                        starButton.classList.toggle('active', starValue <= selectedRating);
+                    });
+                });
+            });
+        }
+
+        if (reviewForm && reviewComment) {
+            reviewForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const comment = reviewComment.value.trim();
+                if (selectedRating < 1 || selectedRating > 5) {
+                    window.alert('Please select a star rating.');
+                    return;
+                }
+                if (!comment) {
+                    window.alert('Please write a review comment.');
+                    return;
+                }
+
+                fetch(`/products/${productId}/reviews`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ rating: selectedRating, comment: comment })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Unable to submit review.');
+                        }
+                        return response.json();
+                    })
+                    .then(() => {
+                        reviewComment.value = '';
+                        selectedRating = 0;
+                        if (reviewStarsInput) {
+                            reviewStarsInput.querySelectorAll('button[data-star]').forEach(starButton => {
+                                starButton.classList.remove('active');
+                            });
+                        }
+                        loadReviews();
+                    })
+                    .catch(error => {
+                        window.alert(error.message || 'Unable to submit review.');
+                    });
+            });
+        }
+
+        loadReviews();
+        window.setInterval(loadReviews, 10000);
+    });
+</script>
 </body>
 </html>

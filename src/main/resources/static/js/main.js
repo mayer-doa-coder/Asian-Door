@@ -44,13 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return appPath(trimmed);
     }
 
-    var CURRENCY = new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP'
+    var CURRENCY = new Intl.NumberFormat('en-BD', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
 
     function formatCurrency(value) {
-        return CURRENCY.format(Number(value || 0));
+        return 'Tk ' + CURRENCY.format(Number(value || 0));
     }
 
     function setCartBadgeCount(count) {
@@ -147,11 +147,28 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        var quantity = 1;
+        var quantityInputId = button.getAttribute('data-quantity-input');
+        if (quantityInputId) {
+            var quantityInput = document.getElementById(quantityInputId);
+            if (quantityInput) {
+                var parsedQuantity = Number(quantityInput.value);
+                if (Number.isFinite(parsedQuantity) && parsedQuantity > 0) {
+                    quantity = Math.floor(parsedQuantity);
+                }
+            }
+        }
+
+        var maxStock = Number(button.getAttribute('data-max-stock'));
+        if (Number.isFinite(maxStock) && maxStock > 0 && quantity > maxStock) {
+            quantity = maxStock;
+        }
+
         var originalHtml = button.innerHTML;
         button.disabled = true;
         button.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Adding...';
 
-        fetch(appPath('/cart/add/' + productId + '?quantity=1'), {
+        fetch(appPath('/cart/add/' + productId + '?quantity=' + quantity), {
             method: 'POST',
             headers: { 'Accept': 'application/json' }
         })
@@ -184,6 +201,53 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.alert(error.message || 'Unable to add to cart.');
             });
     });
+
+    // Product detail quantity controls.
+    var detailQtyInput = document.getElementById('detailQty');
+    var qtyDecreaseBtn = document.querySelector('.js-qty-decrease');
+    var qtyIncreaseBtn = document.querySelector('.js-qty-increase');
+    var detailAddButton = document.querySelector('.js-add-to-cart[data-quantity-input="detailQty"]');
+
+    if (detailQtyInput && qtyDecreaseBtn && qtyIncreaseBtn) {
+        var maxDetailStock = detailAddButton ? Number(detailAddButton.getAttribute('data-max-stock')) : NaN;
+        if (!Number.isFinite(maxDetailStock) || maxDetailStock < 1) {
+            maxDetailStock = 0;
+        }
+
+        function updateDetailQtyControls() {
+            var currentQty = Number(detailQtyInput.value);
+            if (!Number.isFinite(currentQty) || currentQty < 1) {
+                currentQty = 1;
+            }
+
+            if (maxDetailStock > 0 && currentQty > maxDetailStock) {
+                currentQty = maxDetailStock;
+            }
+
+            detailQtyInput.value = String(currentQty);
+
+            var outOfStock = maxDetailStock <= 0;
+            qtyDecreaseBtn.disabled = outOfStock || currentQty <= 1;
+            qtyIncreaseBtn.disabled = outOfStock || currentQty >= maxDetailStock;
+        }
+
+        qtyDecreaseBtn.addEventListener('click', function () {
+            var currentQty = Number(detailQtyInput.value) || 1;
+            detailQtyInput.value = String(Math.max(1, currentQty - 1));
+            updateDetailQtyControls();
+        });
+
+        qtyIncreaseBtn.addEventListener('click', function () {
+            if (maxDetailStock <= 0) {
+                return;
+            }
+            var currentQty = Number(detailQtyInput.value) || 1;
+            detailQtyInput.value = String(Math.min(maxDetailStock, currentQty + 1));
+            updateDetailQtyControls();
+        });
+
+        updateDetailQtyControls();
+    }
 
     // Cart page logic.
     var cartPage = document.querySelector('[data-cart-page="true"]');

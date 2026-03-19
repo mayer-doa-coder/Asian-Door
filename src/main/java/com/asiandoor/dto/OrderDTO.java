@@ -1,6 +1,7 @@
 package com.asiandoor.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Data;
 
@@ -12,4 +13,8 @@ public class OrderDTO {
     private Double totalPrice;
     private String status;
     private Long userId;
+    private String paymentType;
+    private List<OrderItemSummaryDTO> items;
+    private String orderDateDisplay;
+    private String orderTimeDisplay;
 }

@@ -17,7 +17,12 @@
 
         .figma-about .hero {
             background: #ddd;
-            height: 290px;
+            width: 100vw;
+            max-width: none;
+            height: clamp(180px, 28vw, 360px);
+            margin: 0;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
             overflow: hidden;
             position: relative;
         }
@@ -27,17 +32,6 @@
             height: 100%;
             object-fit: cover;
             display: block;
-        }
-
-        .figma-about .hero h1 {
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            color: #3f3f3f;
-            margin: 0;
         }
 
         .figma-about .features {
@@ -67,7 +61,11 @@
         .figma-about .video-banner {
             margin-top: 1.4rem;
             margin-bottom: 2.1rem;
-            height: 350px;
+            width: 100vw;
+            max-width: none;
+            height: clamp(180px, 28vw, 360px);
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
             background: #ddd;
             position: relative;
             overflow: hidden;
@@ -78,6 +76,34 @@
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+
+        .figma-about .hero img,
+        .figma-about .video-banner img {
+            transition: transform .5s ease;
+        }
+
+        .figma-about .hero:hover img,
+        .figma-about .video-banner:hover img {
+            transform: scale(1.03);
+        }
+
+        .figma-about .hero,
+        .figma-about .features,
+        .figma-about .performance {
+            opacity: 0;
+            transform: translateY(14px);
+            animation: aboutFadeUp .65s ease forwards;
+        }
+
+        .figma-about .features { animation-delay: .1s; }
+        .figma-about .performance { animation-delay: .2s; }
+
+        @keyframes aboutFadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .figma-about .play-btn {
@@ -116,100 +142,36 @@
             max-width: 580px;
         }
 
-        .figma-about .skill {
-            margin-bottom: 1.3rem;
+        .figma-about .value-list {
+            display: grid;
+            gap: 1rem;
         }
 
-        .figma-about .skill-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: .45rem;
+        .figma-about .value-item {
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            padding: .95rem 1rem;
+        }
+
+        .figma-about .value-item h6 {
+            margin: 0 0 .25rem;
             color: #353535;
+            font-size: 1rem;
             font-weight: 700;
         }
 
-        .figma-about .skill-head span:last-child {
-            font-size: .86rem;
-        }
-
-        .figma-about .skill-track {
-            width: 100%;
-            height: 3px;
-            background: #6f6f6f;
-            position: relative;
-        }
-
-        .figma-about .skill-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            background: #2b2b2b;
-        }
-
-        .figma-about .blog {
-            padding: 1rem 0 2.6rem;
-        }
-
-        .figma-about .blog-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.2rem;
-        }
-
-        .figma-about .blog-head h3 {
-            font-size: 1.65rem;
-            color: #2b2b2b;
-            font-weight: 700;
+        .figma-about .value-item p {
             margin: 0;
-            text-transform: lowercase;
-        }
-
-        .figma-about .blog-card {
-            text-align: center;
-            color: #303030;
-            display: block;
-        }
-
-        .figma-about .blog-card .img-wrap {
-            background: #d9d9d9;
-            aspect-ratio: 1.08 / 1;
-            overflow: hidden;
-            margin-bottom: .8rem;
-        }
-
-        .figma-about .blog-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .figma-about .blog-card .date {
-            color: #9e9e9e;
-            font-size: .8rem;
-            margin-bottom: .45rem;
-        }
-
-        .figma-about .blog-card .title {
-            color: #303030;
+            color: #808080;
+            line-height: 1.4;
             font-size: .92rem;
-            margin-bottom: .45rem;
-            line-height: 1.35;
-        }
-
-        .figma-about .blog-card .read {
-            color: #303030;
-            font-size: .86rem;
-            text-decoration: underline;
-            text-underline-offset: 2px;
         }
 
         @media (max-width: 992px) {
-            .figma-about .hero { height: 220px; }
-            .figma-about .video-banner { height: 260px; }
+            .figma-about .hero,
+            .figma-about .video-banner {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -219,33 +181,32 @@
 
     <section class="container">
         <div class="hero">
-            <img th:src="@{/images/about-figma/hero.jpg}" alt="About hero"/>
-            <h1>About us</h1>
+            <img th:src="@{/images/about-figma/about-door1.jpg}" alt="Crafted wooden doors"/>
         </div>
     </section>
 
     <section class="container features">
         <div class="row g-4">
             <div class="col-6 col-lg-3 feature-item">
-                <h6><i class="bi bi-clock"></i>Shope oline</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+                <h6><i class="bi bi-clock"></i>Shop online</h6>
+                <p>Browse trusted wooden, steel, and security doors with clear sizes, material details, and real stock.</p>
             </div>
             <div class="col-6 col-lg-3 feature-item">
-                <h6><i class="bi bi-bag"></i>Free shipping</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+                <h6><i class="bi bi-bag"></i>Delivery support</h6>
+                <p>Fast local delivery with careful packaging so every door arrives ready for installation.</p>
             </div>
             <div class="col-6 col-lg-3 feature-item">
                 <h6><i class="bi bi-credit-card"></i>Return policy</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+                <p>Simple return and exchange process for damaged or incorrect products, backed by responsive support.</p>
             </div>
             <div class="col-6 col-lg-3 feature-item">
-                <h6><i class="bi bi-currency-dollar"></i>PAYMENT</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat dolor odio odio</p>
+                <h6><i class="bi bi-cash-coin"></i>Payment</h6>
+                <p>Secure checkout with transparent Tk pricing and order confirmation at every step.</p>
             </div>
         </div>
 
         <div class="video-banner">
-            <img th:src="@{/images/about-figma/video-banner.jpg}" alt="Video section"/>
+            <img th:src="@{/images/about-figma/about-door2.jpg}" alt="Modern doorway installation"/>
             <div class="play-btn"><span><i class="bi bi-play-fill"></i></span></div>
         </div>
     </section>
@@ -258,57 +219,30 @@
                     meets perfection
                 </h2>
                 <p class="copy">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse massa libero, mattis volutpat id.
-                    Egestas adipiscing placerat eleifend a nascetur. Mattis proin enim, nam porttitor vitae.
+                    At Asian Door, we focus on doors that combine durability, safety, and clean design. From interior
+                    room doors to heavy-duty exterior and security options, every product is selected to handle daily
+                    use while improving the look and comfort of your space.
                 </p>
             </div>
             <div class="col-lg-6">
-                <div class="skill">
-                    <div class="skill-head"><span>Creativity</span><span>72 %</span></div>
-                    <div class="skill-track"><span class="skill-fill" style="width:72%;"></span></div>
+                <div class="value-list">
+                    <div class="value-item">
+                        <h6>Door type guidance</h6>
+                        <p>Find the right category quickly, including wooden, steel, glass, security, interior, and exterior doors.</p>
+                    </div>
+                    <div class="value-item">
+                        <h6>Reliable material quality</h6>
+                        <p>Products are chosen for long-lasting structure, smooth finish, and dependable daily performance.</p>
+                    </div>
+                    <div class="value-item">
+                        <h6>Clear sizing and stock info</h6>
+                        <p>Each listing shows practical details so you can make confident decisions before ordering.</p>
+                    </div>
+                    <div class="value-item">
+                        <h6>Support after purchase</h6>
+                        <p>Our team helps with order updates, delivery concerns, and quick resolution when needed.</p>
+                    </div>
                 </div>
-                <div class="skill">
-                    <div class="skill-head"><span>Advertising</span><span>84 %</span></div>
-                    <div class="skill-track"><span class="skill-fill" style="width:84%;"></span></div>
-                </div>
-                <div class="skill mb-0">
-                    <div class="skill-head"><span>Design</span><span>72 %</span></div>
-                    <div class="skill-track"><span class="skill-fill" style="width:72%;"></span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container blog" id="blog">
-        <div class="blog-head">
-            <h3>last blog post</h3>
-            <div class="text-muted small"><i class="bi bi-chevron-left"></i> <i class="bi bi-chevron-right ms-2"></i></div>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-md-4">
-                <a class="blog-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-1.jpg}" alt="Blog post 1"/></div>
-                    <p class="date">Sep 26, 2022</p>
-                    <p class="title">Paint your office in natural<br/>colors only</p>
-                    <span class="read">Read more</span>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="blog-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-2.jpg}" alt="Blog post 2"/></div>
-                    <p class="date">Sep 26, 2022</p>
-                    <p class="title">Paint your office in natural<br/>colors only</p>
-                    <span class="read">Read more</span>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="blog-card" th:href="@{/products}">
-                    <div class="img-wrap"><img th:src="@{/images/about-figma/blog-3.jpg}" alt="Blog post 3"/></div>
-                    <p class="date">Sep 26, 2022</p>
-                    <p class="title">Paint your office in natural<br/>colors only</p>
-                    <span class="read">Read more</span>
-                </a>
             </div>
         </div>
     </section>

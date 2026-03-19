@@ -57,7 +57,7 @@
                                     <span class="category-pill" th:text="${p.category != null ? #strings.capitalize(p.category) : '—'}">Category</span>
                                 </td>
                                 <td class="text-end fw-semibold">
-                                    ₱<span th:text="${p.price != null}
+                                    Tk <span th:text="${p.price != null}
                                         ? ${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')}
                                         : '0.00'">0.00</span>
                                 </td>

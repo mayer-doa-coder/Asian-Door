@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
+    <title>Asian Door | Contact Support</title>
+
+    <style>
+        .figma-profile {
+            background: #f6f6f6;
+            color: #2f2f2f;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .figma-profile a { text-decoration: none !important; }
+
+        .figma-profile .profile-layout {
+            flex: 1;
+            padding: 1.2rem 0 1.2rem;
+        }
+
+        .figma-profile .side-card {
+            background: #fff;
+            border: 1px solid #dedede;
+            border-radius: .65rem;
+            box-shadow: 0 18px 36px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .figma-profile .buyer-card {
+            padding: .7rem;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .figma-profile .buyer-head {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            border: 1px solid #c4c4c4;
+            border-radius: .5rem;
+            padding: .5rem;
+        }
+
+        .figma-profile .buyer-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #ececec;
+            color: #5b5b5b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .figma-profile .buyer-name {
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .figma-profile .buyer-role {
+            margin: 0;
+            color: #7d7d7d;
+            font-size: .82rem;
+        }
+
+        .figma-profile .profile-nav a,
+        .figma-profile .profile-nav form button {
+            width: 100%;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            text-decoration: none;
+            color: #4a4a4a;
+            padding: .75rem .95rem;
+            border-bottom: 1px solid #ececec;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-weight: 500;
+        }
+
+        .figma-profile .profile-nav a.active {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .profile-nav a:hover,
+        .figma-profile .profile-nav form button:hover {
+            background: #f4f4f4;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .profile-nav a.active:hover {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .support-wrap {
+            padding: .3rem .2rem;
+        }
+
+        .figma-profile .support-title {
+            text-align: left;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            margin-bottom: .4rem;
+            text-transform: uppercase;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .support-underline {
+            width: 92px;
+            height: 2px;
+            border-radius: 999px;
+            background: #9a9a9a;
+            margin: 0 0 .85rem;
+        }
+
+        .figma-profile .support-sub {
+            text-align: left;
+            font-size: .96rem;
+            color: #737373;
+            margin-bottom: .6rem;
+        }
+
+        .figma-profile .support-info {
+            padding: .1rem 0 .25rem;
+            margin-bottom: .75rem;
+        }
+
+        .figma-profile .support-info h6 {
+            margin: 0 0 .4rem;
+            font-size: .92rem;
+            font-weight: 700;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .support-info ul {
+            margin: 0;
+            padding-left: 1rem;
+            color: #5d5d5d;
+            font-size: .88rem;
+            line-height: 1.45;
+        }
+
+        .figma-profile .support-info li + li {
+            margin-top: .2rem;
+        }
+
+        .figma-profile .support-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .9rem;
+        }
+
+        .figma-profile .support-card {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: .9rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, .07);
+            padding: .8rem;
+            text-align: left;
+            min-height: 235px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .figma-profile .support-icon {
+            font-size: 2.2rem;
+            line-height: 1;
+            margin-bottom: .45rem;
+            color: #5c5c5c;
+        }
+
+        .figma-profile .support-card h5 {
+            margin-bottom: .45rem;
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .support-card p {
+            margin-bottom: .6rem;
+            color: #595959;
+            font-size: .95rem;
+            line-height: 1.35;
+        }
+
+        .figma-profile .action-btn {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+            width: 100%;
+            border-radius: .6rem;
+            color: #fff;
+            font-size: .86rem;
+            font-weight: 600;
+            padding: .55rem .85rem;
+            border: 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,.12);
+        }
+
+        .figma-profile .action-btn.call,
+        .figma-profile .action-btn.whatsapp,
+        .figma-profile .action-btn.map { background: #393939; }
+
+        .figma-profile .action-btn:hover {
+            filter: brightness(.95);
+            color: #fff;
+        }
+
+        @media (max-width: 1199px) {
+            .figma-profile .support-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 767px) {
+            .figma-profile .support-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .figma-profile .support-underline {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="figma-profile">
+    <th:block th:replace="~{fragments/figma-shell :: topNav('profile', '#support-footer')}"></th:block>
+
+    <section class="profile-layout">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-lg-3">
+                    <aside class="side-card">
+                        <div class="buyer-card">
+                            <div class="buyer-head">
+                                <span class="buyer-icon"><i class="bi bi-person"></i></span>
+                                <div>
+                                    <p class="buyer-name" th:text="${(user != null and user.name != null) ? user.name : 'Buyer User'}">Buyer User</p>
+                                    <p class="buyer-role">Customer</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <nav class="profile-nav">
+                            <a th:href="@{/profile}"><i class="bi bi-speedometer2"></i>Dashboard</a>
+                            <a th:href="@{/orders/history/1}"><i class="bi bi-cart3"></i>Order History</a>
+                            <a th:href="@{/orders/history/1}"><i class="bi bi-receipt"></i>All Transactions</a>
+                            <a th:href="@{/profile/update}"><i class="bi bi-person-gear"></i>Update Profile</a>
+                            <a class="active" th:href="@{/support}"><i class="bi bi-headset"></i>Contact Support</a>
+                            <form th:action="@{/logout}" method="post" class="m-0">
+                                <button type="submit"><i class="bi bi-box-arrow-right"></i>Logout</button>
+                            </form>
+                        </nav>
+                    </aside>
+                </div>
+
+                <div class="col-lg-9">
+                    <section class="support-wrap">
+                        <h1 class="support-title">Contact Support</h1>
+                        <div class="support-underline"></div>
+                        <p class="support-sub">Reach us directly by phone, WhatsApp, or location direction.</p>
+
+                        <div class="support-info">
+                            <h6>Support Information</h6>
+                            <ul>
+                                <li>Support hours: Everyday, 9:00 AM to 11:00 PM.</li>
+                                <li>Typical response time on WhatsApp: within 30 minutes during support hours.</li>
+                                <li>For urgent order issues, please call us directly for faster help.</li>
+                            </ul>
+                        </div>
+
+                        <div class="support-grid">
+                            <article class="support-card">
+                                <i class="bi bi-telephone support-icon"></i>
+                                <h5>Call Us</h5>
+                                <p>+8801716516524</p>
+                                <a class="action-btn call" href="tel:+8801716516524">
+                                    <i class="bi bi-telephone"></i>Call Now
+                                </a>
+                            </article>
+
+                            <article class="support-card">
+                                <i class="bi bi-whatsapp support-icon"></i>
+                                <h5>WhatsApp Chat</h5>
+                                <p>Open WhatsApp directly to chat with us on this number.</p>
+                                <a class="action-btn whatsapp" href="https://wa.me/8801716516524" target="_blank" rel="noopener noreferrer">
+                                    <i class="bi bi-whatsapp"></i>Chat on WhatsApp
+                                </a>
+                            </article>
+
+                            <article class="support-card">
+                                <i class="bi bi-geo-alt support-icon"></i>
+                                <h5>Visit Location</h5>
+                                <p>Mipur-11, Behind Islami Bank Hospital</p>
+                                <a class="action-btn map"
+                                   href="https://www.google.com/maps/search/?api=1&query=Mipur-11%2C%20Behind%20Islami%20Bank%20Hospital"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    <i class="bi bi-map"></i>Open in Google Maps
+                                </a>
+                            </article>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="~{fragments/figma-shell :: darkFooter('support-footer')}"></footer>
+</main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
+</body>
+</html>

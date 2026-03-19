@@ -6,62 +6,147 @@
     <title>Asian Door | Order History</title>
 
     <style>
-        .figma-flow {
+        .figma-profile {
             background: #f6f6f6;
             color: #2f2f2f;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
         }
 
-        .figma-flow a {
-            text-decoration: none !important;
+        .figma-profile a { text-decoration: none !important; }
+
+        .figma-profile .profile-layout {
+            padding: 1.2rem 0 2.5rem;
         }
 
-        .figma-flow .orders-shell {
-            padding-bottom: 2.6rem;
+        .figma-profile .side-card {
+            background: #fff;
+            border: 1px solid #dedede;
+            border-radius: .65rem;
+            box-shadow: 0 18px 36px rgba(0,0,0,.08);
+            overflow: hidden;
         }
 
-        .figma-flow .orders-title {
-            text-transform: uppercase;
-            letter-spacing: .02em;
-            font-size: 2rem;
-            font-weight: 800;
+        .figma-profile .buyer-card {
+            padding: .7rem;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .figma-profile .buyer-head {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            border: 1px solid #c4c4c4;
+            border-radius: .5rem;
+            padding: .5rem;
+        }
+
+        .figma-profile .buyer-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #ececec;
+            color: #5b5b5b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .figma-profile .buyer-name {
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .figma-profile .buyer-role {
+            margin: 0;
+            color: #7d7d7d;
+            font-size: .82rem;
+        }
+
+        .figma-profile .profile-nav a,
+        .figma-profile .profile-nav form button {
+            width: 100%;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            text-decoration: none;
+            color: #4a4a4a;
+            padding: .75rem .95rem;
+            border-bottom: 1px solid #ececec;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-weight: 500;
+        }
+
+        .figma-profile .profile-nav a.active {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .profile-nav a:hover,
+        .figma-profile .profile-nav form button:hover {
+            background: #f4f4f4;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .profile-nav a.active:hover {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
             margin-bottom: .4rem;
+            text-transform: uppercase;
         }
 
-        .figma-flow .orders-sub {
+        .figma-profile .section-sub {
             color: #7c7c7c;
             margin-bottom: 1.1rem;
         }
 
-        .figma-flow .orders-card {
-            border: 1px solid #e6e6e6;
-            border-radius: .95rem;
+        .figma-profile .orders-empty {
+            border: 1px dashed #cecece;
+            border-radius: .9rem;
             background: #fff;
+            text-align: center;
+            padding: 1.6rem;
+        }
+
+        .figma-profile .order-card {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: .9rem;
             box-shadow: 0 4px 10px rgba(0,0,0,.03);
-            overflow: hidden;
+            padding: .95rem;
+            margin-bottom: .9rem;
         }
 
-        .figma-flow .orders-table thead th {
-            border: 0;
-            border-bottom: 1px solid #ececec;
-            background: #fafafa;
-            text-transform: uppercase;
-            font-size: .73rem;
-            letter-spacing: .05em;
-            color: #646464;
-            padding-top: .9rem;
-            padding-bottom: .9rem;
+        .figma-profile .order-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: .8rem;
+            flex-wrap: wrap;
+            margin-bottom: .7rem;
         }
 
-        .figma-flow .orders-table td {
-            vertical-align: middle;
-            border-color: #efefef;
-            padding-top: .9rem;
-            padding-bottom: .9rem;
+        .figma-profile .order-head h5 {
+            margin: 0;
+            font-size: 1.02rem;
+            font-weight: 700;
         }
 
-        .figma-flow .status-pill {
+        .figma-profile .order-meta {
+            color: #6f6f6f;
+            font-size: .86rem;
+        }
+
+        .figma-profile .status-pill {
             border-radius: 999px;
             font-size: .72rem;
             font-weight: 700;
@@ -70,97 +155,285 @@
             display: inline-block;
         }
 
-        .figma-flow .status-pending { background: #fff7ed; color: #c2410c; }
-        .figma-flow .status-processing { background: #eff6ff; color: #1d4ed8; }
-        .figma-flow .status-shipped { background: #ecfeff; color: #0f766e; }
-        .figma-flow .status-delivered { background: #ecfdf5; color: #15803d; }
+        .figma-profile .status-pending { background: #fff7ed; color: #c2410c; }
+        .figma-profile .status-processing { background: #eff6ff; color: #1d4ed8; }
+        .figma-profile .status-shipped { background: #ecfeff; color: #0f766e; }
+        .figma-profile .status-delivered { background: #ecfdf5; color: #15803d; }
 
-        .figma-flow .orders-empty {
-            border: 1px dashed #cecece;
-            border-radius: .9rem;
-            background: #fff;
-            text-align: center;
-            padding: 1.6rem;
+        .figma-profile .payment-pill {
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            padding: .3em .75em;
+            display: inline-block;
+            background: #f1f5f9;
+            color: #334155;
         }
 
-        .figma-flow .quick-actions {
-            margin-top: 1rem;
+        .figma-profile .items-list {
+            display: grid;
+            gap: .6rem;
+            margin-bottom: .6rem;
+        }
+
+        .figma-profile .item-row {
+            display: grid;
+            grid-template-columns: 70px 1fr auto;
+            gap: .7rem;
+            align-items: center;
+            border: 1px solid #efefef;
+            border-radius: .6rem;
+            padding: .45rem;
+            background: #fcfcfc;
+        }
+
+        .figma-profile .item-row img {
+            width: 70px;
+            height: 58px;
+            object-fit: cover;
+            background: #e7e7e7;
+            border-radius: .35rem;
+        }
+
+        .figma-profile .item-name {
+            margin: 0;
+            font-size: .9rem;
+            font-weight: 600;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .item-qty {
+            font-size: .82rem;
+            color: #6b6b6b;
+        }
+
+        .figma-profile .item-total {
+            font-size: .9rem;
+            font-weight: 700;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .totals-row {
             display: flex;
-            gap: .65rem;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .6rem;
+            border-top: 1px dashed #ddd;
+            padding-top: .65rem;
+        }
+
+        .figma-profile .order-total {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .cancel-wrap {
+            margin-top: .65rem;
+            padding-top: .65rem;
+            border-top: 1px dashed #ddd;
+        }
+
+        .figma-profile .cancel-wrap label {
+            display: block;
+            margin-bottom: .35rem;
+            font-size: .83rem;
+            color: #5e5e5e;
+        }
+
+        .figma-profile .cancel-wrap textarea {
+            width: 100%;
+            border: 1px solid #d8d8d8;
+            background: #fff;
+            color: #474747;
+            font-size: .88rem;
+            padding: .5rem .6rem;
+            min-height: 70px;
+            border-radius: .45rem;
+            resize: vertical;
+        }
+
+        .figma-profile .btn-cancel-order {
+            border: 0;
+            background: #b42318;
+            color: #fff;
+            padding: .42rem .85rem;
+            font-size: .82rem;
+            border-radius: .4rem;
+            margin-top: .45rem;
+        }
+
+        .figma-profile .cancel-note {
+            margin-top: .35rem;
+            color: #6d6d6d;
+            font-size: .8rem;
+        }
+
+        .figma-profile .pagination-wrap {
+            margin-top: .7rem;
+            display: flex;
+            justify-content: center;
+            gap: .45rem;
             flex-wrap: wrap;
         }
 
-        .figma-flow .quick-actions a {
-            border: 1px solid #dadada;
-            border-radius: 999px;
-            color: #2f2f2f;
+        .figma-profile .pagination-wrap a,
+        .figma-profile .pagination-wrap span {
+            min-width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d9d9d9;
+            border-radius: .4rem;
+            color: #3f3f3f;
             font-size: .85rem;
-            text-decoration: none;
-            padding: .45rem .95rem;
-            font-weight: 600;
             background: #fff;
+            padding: 0 .5rem;
         }
 
-        .figma-flow .quick-actions a:hover {
-            background: #2f2f2f;
+        .figma-profile .pagination-wrap .active {
+            background: #393939;
             color: #fff;
-            border-color: #2f2f2f;
+            border-color: #393939;
+        }
+
+        @media (max-width: 767px) {
+            .figma-profile .item-row {
+                grid-template-columns: 56px 1fr;
+            }
+
+            .figma-profile .item-row img {
+                width: 56px;
+                height: 50px;
+            }
+
+            .figma-profile .item-total {
+                grid-column: 1 / -1;
+                justify-self: end;
+            }
         }
     </style>
 </head>
 <body>
-<main class="figma-flow">
-    <th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#orders-footer')}"></th:block>
+<main class="figma-profile">
+    <th:block th:replace="~{fragments/figma-shell :: topNav('profile', '#orders-footer')}"></th:block>
 
-    <section class="container orders-shell">
-        <h1 class="orders-title">Order History</h1>
-        <p class="orders-sub">Track all your orders and current delivery status.</p>
+    <section class="profile-layout">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-lg-3">
+                    <aside class="side-card">
+                        <div class="buyer-card">
+                            <div class="buyer-head">
+                                <span class="buyer-icon"><i class="bi bi-person"></i></span>
+                                <div>
+                                    <p class="buyer-name" th:text="${(user != null and user.name != null) ? user.name : 'Buyer User'}">Buyer User</p>
+                                    <p class="buyer-role">Customer</p>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="alert alert-success d-flex align-items-center gap-2" role="alert" th:if="${placedOrderId != null}">
-            <i class="bi bi-check-circle-fill"></i>
-            <span>Order <strong th:text="${'#' + placedOrderId}">#0</strong> has been placed successfully.</span>
-        </div>
+                        <nav class="profile-nav">
+                            <a th:href="@{/profile}"><i class="bi bi-speedometer2"></i>Dashboard</a>
+                            <a class="active" th:href="@{/orders/history/1}"><i class="bi bi-cart3"></i>Order History</a>
+                            <a th:href="@{/orders/history/1}"><i class="bi bi-receipt"></i>All Transactions</a>
+                            <a th:href="@{/profile/update}"><i class="bi bi-person-gear"></i>Update Profile</a>
+                            <a th:href="@{/support}"><i class="bi bi-headset"></i>Contact Support</a>
+                            <form th:action="@{/logout}" method="post" class="m-0">
+                                <button type="submit"><i class="bi bi-box-arrow-right"></i>Logout</button>
+                            </form>
+                        </nav>
+                    </aside>
+                </div>
 
-        <div class="orders-card" th:if="${orders != null and !#lists.isEmpty(orders)}">
-            <div class="table-responsive">
-                <table class="table align-middle mb-0 orders-table">
-                    <thead>
-                    <tr>
-                        <th class="ps-3">Order ID</th>
-                        <th>Date</th>
-                        <th>Total</th>
-                        <th class="pe-3">Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="order : ${orders}">
-                        <td class="fw-semibold ps-3" th:text="${'#' + order.id}">#0</td>
-                        <td>
-                            <span th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy')}">01 Jan 2026</span>
-                            <div class="small text-muted" th:text="${#temporals.format(order.orderDate, 'hh:mm a')}">10:00 AM</div>
-                        </td>
-                        <td class="fw-bold" style="color:#2f2f2f;" th:text="${'Tk ' + #numbers.formatDecimal(order.totalPrice, 1, 'COMMA', 2, 'POINT')}">Tk 0.00</td>
-                        <td class="pe-3">
-                            <span class="status-pill" th:classappend="${' status-' + #strings.toLowerCase(order.status)}" th:text="${order.status}">PENDING</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="col-lg-9">
+                    <h1 class="section-title">Order History</h1>
+                    <p class="section-sub">Track your orders with product details, quantities, payment type, totals, and status.</p>
+
+                    <div class="alert alert-success d-flex align-items-center gap-2" role="alert" th:if="${placedOrderId != null}">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Order <strong th:text="${'#' + placedOrderId}">#0</strong> has been placed successfully.</span>
+                    </div>
+
+                    <div th:if="${orders != null and !#lists.isEmpty(orders)}">
+                        <article class="order-card" th:each="order : ${orders}">
+                            <div class="order-head">
+                                <div>
+                                    <h5 th:text="${'Order #' + order.id}">Order #0</h5>
+                                    <div class="order-meta">
+                                        <span th:text="${order.orderDateDisplay}">01 Jan 2026</span>
+                                        ·
+                                        <span th:text="${order.orderTimeDisplay}">10:00 AM</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="payment-pill" th:text="${order.paymentType != null ? order.paymentType : 'CASH'}">CASH</span>
+                                    <span class="status-pill" th:classappend="${' status-' + #strings.toLowerCase(order.status)}" th:text="${order.status}">PENDING</span>
+                                </div>
+                            </div>
+
+                            <div class="items-list" th:if="${order.items != null and !#lists.isEmpty(order.items)}">
+                                <div class="item-row" th:each="item : ${order.items}">
+                                    <img th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}"
+                                         th:src="@{${item.imageUrl}}"
+                                         th:alt="${item.productName}"
+                                         th:attr="onerror=|this.onerror=null;this.src='@{/images/products-figma/product-1.jpg}'|" />
+                                    <img th:if="${item.imageUrl == null or #strings.isEmpty(item.imageUrl)}"
+                                         th:src="@{/images/products-figma/product-1.jpg}"
+                                         th:alt="${item.productName}" />
+                                    <div>
+                                        <p class="item-name" th:text="${item.productName}">Door product</p>
+                                        <div class="item-qty" th:text="${'Qty: ' + (item.quantity != null ? item.quantity : 0)}">Qty: 0</div>
+                                    </div>
+                                    <div class="item-total" th:text="${'Tk ' + #numbers.formatDecimal(item.lineTotal != null ? item.lineTotal : 0, 1, 'COMMA', 2, 'POINT')}">Tk 0.00</div>
+                                </div>
+                            </div>
+
+                            <div class="totals-row">
+                                <span class="order-meta" th:text="${order.items != null ? #lists.size(order.items) + ' products' : '0 products'}">0 products</span>
+                                <span class="order-total" th:text="${'Total: Tk ' + #numbers.formatDecimal(order.totalPrice != null ? order.totalPrice : 0, 1, 'COMMA', 2, 'POINT')}">Total: Tk 0.00</span>
+                            </div>
+
+                            <div class="cancel-wrap" th:if="${order.status == 'PENDING' or order.status == 'PROCESSING'}">
+                                <label th:for="${'cancelReason_' + order.id}">Why cancelling this order?</label>
+                                <textarea th:id="${'cancelReason_' + order.id}" placeholder="Write reason for cancellation..."></textarea>
+                                <button type="button" class="btn-cancel-order" th:attr="data-order-id=${order.id}">Cancel Order</button>
+                                <div class="cancel-note">Placeholder UI only for now. Backend cancellation flow can be connected later.</div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="orders-empty" th:if="${orders == null or #lists.isEmpty(orders)}">
+                        <i class="bi bi-inbox fs-2 text-muted"></i>
+                        <h5 class="mt-2 mb-1">No orders yet</h5>
+                        <p class="text-muted mb-3">Your placed orders will appear here.</p>
+                        <a th:href="@{/products}" class="btn btn-dark btn-sm">
+                            <i class="bi bi-grid me-1"></i>Shop Products
+                        </a>
+                    </div>
+
+                    <div class="pagination-wrap" th:if="${totalPages != null and totalPages > 1}">
+                        <a th:if="${currentPage > 1}"
+                           th:href="@{/orders/history/{page}(page=${currentPage - 1})}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+
+                        <th:block th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                            <span class="active" th:if="${pageNum == currentPage}" th:text="${pageNum}">1</span>
+                            <a th:if="${pageNum != currentPage}"
+                               th:href="@{/orders/history/{page}(page=${pageNum})}"
+                               th:text="${pageNum}">1</a>
+                        </th:block>
+
+                        <a th:if="${currentPage < totalPages}"
+                           th:href="@{/orders/history/{page}(page=${currentPage + 1})}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="orders-empty" th:if="${orders == null or #lists.isEmpty(orders)}">
-            <i class="bi bi-inbox fs-2 text-muted"></i>
-            <h5 class="mt-2 mb-1">No orders yet</h5>
-            <p class="text-muted mb-3">Your placed orders will appear here.</p>
-            <a th:href="@{/products}" class="btn btn-dark btn-sm">
-                <i class="bi bi-grid me-1"></i>Shop Products
-            </a>
-        </div>
-
-        <div class="quick-actions" th:if="${orders != null and !#lists.isEmpty(orders)}">
-            <a th:href="@{/products}"><i class="bi bi-grid me-1"></i>Continue Shopping</a>
-            <a th:href="@{/cart/view}"><i class="bi bi-bag me-1"></i>View Cart</a>
         </div>
     </section>
 
@@ -168,5 +441,23 @@
 </main>
 
 <th:block th:replace="~{footer :: scripts}"></th:block>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-cancel-order').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const orderId = button.getAttribute('data-order-id');
+                const reasonBox = document.getElementById('cancelReason_' + orderId);
+                const reason = reasonBox ? reasonBox.value.trim() : '';
+
+                if (!reason) {
+                    window.alert('Please provide a cancellation reason.');
+                    return;
+                }
+
+                window.alert('Cancellation request UI captured for order #' + orderId + '. Backend integration can be connected next.');
+            });
+        });
+    });
+</script>
 </body>
 </html>

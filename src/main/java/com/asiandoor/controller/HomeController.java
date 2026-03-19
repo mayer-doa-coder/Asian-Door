@@ -90,6 +90,15 @@ public class HomeController {
         return "cart";
     }
 
+    @GetMapping("/support")
+    public String support(@AuthenticationPrincipal UserDetails principal, Model model) {
+        String email = principal != null ? principal.getUsername() : null;
+        if (email != null) {
+            userService.findUserDTOByEmail(email).ifPresent(user -> model.addAttribute("user", user));
+        }
+        return "support";
+    }
+
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal UserDetails principal, Model model) {
         String email = principal != null ? principal.getUsername() : null;

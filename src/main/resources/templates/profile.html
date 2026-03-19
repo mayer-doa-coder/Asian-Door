@@ -98,16 +98,6 @@
             color: #fff;
         }
 
-        .figma-profile .support-bar {
-            background: #585858;
-            color: #fff;
-            padding: .82rem .95rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: .55rem;
-        }
-
         .figma-profile .section-title {
             font-size: 1.35rem;
             font-weight: 700;
@@ -189,7 +179,7 @@
 </head>
 <body>
 <main class="figma-profile">
-    <th:block th:replace="~{fragments/figma-shell :: topNav('profile', '#')}"></th:block>
+    <th:block th:replace="~{fragments/figma-shell :: topNav('profile', '#profile-footer')}"></th:block>
 
     <section class="profile-layout">
         <div class="container">
@@ -210,14 +200,12 @@
                             <a class="active" th:href="@{/profile}"><i class="bi bi-speedometer2"></i>Dashboard</a>
                             <a th:href="@{/orders/history}"><i class="bi bi-cart3"></i>Order History</a>
                             <a th:href="@{/orders/history}"><i class="bi bi-receipt"></i>All Transactions</a>
-                            <a th:href="@{/cart/view}"><i class="bi bi-bookmark-heart"></i>Saved Items</a>
                             <a th:href="@{/profile/update}"><i class="bi bi-person-gear"></i>Update Profile</a>
+                            <a th:href="@{/support}"><i class="bi bi-headset"></i>Contact Support</a>
                             <form th:action="@{/logout}" method="post" class="m-0">
                                 <button type="submit"><i class="bi bi-box-arrow-right"></i>Logout</button>
                             </form>
                         </nav>
-
-                        <div class="support-bar"><i class="bi bi-headset"></i>Contact Support</div>
                     </aside>
                 </div>
 
@@ -275,6 +263,8 @@
             </div>
         </div>
     </section>
+
+    <footer th:replace="~{fragments/figma-shell :: darkFooter('profile-footer')}"></footer>
 </main>
 
 <th:block th:replace="~{footer :: scripts}"></th:block>

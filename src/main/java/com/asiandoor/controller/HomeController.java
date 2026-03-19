@@ -15,6 +15,8 @@ import com.asiandoor.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
@@ -36,13 +38,21 @@ public class HomeController {
     public String products(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "newest") String sort,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "0") int page,
             Model model) {
 
-        Page<ProductDTO> result = productService.getFilteredProducts(category, search, page);
+        Page<ProductDTO> result = productService.getFilteredProducts(category, search, page, sort, minPrice, maxPrice);
+        Map<String, Long> categoryCounts = productService.getCategoryCounts();
 
         model.addAttribute("category", category);
         model.addAttribute("search", search);
+        model.addAttribute("sort", sort);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("categoryCounts", categoryCounts);
         model.addAttribute("products", result.getContent());
         model.addAttribute("currentPage", result.getNumber());
         model.addAttribute("totalPages", result.getTotalPages());

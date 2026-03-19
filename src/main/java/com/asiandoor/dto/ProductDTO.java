@@ -25,7 +25,7 @@ public class ProductDTO {
     private String material;
 
     @NotNull(message = "Price is required.")
-    @DecimalMin(value = "0.01", message = "Price must be greater than ₱0.")
+    @DecimalMin(value = "0.01", message = "Price must be greater than Tk 0.")
     private Double price;
 
     private String dimensions;

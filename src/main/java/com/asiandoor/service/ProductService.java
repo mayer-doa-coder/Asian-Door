@@ -1,12 +1,15 @@
 package com.asiandoor.service;
 
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -48,23 +51,78 @@ public class ProductService {
      * Results are sorted by id descending (newest first).
      */
     public Page<ProductDTO> getFilteredProducts(String category, String search, int page) {
-        boolean hasCategory = StringUtils.hasText(category);
-        boolean hasSearch   = StringUtils.hasText(search);
+        return getFilteredProducts(category, search, page, "newest", null, null);
+    }
 
-        PageRequest pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+    public Page<ProductDTO> getFilteredProducts(String category,
+                                                String search,
+                                                int page,
+                                                String sort,
+                                                Double minPrice,
+                                                Double maxPrice) {
+        Sort appliedSort = resolveSort(sort);
+        int safePage = Math.max(page, 0);
+        PageRequest pageable = PageRequest.of(safePage, PAGE_SIZE, appliedSort);
 
-        Page<Product> result;
-        if (hasCategory && hasSearch) {
-            result = productRepository.findByCategoryAndKeyword(category.trim(), search.trim(), pageable);
-        } else if (hasCategory) {
-            result = productRepository.findByCategoryIgnoreCase(category.trim(), pageable);
-        } else if (hasSearch) {
-            result = productRepository.searchByKeyword(search.trim(), pageable);
-        } else {
-            result = productRepository.findAll(pageable);
+        if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
+            return Page.empty(pageable);
         }
 
-        return result.map(this::toDTO);
+        final Double normalizedMinPrice = minPrice;
+        final Double normalizedMaxPrice = maxPrice;
+
+        Specification<Product> spec = (root, query, cb) -> cb.conjunction();
+
+        if (StringUtils.hasText(category)) {
+            String categoryNormalized = category.trim().toLowerCase();
+            spec = spec.and((root, query, cb) -> cb.equal(cb.lower(root.get("category")), categoryNormalized));
+        }
+
+        if (StringUtils.hasText(search)) {
+            String keyword = "%" + search.trim().toLowerCase() + "%";
+            spec = spec.and((root, query, cb) -> cb.or(
+                    cb.like(cb.lower(root.get("name")), keyword),
+                    cb.like(cb.lower(root.get("description")), keyword),
+                    cb.like(cb.lower(root.get("material")), keyword)
+            ));
+        }
+
+        if (normalizedMinPrice != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("price"), normalizedMinPrice));
+        }
+
+        if (normalizedMaxPrice != null) {
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), normalizedMaxPrice));
+        }
+
+        return productRepository.findAll(spec, pageable).map(this::toDTO);
+    }
+
+    public Map<String, Long> getCategoryCounts() {
+        Map<String, Long> counts = new LinkedHashMap<>();
+        productRepository.countProductsByCategory().forEach(row -> {
+            String key = row[0] == null ? "" : row[0].toString();
+            long value = row[1] == null ? 0L : ((Number) row[1]).longValue();
+            if (!key.isBlank()) {
+                counts.put(key, value);
+            }
+        });
+        return counts;
+    }
+
+    private Sort resolveSort(String sort) {
+        if (!StringUtils.hasText(sort)) {
+            return Sort.by(Sort.Direction.DESC, "id");
+        }
+
+        return switch (sort.trim().toLowerCase()) {
+            case "price_asc" -> Sort.by(Sort.Direction.ASC, "price");
+            case "price_desc" -> Sort.by(Sort.Direction.DESC, "price");
+            case "name_asc" -> Sort.by(Sort.Direction.ASC, "name");
+            case "name_desc" -> Sort.by(Sort.Direction.DESC, "name");
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "id");
+            default -> Sort.by(Sort.Direction.DESC, "id");
+        };
     }
 
     // ── Update ───────────────────────────────────────────────────────────────

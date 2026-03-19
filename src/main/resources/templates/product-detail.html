@@ -291,10 +291,10 @@
                 </div>
 
                 <div class="price-row">
-                    <span class="old-price">$
+                    <span class="old-price">Tk
                         <span th:text="${product.price != null ? #numbers.formatDecimal(product.price * 2, 1, 'COMMA', 2, 'POINT') : '256.00'}">256.00</span>
                     </span>
-                    <span class="new-price">$
+                    <span class="new-price">Tk
                         <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '125.00'}">125.00</span>
                     </span>
                 </div>

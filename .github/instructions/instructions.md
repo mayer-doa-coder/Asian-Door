@@ -1,13 +1,13 @@
 ---
-description: Asian Door project context and guidelines. Load this whenever working on any part of the Asian Door e-commerce platform.
+description: Asian Wooden Decor project context and guidelines. Load this whenever working on any part of the Asian Wooden Decor e-commerce platform.
 applyTo: '**'
 ---
 
-# Asian Door — Project Reference
+# Asian Wooden Decor — Project Reference
 
 ## Project Overview
 
-**Asian Door** is a web-based single-vendor e-commerce platform for selling doors online. The administrator is the sole seller and manages all products, orders, and inventory through a centralized admin panel. The goal is to modernize the traditional door-selling business by providing customers with a convenient online shopping experience.
+**Asian Wooden Decor** is a web-based single-vendor e-commerce platform for selling doors online. The administrator is the sole seller and manages all products, orders, and inventory through a centralized admin panel. The goal is to modernize the traditional door-selling business by providing customers with a convenient online shopping experience.
 
 ---
 

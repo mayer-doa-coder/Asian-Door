@@ -28,7 +28,7 @@ public class DataSeeder implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.admin.name:Asian Door Admin}")
+    @Value("${app.admin.name:Asian Wooden Decor Admin}")
     private String adminName;
 
     @Value("${app.admin.email:admin@asiandoor.com}")

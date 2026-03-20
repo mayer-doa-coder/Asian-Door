@@ -1,7 +1,19 @@
 /* Shared Figma shell styles (topbar + dark footer) */
 
+:root {
+    --awd-primary-bg: #b7aea6;
+}
+
+body {
+    background: var(--awd-primary-bg) !important;
+}
+
+:is(.figma-products, .figma-detail, .figma-about, .figma-flow, .figma-auth, .figma-profile) {
+    background: var(--awd-primary-bg) !important;
+}
+
 :is(.figma-products, .figma-detail, .figma-about, .figma-flow, .figma-auth, .figma-profile) .topbar {
-    background: #f6f6f6;
+    background: var(--awd-primary-bg);
     padding: 1.7rem 0 1rem;
     position: sticky;
     top: 0;

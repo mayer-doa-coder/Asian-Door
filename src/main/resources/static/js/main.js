@@ -1,5 +1,5 @@
 /* =========================================
-   Asian Door — Main JavaScript
+   Asian Wooden Decor — Main JavaScript
    ========================================= */
 
 document.addEventListener('DOMContentLoaded', function () {

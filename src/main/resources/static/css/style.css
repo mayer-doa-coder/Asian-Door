@@ -1,10 +1,10 @@
 /* =========================================
-   Asian Door — Custom Stylesheet
+   Asian Wooden Decor — Custom Stylesheet
    ========================================= */
 
 /* Root variables */
 :root {
-    --ad-primary:        #1a1a2e;
+    --ad-primary:        #b7aea6;
     --ad-accent:         #e63946;
     --ad-light:          #f8f9fa;
     --skeleton-base:     #e2e5e8;
@@ -14,9 +14,22 @@
 
 /* General */
 body {
+    --bs-body-bg: var(--ad-primary);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 400;
-    background-color: #f5f5f5;
+    background-color: var(--ad-primary) !important;
+}
+
+main,
+.figma-home,
+.figma-products,
+.figma-detail,
+.figma-about,
+.figma-flow,
+.figma-auth,
+.figma-profile,
+.admin-figma {
+    background-color: var(--ad-primary) !important;
 }
 
 h1, h2, h3, h4, h5, h6 {

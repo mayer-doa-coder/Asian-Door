@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/cart/**", "/orders/**")
+                .ignoringRequestMatchers("/cart/**", "/orders/**", "/products/*/reviews/**")
             )
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth

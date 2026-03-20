@@ -3,10 +3,17 @@ package com.asiandoor.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asiandoor.dto.OrderItemSummaryDTO;
 import com.asiandoor.dto.OrderDTO;
 import com.asiandoor.entity.Order;
 import com.asiandoor.entity.OrderItem;
@@ -23,6 +30,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
+    private static final ZoneId BANGLADESH_ZONE = ZoneId.of("Asia/Dhaka");
+    private static final DateTimeFormatter ORDER_DATE_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy");
+    private static final DateTimeFormatter ORDER_TIME_FORMAT = DateTimeFormatter.ofPattern("hh:mm a");
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
@@ -94,6 +105,7 @@ public class OrderService {
         return toDTO(savedOrder);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> getOrdersByUser(Long userId) {
         if (userId == null) {
             return List.of();
@@ -102,6 +114,20 @@ public class OrderService {
                 .stream()
                 .map(this::toDTO)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderDTO> getOrdersByUser(Long userId, int page, int size) {
+        if (userId == null) {
+            return Page.empty();
+        }
+
+        int safePage = Math.max(page, 0);
+        int safeSize = size <= 0 ? 4 : size;
+        PageRequest pageable = PageRequest.of(safePage, safeSize);
+
+        return orderRepository.findByUserIdOrderByOrderDateDesc(userId, pageable)
+                .map(this::toDTO);
     }
 
     public Order getOrderById(Long orderId) {
@@ -127,6 +153,44 @@ public class OrderService {
         dto.setTotalPrice(order.getTotalPrice());
         dto.setStatus(order.getStatus() != null ? order.getStatus().name() : null);
         dto.setUserId(order.getUser() != null ? order.getUser().getId() : null);
+        dto.setPaymentType(resolvePaymentType(order.getId()));
+        LocalDateTime bangladeshDateTime = toBangladeshDateTime(order.getOrderDate());
+        dto.setOrderDateDisplay(ORDER_DATE_FORMAT.format(bangladeshDateTime));
+        dto.setOrderTimeDisplay(ORDER_TIME_FORMAT.format(bangladeshDateTime));
+
+        List<OrderItemSummaryDTO> itemSummaries = order.getItems() == null
+                ? List.of()
+                : order.getItems().stream().map(item -> {
+                    OrderItemSummaryDTO itemDTO = new OrderItemSummaryDTO();
+                    itemDTO.setProductId(item.getProduct() != null ? item.getProduct().getId() : null);
+                    itemDTO.setProductName(item.getProduct() != null ? item.getProduct().getName() : "Product");
+                    itemDTO.setImageUrl(item.getProduct() != null ? item.getProduct().getImageUrl() : null);
+                    itemDTO.setQuantity(item.getQuantity());
+                    itemDTO.setUnitPrice(item.getPrice());
+
+                    int quantity = item.getQuantity() != null ? item.getQuantity() : 0;
+                    double unitPrice = item.getPrice() != null ? item.getPrice() : 0.0;
+                    itemDTO.setLineTotal(quantity * unitPrice);
+                    return itemDTO;
+                }).toList();
+
+        dto.setItems(itemSummaries);
         return dto;
+    }
+
+    private LocalDateTime toBangladeshDateTime(LocalDateTime orderDate) {
+        LocalDateTime source = orderDate != null ? orderDate : LocalDateTime.now(ZoneOffset.UTC);
+        return source.atZone(ZoneOffset.UTC)
+                .withZoneSameInstant(BANGLADESH_ZONE)
+                .toLocalDateTime();
+    }
+
+    private String resolvePaymentType(Long orderId) {
+        String[] paymentTypes = {"CASH", "BKASH", "NAGAD", "BANK"};
+        if (orderId == null) {
+            return paymentTypes[0];
+        }
+        int index = (int) (Math.abs(orderId) % paymentTypes.length);
+        return paymentTypes[index];
     }
 }

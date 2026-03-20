@@ -61,7 +61,7 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="price" class="form-label">Price (₱)</label>
+                            <label for="price" class="form-label">Price (Tk)</label>
                             <input type="number" id="price" th:field="*{price}" class="form-control"
                                    th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'"
                                    step="0.01" min="0.01" placeholder="0.00" />
@@ -81,6 +81,12 @@
                         <label for="dimensions" class="form-label">Dimensions</label>
                         <input type="text" id="dimensions" th:field="*{dimensions}" class="form-control"
                                placeholder="e.g. 210 × 90 cm" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lockSystem" class="form-label">Lock System</label>
+                        <input type="text" id="lockSystem" th:field="*{lockSystem}" class="form-control"
+                               placeholder="e.g. Multi-point lock" />
                     </div>
 
                     <div class="mb-3">

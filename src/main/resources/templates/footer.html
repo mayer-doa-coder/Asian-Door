@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
     <!--
      | th:fragment="footer"
      | Site-wide footer with categories and quick links.
      +-->
-    <footer th:fragment="footer" class="bg-dark text-light py-4 mt-5">
+    <footer th:fragment="footer" class="footer-dark">
         <div class="container">
-            <div class="row">
+            <div class="row g-4">
 
                 <div class="col-md-4 mb-3">
                     <h5 class="fw-bold">
@@ -20,25 +20,31 @@
                     </p>
                 </div>
 
-                <div class="col-md-4 mb-3">
-                    <h6 class="fw-semibold">Categories</h6>
-                    <ul class="list-unstyled small">
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products(category=wooden)}">Wooden Doors</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products(category=steel)}">Steel Doors</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products(category=glass)}">Glass Doors</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products(category=security)}">Security Doors</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products(category=interior)}">Interior Doors</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products(category=exterior)}">Exterior Doors</a></li>
+                <div class="col-md-3 mb-3">
+                    <h6>About us</h6>
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li><a th:href="@{/products}">Shop</a></li>
+                        <li><a th:href="@{/login}">Login</a></li>
+                        <li><a th:href="@{/register}">Register</a></li>
                     </ul>
                 </div>
 
-                <div class="col-md-4 mb-3">
-                    <h6 class="fw-semibold">Quick Links</h6>
-                    <ul class="list-unstyled small">
-                        <li><a class="text-muted text-decoration-none" th:href="@{/}">Home</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/products}">All Products</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/login}">Login</a></li>
-                        <li><a class="text-muted text-decoration-none" th:href="@{/register}">Register</a></li>
+                <div class="col-md-3 mb-3">
+                    <h6>Useful</h6>
+                    <ul>
+                        <li><a th:href="@{/cart/view}">Cart</a></li>
+                        <li><a th:href="@{/products}">Products</a></li>
+                        <li><a th:href="@{/orders/history}">My orders</a></li>
+                        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}">Admin panel</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <h6>Contact</h6>
+                    <ul>
+                        <li>+8801716516524</li>
+                        <li>mdmatin401@gmail.com</li>
                     </ul>
                 </div>
 

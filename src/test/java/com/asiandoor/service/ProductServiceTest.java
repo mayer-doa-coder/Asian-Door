@@ -17,13 +17,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.asiandoor.dto.ProductDTO;
 import com.asiandoor.entity.Product;
+import com.asiandoor.repository.OrderItemRepository;
 import com.asiandoor.repository.ProductRepository;
+import com.asiandoor.repository.ProductReviewRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private ProductReviewRepository productReviewRepository;
+
+    @Mock
+    private OrderItemRepository orderItemRepository;
 
     @InjectMocks
     private ProductService productService;

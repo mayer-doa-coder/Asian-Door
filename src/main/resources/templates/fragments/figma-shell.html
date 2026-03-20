@@ -13,7 +13,6 @@
                     <a th:href="@{/}" th:classappend="${activePage == 'home'} ? 'active' : ''">Home</a>
                     <a th:href="@{/products}" th:classappend="${activePage == 'shop'} ? 'active' : ''">Shop</a>
                     <a th:href="@{/about}" th:classappend="${activePage == 'about'} ? 'active' : ''">About us</a>
-                    <a th:href="@{/#blog}">Blog</a>
                 </div>
                 <div class="col-6 col-lg-3 text-end nav-icons">
                     <a th:href="@{/products}"><i class="bi bi-search"></i></a>
@@ -41,24 +40,29 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus vitae congue id ipsum sed neque et dui accumsan.</p>
             </div>
             <div class="col-md-3">
-                <h6>About Us</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus vitae congue id ipsum sed neque et dui accumsan.</p>
+                <h6>About us</h6>
+                <ul>
+                    <li><a th:href="@{/}">Home</a></li>
+                    <li><a th:href="@{/products}">Shop</a></li>
+                    <li><a th:href="@{/login}">Login</a></li>
+                    <li><a th:href="@{/register}">Register</a></li>
+                </ul>
             </div>
             <div class="col-md-3">
                 <h6>Useful</h6>
                 <ul>
-                    <li><a th:href="@{/products}">Download product</a></li>
-                    <li><a th:href="@{/products}">Download product</a></li>
-                    <li><a th:href="@{/products}">Download product</a></li>
-                    <li><a th:href="@{/products}">Download product</a></li>
-                    <li><a th:href="@{/products}">Download product</a></li>
+                    <li><a th:href="@{/cart/view}">Cart</a></li>
+                    <li><a th:href="@{/products}">Products</a></li>
+                    <li><a th:href="@{/orders/history}">My orders</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}">Admin panel</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h6>Call Center</h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus vitae</p>
-                <p class="mt-2">soroushnorozyui@gmail.com</p>
-                <p class="mt-1">+1 333 555</p>
+                <h6>Contact</h6>
+                <ul>
+                    <li>+8801716516524</li>
+                    <li>mdmatin401@gmail.com</li>
+                </ul>
             </div>
         </div>
     </div>

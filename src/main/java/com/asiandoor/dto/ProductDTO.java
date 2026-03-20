@@ -25,10 +25,12 @@ public class ProductDTO {
     private String material;
 
     @NotNull(message = "Price is required.")
-    @DecimalMin(value = "0.01", message = "Price must be greater than ₱0.")
+    @DecimalMin(value = "0.01", message = "Price must be greater than Tk 0.")
     private Double price;
 
     private String dimensions;
+
+    private String lockSystem;
 
     @NotNull(message = "Stock is required.")
     @Min(value = 0, message = "Stock cannot be negative.")
@@ -37,4 +39,8 @@ public class ProductDTO {
     private String imageUrl;
 
     private String description;
+
+    private Double averageRating = 0.0;
+
+    private Long totalReviews = 0L;
 }

@@ -28,6 +28,8 @@ public class Product {
 
     private String dimensions;
 
+    private String lockSystem;
+
     private Integer stock;
 
     private String imageUrl;

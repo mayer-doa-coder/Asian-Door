@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
+    <title>Asian Door | Update Profile</title>
+    <style>
+        .figma-profile {
+            background: #f6f6f6;
+            color: #2f2f2f;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .figma-profile a {
+            text-decoration: none !important;
+        }
+
+        .figma-profile .profile-layout {
+            padding: 1.2rem 0 2.5rem;
+        }
+
+        .figma-profile .side-card {
+            background: #fff;
+            border: 1px solid #dedede;
+            border-radius: .65rem;
+            box-shadow: 0 18px 36px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .figma-profile .buyer-card {
+            padding: .7rem;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .figma-profile .buyer-head {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            border: 1px solid #c4c4c4;
+            border-radius: .5rem;
+            padding: .5rem;
+        }
+
+        .figma-profile .buyer-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #ececec;
+            color: #5b5b5b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .figma-profile .buyer-name {
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .figma-profile .buyer-role {
+            margin: 0;
+            color: #7d7d7d;
+            font-size: .82rem;
+        }
+
+        .figma-profile .profile-nav a,
+        .figma-profile .profile-nav form button {
+            width: 100%;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            text-decoration: none;
+            color: #4a4a4a;
+            padding: .75rem .95rem;
+            border-bottom: 1px solid #ececec;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-weight: 500;
+        }
+
+        .figma-profile .profile-nav a.active {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .profile-nav a:hover,
+        .figma-profile .profile-nav form button:hover {
+            background: #f4f4f4;
+            color: #2f2f2f;
+        }
+
+        .figma-profile .profile-nav a.active:hover {
+            background: #393939;
+            color: #fff;
+        }
+
+        .figma-profile .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: .55rem;
+        }
+
+        .figma-profile .section-sub {
+            color: #737373;
+            font-size: .95rem;
+            margin-bottom: .9rem;
+        }
+
+        .figma-profile .profile-form {
+            max-width: 620px;
+        }
+
+        .figma-profile .field-wrap {
+            margin-bottom: 1rem;
+        }
+
+        .figma-profile .field-wrap label {
+            display: block;
+            font-size: .9rem;
+            color: #5b5b5b;
+            margin-bottom: .3rem;
+        }
+
+        .figma-profile .field-wrap input {
+            width: 100%;
+            border: 0;
+            border-bottom: 1px solid #c8c8c8;
+            background: transparent;
+            color: #2f2f2f;
+            padding: .55rem .1rem;
+            font-size: .97rem;
+        }
+
+        .figma-profile .field-wrap input:focus {
+            outline: none;
+            border-bottom-color: #4d4d4d;
+        }
+
+        .figma-profile .field-wrap input.is-invalid {
+            border-bottom-color: #b02a37;
+        }
+
+        .figma-profile .error-text {
+            color: #b02a37;
+            font-size: .82rem;
+            margin-top: .25rem;
+        }
+
+        .figma-profile .hint-text {
+            color: #6f6f6f;
+            font-size: .82rem;
+            margin-top: .25rem;
+        }
+
+        .figma-profile .hint-text.good {
+            color: #1f7a45;
+        }
+
+        .figma-profile .hint-text.bad {
+            color: #b02a37;
+        }
+
+        .figma-profile .live-row {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            flex-wrap: wrap;
+            margin-bottom: .95rem;
+        }
+
+        .figma-profile .live-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            background: #ececec;
+            color: #4f4f4f;
+            font-size: .78rem;
+            padding: .2rem .55rem;
+            border-radius: 999px;
+        }
+
+        .figma-profile .live-chip.active {
+            background: #dff2e5;
+            color: #1e6d40;
+        }
+
+        .figma-profile .btn-save {
+            border: 0;
+            background: #393939;
+            color: #fff;
+            padding: .55rem 1.25rem;
+            font-size: .92rem;
+        }
+
+        .figma-profile .btn-save:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .figma-profile .btn-cancel {
+            color: #565656;
+            font-size: .92rem;
+            margin-left: .9rem;
+        }
+
+        .figma-profile .toast-wrap {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1080;
+            display: grid;
+            gap: .55rem;
+        }
+
+        .figma-profile .mini-toast {
+            min-width: 220px;
+            max-width: 320px;
+            padding: .65rem .8rem;
+            font-size: .86rem;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(-8px);
+            animation: toastIn .2s ease forwards;
+        }
+
+        .figma-profile .mini-toast.success {
+            background: #1f7a45;
+        }
+
+        .figma-profile .mini-toast.error {
+            background: #b02a37;
+        }
+
+        .figma-profile .mini-toast.hide {
+            animation: toastOut .25s ease forwards;
+        }
+
+        @keyframes toastIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+        }
+
+        @media (max-width: 991px) {
+            .figma-profile .side-card {
+                margin-bottom: .9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="figma-profile">
+    <th:block th:replace="~{fragments/figma-shell :: topNav('profile', '#profile-update-footer')}"></th:block>
+
+    <div class="toast-wrap" aria-live="polite" aria-atomic="true" th:object="${profileUpdateRequest}">
+        <div class="mini-toast success" th:if="${updated}" data-autohide="true">Profile updated successfully.</div>
+        <div class="mini-toast error" th:if="${#fields.hasGlobalErrors()}" data-autohide="true"
+             th:each="err : ${#fields.globalErrors()}" th:text="${err}">Unable to update profile.</div>
+        <div class="mini-toast error" th:if="${#fields.hasErrors('name')}" data-autohide="true" th:text="${#fields.errors('name')[0]}">Name is required.</div>
+        <div class="mini-toast error" th:if="${#fields.hasErrors('email')}" data-autohide="true" th:text="${#fields.errors('email')[0]}">Email is required.</div>
+        <div class="mini-toast error" th:if="${#fields.hasErrors('password')}" data-autohide="true" th:text="${#fields.errors('password')[0]}">Password is invalid.</div>
+        <div class="mini-toast error" th:if="${#fields.hasErrors('confirmPassword')}" data-autohide="true" th:text="${#fields.errors('confirmPassword')[0]}">Confirm password is invalid.</div>
+    </div>
+
+    <section class="profile-layout">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-lg-3">
+                    <aside class="side-card">
+                        <div class="buyer-card">
+                            <div class="buyer-head">
+                                <span class="buyer-icon"><i class="bi bi-person"></i></span>
+                                <div>
+                                    <p class="buyer-name" th:text="${(user != null and user.name != null) ? user.name : 'Buyer User'}">Buyer User</p>
+                                    <p class="buyer-role">Customer</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <nav class="profile-nav">
+                            <a th:href="@{/profile}"><i class="bi bi-speedometer2"></i>Dashboard</a>
+                            <a th:href="@{/orders/history}"><i class="bi bi-cart3"></i>Order History</a>
+                            <a th:href="@{/orders/history}"><i class="bi bi-receipt"></i>All Transactions</a>
+                            <a class="active" th:href="@{/profile/update}"><i class="bi bi-person-gear"></i>Update Profile</a>
+                            <a th:href="@{/support}"><i class="bi bi-headset"></i>Contact Support</a>
+                            <form th:action="@{/logout}" method="post" class="m-0">
+                                <button type="submit"><i class="bi bi-box-arrow-right"></i>Logout</button>
+                            </form>
+                        </nav>
+                    </aside>
+                </div>
+
+                <div class="col-lg-9">
+                    <h1 class="section-title">Update Profile</h1>
+                    <p class="section-sub">Change your name, email, and password. If you change email or password, you will be logged out and asked to log in again.</p>
+
+                    <div class="live-row">
+                        <span id="changeBadge" class="live-chip"><i class="bi bi-dot"></i>No changes yet</span>
+                        <span id="passwordMatchHint" class="live-chip">Password not set</span>
+                    </div>
+
+                    <form class="profile-form" th:action="@{/profile/update}" th:object="${profileUpdateRequest}" method="post" novalidate
+                          th:attr="data-initial-name=*{name},data-initial-email=*{email}">
+                        <div class="field-wrap">
+                            <label for="name">Name</label>
+                            <input id="name" type="text" th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? ' is-invalid'" />
+                            <div class="error-text" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            <div class="hint-text" id="namePreview">Display name preview: <span th:text="*{name}">Customer</span></div>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label for="email">Email</label>
+                            <input id="email" type="email" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? ' is-invalid'" />
+                            <div class="error-text" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            <div class="hint-text" id="emailChangeHint">If changed and saved, you'll be logged out.</div>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label for="password">New Password</label>
+                            <input id="password" type="password" th:field="*{password}" th:classappend="${#fields.hasErrors('password')} ? ' is-invalid'" />
+                            <div class="error-text" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                            <div class="hint-text" id="passwordStrengthHint">Leave empty to keep current password.</div>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label for="confirmPassword">Retype Password</label>
+                            <input id="confirmPassword" type="password" th:field="*{confirmPassword}" th:classappend="${#fields.hasErrors('confirmPassword')} ? ' is-invalid'" />
+                            <div class="error-text" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+                        </div>
+
+                        <button id="saveBtn" class="btn-save" type="submit">Save Changes</button>
+                        <a class="btn-cancel" th:href="@{/profile}">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="~{fragments/figma-shell :: darkFooter('profile-update-footer')}"></footer>
+</main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toasts = document.querySelectorAll('.mini-toast[data-autohide="true"]');
+        toasts.forEach(function (toast) {
+            window.setTimeout(function () {
+                toast.classList.add('hide');
+                window.setTimeout(function () {
+                    if (toast && toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 250);
+            }, 2800);
+        });
+
+        const form = document.querySelector('.profile-form');
+        if (!form) {
+            return;
+        }
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const saveBtn = document.getElementById('saveBtn');
+
+        const changeBadge = document.getElementById('changeBadge');
+        const passwordMatchHint = document.getElementById('passwordMatchHint');
+        const passwordStrengthHint = document.getElementById('passwordStrengthHint');
+        const namePreview = document.getElementById('namePreview');
+        const emailChangeHint = document.getElementById('emailChangeHint');
+
+        const initialName = (form.dataset.initialName || '').trim();
+        const initialEmail = (form.dataset.initialEmail || '').trim().toLowerCase();
+
+        function getStrength(password) {
+            if (!password) return { text: 'Leave empty to keep current password.', css: '' };
+            if (password.length < 6) return { text: 'Weak password (min 6 characters).', css: 'bad' };
+            if (password.length < 10) return { text: 'Medium password.', css: '' };
+            return { text: 'Strong password.', css: 'good' };
+        }
+
+        function updateLiveState() {
+            const currentName = (nameInput.value || '').trim();
+            const currentEmail = (emailInput.value || '').trim().toLowerCase();
+            const password = passwordInput.value || '';
+            const confirmPassword = confirmPasswordInput.value || '';
+
+            const nameChanged = currentName !== initialName;
+            const emailChanged = currentEmail !== initialEmail;
+            const passwordChanged = password.length > 0;
+            const hasChanges = nameChanged || emailChanged || passwordChanged;
+
+            if (changeBadge) {
+                changeBadge.classList.toggle('active', hasChanges);
+                changeBadge.innerHTML = hasChanges
+                    ? '<i class="bi bi-check-circle"></i>Unsaved changes'
+                    : '<i class="bi bi-dot"></i>No changes yet';
+            }
+
+            if (namePreview) {
+                namePreview.innerHTML = 'Display name preview: <span>' + (currentName || 'Customer') + '</span>';
+            }
+
+            if (emailChangeHint) {
+                emailChangeHint.className = 'hint-text' + (emailChanged ? ' bad' : '');
+                emailChangeHint.textContent = emailChanged
+                    ? 'Email changed: after save, you will be logged out.'
+                    : "If changed and saved, you'll be logged out.";
+            }
+
+            const strength = getStrength(password);
+            if (passwordStrengthHint) {
+                passwordStrengthHint.className = 'hint-text ' + strength.css;
+                passwordStrengthHint.textContent = strength.text;
+            }
+
+            let passwordsOk = true;
+            if (password || confirmPassword) {
+                passwordsOk = password.length >= 6 && password === confirmPassword;
+                if (passwordMatchHint) {
+                    const match = password === confirmPassword;
+                    passwordMatchHint.classList.toggle('active', match && password.length >= 6);
+                    passwordMatchHint.textContent = match
+                        ? (password.length >= 6 ? 'Passwords match' : 'Password too short')
+                        : 'Passwords do not match';
+                }
+            } else if (passwordMatchHint) {
+                passwordMatchHint.classList.remove('active');
+                passwordMatchHint.textContent = 'Password not set';
+            }
+
+            if (saveBtn) {
+                saveBtn.disabled = !hasChanges || !passwordsOk;
+            }
+        }
+
+        [nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(function (input) {
+            if (input) {
+                input.addEventListener('input', updateLiveState);
+            }
+        });
+
+        updateLiveState();
+    });
+</script>
+</body>
+</html>

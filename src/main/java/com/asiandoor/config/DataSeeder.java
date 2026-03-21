@@ -2,8 +2,8 @@ package com.asiandoor.config;
 
 import java.util.List;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -72,6 +72,9 @@ public class DataSeeder implements CommandLineRunner {
                     existingAdmin.setName(adminName);
                     existingAdmin.setRole(adminRole);
                     existingAdmin.setPassword(passwordEncoder.encode(adminPassword));
+                    existingAdmin.setVerified(true);
+                    existingAdmin.setVerificationCode(null);
+                    existingAdmin.setVerificationCodeExpiresAt(null);
                     userRepository.save(existingAdmin);
                 }, () -> {
                     User admin = new User();
@@ -79,6 +82,7 @@ public class DataSeeder implements CommandLineRunner {
                     admin.setEmail(adminEmail);
                     admin.setPassword(passwordEncoder.encode(adminPassword));
                     admin.setRole(adminRole);
+                    admin.setVerified(true);
                     userRepository.save(admin);
                 });
     }

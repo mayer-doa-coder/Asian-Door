@@ -9,4 +9,8 @@ import com.asiandoor.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByEmailAndVerificationCode(String email, String verificationCode);
+
+    Optional<User> findByEmailAndPasswordResetCode(String email, String passwordResetCode);
 }

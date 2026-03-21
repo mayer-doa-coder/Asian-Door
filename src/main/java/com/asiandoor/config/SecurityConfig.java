@@ -49,7 +49,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // ── Public pages ────────────────────────────────────────────
                 .requestMatchers("/", "/about", "/products", "/products/**",
-                                 "/login", "/register", "/error", "/access-denied",
+                                 "/login", "/register", "/verify-signup", "/verify-signup/**",
+                                 "/forgot-password", "/forgot-password/**", "/reset-password", "/reset-password/**",
+                                 "/error", "/access-denied",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 // ── Admin only — first line of defence ──────────────────────
                 // Role stored in DB as "ROLE_ADMIN"; hasRole() strips the prefix.

@@ -14,6 +14,14 @@ services:
       APP_ADMIN_NAME: ${APP_ADMIN_NAME:-Asian Door Admin}
       APP_ADMIN_EMAIL: ${APP_ADMIN_EMAIL:-admin@asiandoor.com}
       APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD:-change_this_admin_password}
+      APP_VERIFICATION_CODE_EXPIRY_MINUTES: ${APP_VERIFICATION_CODE_EXPIRY_MINUTES:-10}
+      APP_PASSWORD_RESET_CODE_EXPIRY_MINUTES: ${APP_PASSWORD_RESET_CODE_EXPIRY_MINUTES:-10}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-no-reply@asiandoor.local}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-true}
+      MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS:-true}
     depends_on:
       db:
         condition: service_healthy

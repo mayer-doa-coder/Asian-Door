@@ -1,30 +1,36 @@
 package com.asiandoor.service;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import com.asiandoor.dto.RegisterRequest;
 import com.asiandoor.dto.ProfileUpdateRequest;
+import com.asiandoor.dto.RegisterRequest;
 import com.asiandoor.dto.UserDTO;
 import com.asiandoor.entity.Role;
 import com.asiandoor.entity.User;
 import com.asiandoor.repository.RoleRepository;
 import com.asiandoor.repository.UserRepository;
+
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -38,8 +44,22 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private JavaMailSender mailSender;
+
     @InjectMocks
     private UserService userService;
+
+    @BeforeEach
+    void init() {
+        ReflectionTestUtils.setField(userService, "verificationCodeExpiryMinutes", 10);
+        ReflectionTestUtils.setField(userService, "passwordResetCodeExpiryMinutes", 10);
+        ReflectionTestUtils.setField(userService, "mailFrom", "asianwoodendecor@gmail.com");
+        ReflectionTestUtils.setField(userService, "mailFromName", "Asian Wooden Decor Support");
+
+        lenient().when(mailSender.createMimeMessage())
+                .thenReturn(new MimeMessage(Session.getDefaultInstance(new java.util.Properties())));
+    }
 
     @Test
     void shouldRegisterUser() {

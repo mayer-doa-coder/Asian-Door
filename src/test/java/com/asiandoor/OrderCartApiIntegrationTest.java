@@ -1,9 +1,22 @@
 package com.asiandoor;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -11,20 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -87,6 +86,9 @@ class OrderCartApiIntegrationTest {
         if (existing.isPresent()) {
             testUser = existing.get();
                         testUser.setPassword(passwordEncoder.encode(userRawPassword));
+                        testUser.setVerified(true);
+                        testUser.setVerificationCode(null);
+                        testUser.setVerificationCodeExpiresAt(null);
                         testUser = userRepository.save(testUser);
         } else {
             User user = new User();
@@ -94,6 +96,7 @@ class OrderCartApiIntegrationTest {
             user.setEmail("customer@test.com");
                         user.setPassword(passwordEncoder.encode(userRawPassword));
             user.setRole(customerRole);
+                        user.setVerified(true);
             testUser = userRepository.save(user);
         }
 
@@ -168,7 +171,7 @@ class OrderCartApiIntegrationTest {
         String registeredEmail = "buyer+" + UUID.randomUUID() + "@test.com";
         String registeredPassword = "BuyerPass123!";
 
-        mockMvc.perform(post("/register")
+        MvcResult registerResult = mockMvc.perform(post("/register")
                         .with(csrf())
                         .param("fullName", "Integration Buyer")
                         .param("email", registeredEmail)
@@ -176,7 +179,18 @@ class OrderCartApiIntegrationTest {
                         .param("password", registeredPassword)
                         .param("confirmPassword", registeredPassword))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login?registered"));
+                .andExpect(redirectedUrl("/verify-signup"))
+                .andReturn();
+
+        MockHttpSession registerSession = (MockHttpSession) registerResult.getRequest().getSession(false);
+        User registeredForVerification = userRepository.findByEmail(registeredEmail).orElseThrow();
+
+        mockMvc.perform(post("/verify-signup")
+                        .with(csrf())
+                        .session(registerSession)
+                        .param("code", registeredForVerification.getVerificationCode()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
 
         MvcResult loginResult = mockMvc.perform(formLogin("/login")
                         .user(registeredEmail)

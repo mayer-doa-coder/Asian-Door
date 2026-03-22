@@ -31,6 +31,19 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private boolean verified = false;
+
+    @Column(length = 6)
+    private String verificationCode;
+
+    private LocalDateTime verificationCodeExpiresAt;
+
+    @Column(length = 6)
+    private String passwordResetCode;
+
+    private LocalDateTime passwordResetCodeExpiresAt;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

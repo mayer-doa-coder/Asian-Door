@@ -192,6 +192,7 @@ public class OrderService {
                     OrderItemSummaryDTO itemDTO = new OrderItemSummaryDTO();
                     itemDTO.setProductId(item.getProduct() != null ? item.getProduct().getId() : null);
                     itemDTO.setProductName(item.getProduct() != null ? item.getProduct().getName() : "Product");
+                    itemDTO.setProductCategory(item.getProduct() != null ? item.getProduct().getCategory() : null);
                     itemDTO.setImageUrl(item.getProduct() != null ? item.getProduct().getImageUrl() : null);
                     itemDTO.setQuantity(item.getQuantity());
                     itemDTO.setUnitPrice(item.getPrice());

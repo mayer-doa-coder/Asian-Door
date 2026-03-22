@@ -36,6 +36,21 @@
                             <div class="fw-semibold" th:text="${'#' + order.id}">#0</div>
                             <div class="small text-muted" th:text="${order.orderDateDisplay + ' · ' + order.orderTimeDisplay}">Date</div>
                             <div class="small text-muted" th:text="${(order.items != null ? #lists.size(order.items) : 0) + ' item(s)'}">0 item(s)</div>
+                            <div class="mt-2 border rounded p-2 bg-light" th:if="${order.items != null and !#lists.isEmpty(order.items)}">
+                                <div class="small d-flex justify-content-between align-items-start border-bottom pb-1 mb-1"
+                                     th:each="item : ${order.items}">
+                                    <div>
+                                        <div class="fw-semibold text-dark" th:text="${item.productName != null ? item.productName : 'Product'}">Product</div>
+                                        <div class="text-muted">
+                                            <span th:text="${'Type: ' + (item.productCategory != null ? #strings.capitalize(item.productCategory) : 'N/A')}">Type: N/A</span>
+                                            <span> · </span>
+                                            <span th:text="${'Qty: ' + (item.quantity != null ? item.quantity : 0)}">Qty: 0</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-nowrap fw-semibold"
+                                         th:text="${'Tk ' + #numbers.formatDecimal(item.lineTotal != null ? item.lineTotal : 0, 1, 'COMMA', 2, 'POINT')}">Tk 0.00</div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <div class="fw-semibold" th:text="${order.customerName != null ? order.customerName : 'N/A'}">Name</div>

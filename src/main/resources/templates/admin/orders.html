@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin-figma.css}"/>
+    <title>Admin Orders | Asian Door</title>
+</head>
+<body class="admin-figma">
+<th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#')}"></th:block>
+<main th:replace="~{fragments/admin-shell :: adminPage('orders', 'Orders', ~{::ordersContent})}">
+    <th:block th:fragment="ordersContent">
+        <div class="panel-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Customer Orders</h2>
+                <span class="badge-soft" th:text="${totalOrders + ' total'}">0 total</span>
+            </div>
+
+            <div class="alert alert-success" th:if="${successMessage != null}" th:text="${successMessage}"></div>
+
+            <div class="table-responsive admin-table" th:if="${orders != null and !#lists.isEmpty(orders)}">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th class="ps-3">Order</th>
+                        <th>Customer</th>
+                        <th>Contact</th>
+                        <th>Payment</th>
+                        <th class="text-end">Total</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td class="ps-3">
+                            <div class="fw-semibold" th:text="${'#' + order.id}">#0</div>
+                            <div class="small text-muted" th:text="${order.orderDateDisplay + ' · ' + order.orderTimeDisplay}">Date</div>
+                            <div class="small text-muted" th:text="${(order.items != null ? #lists.size(order.items) : 0) + ' item(s)'}">0 item(s)</div>
+                        </td>
+                        <td>
+                            <div class="fw-semibold" th:text="${order.customerName != null ? order.customerName : 'N/A'}">Name</div>
+                            <div class="small text-muted" th:text="${order.deliveryAddress != null ? order.deliveryAddress : 'Address not provided'}">Address</div>
+                        </td>
+                        <td>
+                            <div class="small" th:text="${order.customerEmail != null ? order.customerEmail : 'N/A'}">Email</div>
+                            <div class="small text-muted" th:text="${order.customerPhone != null ? order.customerPhone : 'Phone not provided'}">Phone</div>
+                        </td>
+                        <td>
+                            <span class="category-pill" th:text="${order.paymentType != null ? order.paymentType : 'Cash on Delivery'}">Cash on Delivery</span>
+                        </td>
+                        <td class="text-end fw-semibold">
+                            Tk <span th:text="${#numbers.formatDecimal(order.totalPrice != null ? order.totalPrice : 0, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post" class="d-flex align-items-center gap-2">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <select name="status" class="form-select form-select-sm">
+                                    <option th:each="statusValue : ${statuses}"
+                                            th:value="${statusValue}"
+                                            th:selected="${statusValue.name() == order.status}"
+                                            th:text="${statusValue.name()}">PENDING</option>
+                                </select>
+                                <button type="submit" class="btn btn-dark btn-sm">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${orders == null or #lists.isEmpty(orders)}" class="text-center text-muted py-4">
+                <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                <p class="mb-0">No orders available yet.</p>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-3" th:if="${totalPages != null and totalPages > 1}">
+                <a class="btn btn-outline-secondary btn-sm"
+                   th:if="${currentPage > 1}"
+                   th:href="@{/admin/orders(page=${currentPage - 1})}">Prev</a>
+
+                <span class="btn btn-dark btn-sm" th:text="${currentPage + ' / ' + totalPages}">1 / 1</span>
+
+                <a class="btn btn-outline-secondary btn-sm"
+                   th:if="${currentPage < totalPages}"
+                   th:href="@{/admin/orders(page=${currentPage + 1})}">Next</a>
+            </div>
+        </div>
+    </th:block>
+</main>
+
+<th:block th:replace="~{footer :: scripts}"></th:block>
+</body>
+</html>

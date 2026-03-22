@@ -2,11 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin-figma.css}"/>
     <title>Manage Products - Admin | Asian Door</title>
 </head>
 <body class="admin-figma">
-<nav th:replace="~{header :: header}"></nav>
+<th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#')}"></th:block>
 <main th:replace="~{fragments/admin-shell :: adminPage('products', 'Dashboard', ~{::productsContent})}">
     <th:block th:fragment="productsContent">
         <section class="panel-card">

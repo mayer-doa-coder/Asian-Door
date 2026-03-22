@@ -2,11 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin-figma.css}"/>
     <title>Admin Dashboard | Asian Door</title>
 </head>
 <body class="admin-figma">
-<nav th:replace="~{header :: header}"></nav>
+<th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#')}"></th:block>
 <main th:replace="~{fragments/admin-shell :: adminPage('dashboard', 'Dashboard', ~{::dashboardContent})}">
     <th:block th:fragment="dashboardContent">
         <div class="content-grid">
@@ -83,6 +84,7 @@
                 <div class="d-grid gap-2">
                     <a th:href="@{/admin/products/new}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Create Product</a>
                     <a th:href="@{/admin/products}" class="btn btn-outline-secondary"><i class="bi bi-box-seam me-1"></i>Manage Products</a>
+                    <a th:href="@{/admin/orders}" class="btn btn-outline-secondary"><i class="bi bi-receipt me-1"></i>Manage Orders</a>
                     <a th:href="@{/products}" target="_blank" class="btn btn-outline-dark"><i class="bi bi-shop me-1"></i>View Storefront</a>
                 </div>
 

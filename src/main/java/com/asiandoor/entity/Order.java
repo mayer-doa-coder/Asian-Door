@@ -38,6 +38,21 @@ public class Order {
     @Column(nullable = false, length = 20)
     private OrderStatus status;
 
+    @Column(length = 120)
+    private String customerName;
+
+    @Column(length = 160)
+    private String customerEmail;
+
+    @Column(length = 40)
+    private String customerPhone;
+
+    @Column(length = 255)
+    private String deliveryAddress;
+
+    @Column(length = 30)
+    private String paymentType;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -55,6 +70,9 @@ public class Order {
         }
         if (this.totalPrice == null) {
             this.totalPrice = 0.0;
+        }
+        if (this.paymentType == null || this.paymentType.isBlank()) {
+            this.paymentType = "CASH_ON_DELIVERY";
         }
     }
 }

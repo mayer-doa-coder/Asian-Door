@@ -18,7 +18,10 @@
                     <a th:href="@{/products}"><i class="bi bi-search"></i></a>
                     <a th:href="@{/cart/view}"><i class="bi bi-bag"></i></a>
                     <a th:href="@{/login}" sec:authorize="!isAuthenticated()" onclick="alert('Please login first. Redirecting to login page.');"><i class="bi bi-person-circle"></i></a>
-                    <a class="topbar-avatar-btn" th:href="@{/profile}" sec:authorize="isAuthenticated()" aria-label="My Profile">
+                    <a class="topbar-avatar-btn" th:href="@{/profile}" sec:authorize="isAuthenticated() and !hasRole('ADMIN')" aria-label="My Profile">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <a class="topbar-avatar-btn" th:href="@{/admin}" sec:authorize="isAuthenticated() and hasRole('ADMIN')" aria-label="Admin Dashboard">
                         <i class="bi bi-person-circle"></i>
                     </a>
                     <form th:action="@{/logout}" method="post" class="d-inline" sec:authorize="isAuthenticated()">

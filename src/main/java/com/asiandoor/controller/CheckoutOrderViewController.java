@@ -24,7 +24,11 @@ public class CheckoutOrderViewController {
     private final OrderService orderService;
 
     @GetMapping("/checkout")
-    public String checkoutView() {
+    public String checkoutView(Authentication authentication, Model model) {
+        if (authentication != null && authentication.getName() != null) {
+            userService.findUserDTOByEmail(authentication.getName())
+                    .ifPresent(user -> model.addAttribute("user", user));
+        }
         return "checkout";
     }
 
@@ -67,14 +71,4 @@ public class CheckoutOrderViewController {
         return "orders";
     }
 
-    private Long currentUserId(Authentication authentication) {
-        if (authentication == null || authentication.getName() == null) {
-            throw new IllegalArgumentException("Authenticated user is required.");
-        }
-
-        UserDTO user = userService.findUserDTOByEmail(authentication.getName())
-            .orElseThrow(() -> new ResourceNotFoundException("User account not found."));
-
-        return user.getId();
-    }
 }

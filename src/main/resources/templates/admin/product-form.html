@@ -2,13 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin-figma.css}"/>
     <title th:text="${editMode} ? 'Edit Product - Admin | Asian Door' : 'Add Product - Admin | Asian Door'">
         Product Form - Admin | Asian Door
     </title>
 </head>
 <body class="admin-figma">
-<nav th:replace="~{header :: header}"></nav>
+<th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#')}"></th:block>
 <main th:replace="~{fragments/admin-shell :: adminPage('products', 'Dashboard', ~{::formContent})}">
     <th:block th:fragment="formContent">
         <div class="content-grid">

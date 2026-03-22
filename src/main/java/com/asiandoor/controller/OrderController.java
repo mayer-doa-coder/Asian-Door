@@ -6,10 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiandoor.dto.OrderDTO;
+import com.asiandoor.dto.OrderCreateRequestDTO;
 import com.asiandoor.dto.OrderCreateResponseDTO;
 import com.asiandoor.dto.OrderListResponseDTO;
 import com.asiandoor.dto.UserDTO;
@@ -28,9 +30,12 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<OrderCreateResponseDTO> createOrder(Authentication authentication) {
+    public ResponseEntity<OrderCreateResponseDTO> createOrder(
+            @RequestBody(required = false) OrderCreateRequestDTO request,
+            Authentication authentication
+    ) {
         Long userId = currentUserId(authentication);
-        OrderDTO order = orderService.placeOrder(userId);
+        OrderDTO order = orderService.placeOrder(userId, request);
 
         OrderCreateResponseDTO response = new OrderCreateResponseDTO();
         response.setSuccess(true);

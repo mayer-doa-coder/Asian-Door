@@ -94,8 +94,14 @@
                         </a>
                     </li>
 
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <li class="nav-item" sec:authorize="isAuthenticated() and !hasRole('ADMIN')">
                         <a class="nav-avatar-btn" th:href="@{/profile}" aria-label="My Profile">
+                            <i class="bi bi-person-circle fs-5"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="isAuthenticated() and hasRole('ADMIN')">
+                        <a class="nav-avatar-btn" th:href="@{/admin}" aria-label="Admin Dashboard">
                             <i class="bi bi-person-circle fs-5"></i>
                         </a>
                     </li>

@@ -7,6 +7,7 @@ public class OrderItemSummaryDTO {
 
     private Long productId;
     private String productName;
+    private String productCategory;
     private String imageUrl;
     private Integer quantity;
     private Double unitPrice;

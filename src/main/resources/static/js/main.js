@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return 'Tk ' + CURRENCY.format(Number(value || 0));
     }
 
+    var PAYMENT_METHOD_STORAGE_KEY = 'ad:checkoutPaymentMethod';
+
     function setCartBadgeCount(count) {
         document.querySelectorAll('.nav-cart-badge').forEach(function (badge) {
             badge.textContent = String(count || 0);
@@ -255,9 +257,38 @@ document.addEventListener('DOMContentLoaded', function () {
         var tbody = document.getElementById('cartTableBody');
         var emptyState = document.getElementById('cartEmptyState');
         var summaryItems = document.getElementById('cartSummaryItems');
+        var summaryCountLabel = document.getElementById('summaryCountLabel');
         var summaryTotal = document.getElementById('cartSummaryTotal');
+        var summaryTotalLabel = document.getElementById('summaryTotalLabel');
         var checkoutBtn = document.getElementById('checkoutBtn');
         var alertHost = document.getElementById('cartAlertHost');
+        var cartPaymentRadios = Array.prototype.slice.call(document.querySelectorAll('input[name="cartPaymentMethod"]'));
+
+        function selectedCartPaymentMethod() {
+            var selected = document.querySelector('input[name="cartPaymentMethod"]:checked');
+            return selected ? selected.value : 'CASH_ON_DELIVERY';
+        }
+
+        function applyCartPaymentSelection() {
+            var storedPaymentMethod = window.localStorage.getItem(PAYMENT_METHOD_STORAGE_KEY);
+            if (!storedPaymentMethod) {
+                return;
+            }
+            var matched = cartPaymentRadios.find(function (radio) {
+                return radio.value === storedPaymentMethod;
+            });
+            if (matched) {
+                matched.checked = true;
+            }
+        }
+
+        applyCartPaymentSelection();
+
+        cartPaymentRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                window.localStorage.setItem(PAYMENT_METHOD_STORAGE_KEY, selectedCartPaymentMethod());
+            });
+        });
 
         function renderCart(data) {
             var items = Array.isArray(data.items) ? data.items : [];
@@ -267,7 +298,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 0);
 
             summaryItems.textContent = String(itemQty);
+            if (summaryCountLabel) {
+                summaryCountLabel.textContent = String(itemQty);
+            }
             summaryTotal.textContent = formatCurrency(totalAmount);
+            if (summaryTotalLabel) {
+                summaryTotalLabel.textContent = formatCurrency(totalAmount);
+            }
             setCartBadgeCount(itemQty);
             checkoutBtn.disabled = items.length === 0;
 
@@ -293,11 +330,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     '</div>',
                     '</td>',
                     '<td class="cart-price">' + formatCurrency(item.unitPrice) + '</td>',
-                    '<td><span class="cart-qty-pill">&minus;&nbsp;&nbsp;' + Number(item.quantity || 0) + '&nbsp;&nbsp;+</span></td>',
+                    '<td><span class="cart-qty-pill">' + Number(item.quantity || 0) + '</span></td>',
                     '<td class="cart-price">' + formatCurrency(item.lineTotal) + '</td>',
                     '<td>',
                     '<button type="button" class="remove-btn js-remove-from-cart" data-product-id="' + item.productId + '">',
-                    '<i class="bi bi-trash3"></i>',
+                    '<i class="bi bi-x-lg"></i>',
                     '</button>',
                     '</td>',
                     '</tr>'
@@ -367,6 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         checkoutBtn.addEventListener('click', function () {
+            window.localStorage.setItem(PAYMENT_METHOD_STORAGE_KEY, selectedCartPaymentMethod());
             window.location.href = appPath('/checkout');
         });
 
@@ -378,10 +416,42 @@ document.addEventListener('DOMContentLoaded', function () {
     if (checkoutPage) {
         var checkoutItemsList = document.getElementById('checkoutItemsList');
         var checkoutItemCount = document.getElementById('checkoutItemCount');
+        var checkoutSubtotal = document.getElementById('checkoutSubtotal');
         var checkoutTotalPrice = document.getElementById('checkoutTotalPrice');
         var checkoutEmptyState = document.getElementById('checkoutEmptyState');
         var confirmOrderBtn = document.getElementById('confirmOrderBtn');
         var checkoutAlertHost = document.getElementById('checkoutAlertHost');
+        var checkoutName = document.getElementById('checkoutName');
+        var checkoutEmail = document.getElementById('checkoutEmail');
+        var checkoutPhone = document.getElementById('checkoutPhone');
+        var checkoutAddress = document.getElementById('checkoutAddress');
+        var checkoutPaymentRadios = Array.prototype.slice.call(document.querySelectorAll('input[name="checkoutPaymentMethod"]'));
+
+        function selectedCheckoutPaymentMethod() {
+            var selected = document.querySelector('input[name="checkoutPaymentMethod"]:checked');
+            return selected ? selected.value : 'CASH_ON_DELIVERY';
+        }
+
+        function applyCheckoutPaymentSelection() {
+            var storedPaymentMethod = window.localStorage.getItem(PAYMENT_METHOD_STORAGE_KEY);
+            if (!storedPaymentMethod) {
+                return;
+            }
+            var matched = checkoutPaymentRadios.find(function (radio) {
+                return radio.value === storedPaymentMethod;
+            });
+            if (matched) {
+                matched.checked = true;
+            }
+        }
+
+        applyCheckoutPaymentSelection();
+
+        checkoutPaymentRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                window.localStorage.setItem(PAYMENT_METHOD_STORAGE_KEY, selectedCheckoutPaymentMethod());
+            });
+        });
 
         function renderCheckout(data) {
             var items = Array.isArray(data.items) ? data.items : [];
@@ -392,6 +462,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             checkoutItemCount.textContent = String(itemQty);
             checkoutTotalPrice.textContent = formatCurrency(totalAmount);
+            if (checkoutSubtotal) {
+                checkoutSubtotal.textContent = formatCurrency(totalAmount);
+            }
 
             if (items.length === 0) {
                 confirmOrderBtn.disabled = true;
@@ -418,6 +491,34 @@ document.addEventListener('DOMContentLoaded', function () {
             }).join('');
         }
 
+        function validateCheckoutForm() {
+            var name = checkoutName ? checkoutName.value.trim() : '';
+            var email = checkoutEmail ? checkoutEmail.value.trim() : '';
+            var phone = checkoutPhone ? checkoutPhone.value.trim() : '';
+            var address = checkoutAddress ? checkoutAddress.value.trim() : '';
+
+            if (!name) {
+                throw new Error('Please enter your name.');
+            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                throw new Error('Please enter a valid email address.');
+            }
+            if (!phone || phone.length < 8) {
+                throw new Error('Please enter a valid mobile number.');
+            }
+            if (!address) {
+                throw new Error('Please enter your delivery address.');
+            }
+
+            return {
+                customerName: name,
+                customerEmail: email,
+                customerPhone: phone,
+                deliveryAddress: address,
+                paymentType: selectedCheckoutPaymentMethod()
+            };
+        }
+
         function loadCheckout() {
             return fetch(appPath('/cart'), {
                 method: 'GET',
@@ -441,12 +542,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         confirmOrderBtn.addEventListener('click', function () {
+            var payload;
+            try {
+                payload = validateCheckoutForm();
+            } catch (validationError) {
+                showAlert(checkoutAlertHost, 'warning', validationError.message);
+                return;
+            }
+
             confirmOrderBtn.disabled = true;
             confirmOrderBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Confirming...';
 
             fetch(appPath('/orders'), {
                 method: 'POST',
-                headers: { 'Accept': 'application/json' }
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
             })
                 .then(function (response) {
                     return safeJsonResponse(response).then(function (data) {
@@ -463,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(function (error) {
                     showAlert(checkoutAlertHost, 'danger', error.message || 'Unable to place order.');
                     confirmOrderBtn.disabled = false;
-                    confirmOrderBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Confirm Order';
+                    confirmOrderBtn.innerHTML = 'Confirm Order';
                 });
         });
 

@@ -9,36 +9,53 @@
         .figma-flow {
             background: #f6f6f6;
             color: #2f2f2f;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .figma-flow a {
-            text-decoration: none !important;
+        .figma-flow .cart-wrap {
+            padding-top: 2rem;
+            padding-bottom: 2.5rem;
         }
 
-        .figma-flow .cart-title {
-            text-transform: uppercase;
-            letter-spacing: .02em;
+        .figma-flow .cart-panel {
+            background: #fff;
+            border: 1px solid #e9e9e9;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .04);
+        }
+
+        .figma-flow .cart-main,
+        .figma-flow .cart-summary {
+            padding: 1.6rem;
+        }
+
+        .figma-flow .cart-main {
+            border-right: 1px solid #ededed;
+        }
+
+        .figma-flow .title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: 1.15rem;
+        }
+
+        .figma-flow .title-row h1 {
             font-size: 2.1rem;
             font-weight: 800;
-            margin-bottom: .85rem;
+            margin: 0;
         }
 
-        .figma-flow .cart-shell {
-            padding-bottom: 2.3rem;
+        .figma-flow .title-row small {
+            color: #7a7a7a;
+            font-weight: 600;
         }
 
-        .figma-flow .cart-list-card,
-        .figma-flow .summary-card {
-            background: #fff;
-            border: 1px solid #e6e6e6;
-            border-radius: .9rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,.03);
-        }
-
-        .figma-flow .cart-list-card {
-            padding: .5rem .9rem;
+        .figma-flow .cart-table {
+            margin-bottom: 0;
         }
 
         .figma-flow .cart-table thead {
@@ -47,9 +64,9 @@
 
         .figma-flow .cart-table td {
             border-top: 0;
-            border-bottom: 1px solid #efefef;
+            border-bottom: 1px solid #ededed;
             vertical-align: middle;
-            padding: .95rem .45rem;
+            padding: 1rem .35rem;
         }
 
         .figma-flow .cart-table tr:last-child td {
@@ -60,110 +77,134 @@
             display: flex;
             align-items: center;
             gap: .85rem;
-            min-width: 250px;
+            min-width: 255px;
         }
 
         .figma-flow .cart-product img {
-            width: 72px;
-            height: 72px;
-            border-radius: .45rem;
+            width: 64px;
+            height: 64px;
             object-fit: cover;
+            border-radius: .35rem;
             background: #ececec;
         }
 
         .figma-flow .cart-product-name {
             margin: 0;
-            font-size: 1.03rem;
+            font-size: 1rem;
             font-weight: 700;
-            line-height: 1.2;
+            line-height: 1.3;
             color: #2f2f2f;
         }
 
         .figma-flow .cart-meta {
-            margin: .2rem 0 0;
-            color: #777;
+            margin: .12rem 0 0;
+            color: #7b7b7b;
             font-size: .82rem;
         }
 
         .figma-flow .cart-price {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: #222;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #262626;
+            white-space: nowrap;
         }
 
         .figma-flow .cart-qty-pill {
-            min-width: 4.5rem;
-            text-align: center;
+            min-width: 3.4rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: .32rem .8rem;
-            border-radius: 999px;
-            background: #f0f0f0;
-            color: #2e2e2e;
+            border: 1px solid #d8d8d8;
+            background: #fafafa;
+            padding: .2rem .55rem;
             font-weight: 700;
+            font-size: .86rem;
+            color: #2f2f2f;
         }
 
         .figma-flow .remove-btn {
             border: 0;
             background: transparent;
-            color: #d9534f;
-            font-size: 1.02rem;
-            padding: .2rem;
+            color: #9b9b9b;
+            font-size: 1rem;
+            padding: .1rem;
         }
 
-        .figma-flow .summary-card {
-            padding: 1.2rem;
+        .figma-flow .remove-btn:hover {
+            color: #393939;
+        }
+
+        .figma-flow .back-shop {
+            margin-top: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            color: #525252;
+            font-weight: 600;
+            font-size: .92rem;
+            text-decoration: none;
+        }
+
+        .figma-flow .back-shop:hover {
+            color: #171717;
         }
 
         .figma-flow .summary-title {
-            font-size: 1.55rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: .7rem;
+            margin: 0 0 1.15rem;
+        }
+
+        .figma-flow .summary-section {
+            border-top: 1px solid #ececec;
+            padding-top: .8rem;
+            margin-top: .8rem;
         }
 
         .figma-flow .sum-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: .55rem;
-            color: #4f4f4f;
+            margin-bottom: .6rem;
+            color: #575757;
+            font-weight: 600;
         }
 
-        .figma-flow .sum-row strong {
-            color: #232323;
-        }
-
-        .figma-flow .sum-total {
-            border-top: 1px solid #ededed;
-            margin-top: .8rem;
-            padding-top: .7rem;
+        .figma-flow .payment-option {
+            border: 1px solid #dedede;
+            background: #fafafa;
+            border-radius: .45rem;
+            padding: .45rem .6rem;
+            margin-bottom: .5rem;
             display: flex;
-            align-items: end;
+            align-items: center;
+            gap: .55rem;
+            font-size: .92rem;
+            color: #303030;
+        }
+
+        .figma-flow .total-row {
+            border-top: 1px solid #ececec;
+            padding-top: .85rem;
+            margin-top: .9rem;
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-        }
-
-        .figma-flow .sum-total span {
-            font-size: .95rem;
-            color: #4f4f4f;
-        }
-
-        .figma-flow .sum-total .value {
-            font-size: 2rem;
             font-weight: 800;
-            color: #1f1f1f;
-            line-height: 1;
+            color: #242424;
+            font-size: 1.18rem;
         }
 
         .figma-flow .checkout-btn {
-            margin-top: .9rem;
+            margin-top: 1rem;
             width: 100%;
+            min-height: 44px;
             border: 0;
-            border-radius: 999px;
-            min-height: 46px;
-            background: #2f2f2f;
+            border-radius: .2rem;
+            background: #111;
             color: #fff;
             font-weight: 700;
+            font-size: .95rem;
         }
 
         .figma-flow .checkout-btn:disabled {
@@ -171,34 +212,24 @@
             cursor: not-allowed;
         }
 
-        .figma-flow .pay-badges {
-            margin-top: .8rem;
-            display: flex;
-            align-items: center;
-            gap: .45rem;
-            flex-wrap: wrap;
-        }
-
-        .figma-flow .pay-badges img {
-            height: 18px;
-            width: auto;
-            border-radius: .2rem;
-            border: 1px solid #efefef;
-            background: #fff;
-            padding: .05rem .25rem;
-        }
-
         .figma-flow .cart-empty {
-            border: 1px dashed #cecece;
-            background: #fff;
+            border: 1px dashed #cfcfcf;
+            border-radius: .7rem;
             text-align: center;
-            padding: 1.6rem;
-            border-radius: .85rem;
+            padding: 1.5rem;
+            background: #fff;
+            margin-top: 1rem;
         }
 
-        @media (max-width: 992px) {
-            .figma-flow .cart-title { font-size: 1.8rem; }
-            .figma-flow .cart-product { min-width: 200px; }
+        @media (max-width: 991px) {
+            .figma-flow .cart-main {
+                border-right: 0;
+                border-bottom: 1px solid #ededed;
+            }
+
+            .figma-flow .title-row h1 {
+                font-size: 1.85rem;
+            }
         }
     </style>
 </head>
@@ -206,16 +237,19 @@
 <main class="figma-flow" data-cart-page="true">
     <th:block th:replace="~{fragments/figma-shell :: topNav('shop', '#cart-footer')}"></th:block>
 
-    <section class="container cart-shell">
-        <h1 class="cart-title">Your Cart</h1>
-
+    <section class="container cart-wrap">
         <div id="cartAlertHost" class="mb-3"></div>
 
-        <div class="row g-3 align-items-start">
-            <section class="col-xl-7">
-                <div class="cart-list-card">
+        <div class="cart-panel">
+            <div class="row g-0 align-items-start">
+                <section class="col-lg-8 cart-main">
+                    <div class="title-row">
+                        <h1>Shopping Cart</h1>
+                        <small><span id="cartSummaryItems">0</span> items</small>
+                    </div>
+
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0 cart-table" id="cartTable">
+                        <table class="table align-middle cart-table" id="cartTable">
                             <thead>
                             <tr>
                                 <th>Product Name</th>
@@ -232,43 +266,57 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
 
-                <div id="cartEmptyState" class="cart-empty mt-3 d-none">
-                    <i class="bi bi-cart-x fs-2 text-muted"></i>
-                    <h5 class="mt-2 mb-1">Your cart is empty</h5>
-                    <p class="text-muted mb-3">Add products to continue to checkout.</p>
-                    <a th:href="@{/products}" class="btn btn-dark btn-sm">
-                        <i class="bi bi-grid me-1"></i>Browse Products
+                    <a class="back-shop" th:href="@{/products}">
+                        <i class="bi bi-arrow-left"></i>Back to shop
                     </a>
-                </div>
-            </section>
 
-            <aside class="col-xl-5">
-                <div class="summary-card sticky-top" style="top:88px;">
-                    <h2 class="summary-title">Order Summary</h2>
-
-                    <div class="sum-row">
-                        <span>Items</span>
-                        <strong id="cartSummaryItems">0</strong>
+                    <div id="cartEmptyState" class="cart-empty d-none">
+                        <i class="bi bi-cart-x fs-2 text-muted"></i>
+                        <h5 class="mt-2 mb-1">Your cart is empty</h5>
+                        <p class="text-muted mb-0">Add products to continue to checkout.</p>
                     </div>
-                    <div class="sum-total">
+                </section>
+
+                <aside class="col-lg-4 cart-summary">
+                    <h2 class="summary-title">Summary</h2>
+
+                    <div class="summary-section">
+                        <div class="sum-row">
+                            <span>Items</span>
+                            <span id="summaryCountLabel">0</span>
+                        </div>
+                        <div class="sum-row mb-0">
+                            <span>Subtotal</span>
+                            <span id="cartSummaryTotal">Tk 0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="sum-row mb-2">
+                            <span>Payment</span>
+                        </div>
+                        <label class="payment-option">
+                            <input type="radio" name="cartPaymentMethod" value="BKASH">
+                            <span>Bkash</span>
+                        </label>
+                        <label class="payment-option mb-0">
+                            <input type="radio" name="cartPaymentMethod" value="CASH_ON_DELIVERY" checked>
+                            <span>Cash on Delivery</span>
+                        </label>
+                    </div>
+
+                    <div class="total-row">
                         <span>Total</span>
-                        <p class="value mb-0" id="cartSummaryTotal">Tk 0.00</p>
+                        <span id="summaryTotalLabel">Tk 0.00</span>
                     </div>
 
                     <button id="checkoutBtn" class="checkout-btn" disabled>
-                        Go to Checkout <i class="bi bi-arrow-right ms-1"></i>
+                        CHECKOUT
                     </button>
-
-                    <div class="pay-badges">
-                        <img th:src="@{/images/cart-figma/pay-visa.png}" alt="Visa"/>
-                        <img th:src="@{/images/cart-figma/pay-mastercard.png}" alt="Mastercard"/>
-                        <img th:src="@{/images/cart-figma/pay-paypal.png}" alt="PayPal"/>
-                        <img th:src="@{/images/cart-figma/pay-gpay.png}" alt="Google Pay"/>
-                    </div>
                 </div>
-            </aside>
+                </aside>
+            </div>
         </div>
     </section>
 

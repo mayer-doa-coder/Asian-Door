@@ -14,6 +14,10 @@ public class OrderDTO {
     private String status;
     private Long userId;
     private String paymentType;
+    private String customerName;
+    private String customerEmail;
+    private String customerPhone;
+    private String deliveryAddress;
     private List<OrderItemSummaryDTO> items;
     private String orderDateDisplay;
     private String orderTimeDisplay;

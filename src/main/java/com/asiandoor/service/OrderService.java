@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import com.asiandoor.dto.OrderCreateRequestDTO;
 import com.asiandoor.dto.OrderItemSummaryDTO;
 import com.asiandoor.dto.OrderDTO;
 import com.asiandoor.entity.Order;
@@ -34,6 +36,8 @@ public class OrderService {
     private static final ZoneId BANGLADESH_ZONE = ZoneId.of("Asia/Dhaka");
     private static final DateTimeFormatter ORDER_DATE_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy");
     private static final DateTimeFormatter ORDER_TIME_FORMAT = DateTimeFormatter.ofPattern("hh:mm a");
+    private static final String PAYMENT_BKASH = "BKASH";
+    private static final String PAYMENT_CASH_ON_DELIVERY = "CASH_ON_DELIVERY";
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
@@ -42,6 +46,11 @@ public class OrderService {
 
     @Transactional
     public OrderDTO placeOrder(Long userId) {
+        return placeOrder(userId, null);
+    }
+
+    @Transactional
+    public OrderDTO placeOrder(Long userId, OrderCreateRequestDTO request) {
         if (userId == null) {
             throw new IllegalArgumentException("User ID is required.");
         }
@@ -57,6 +66,11 @@ public class OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PENDING);
+        order.setCustomerName(resolveCustomerName(user, request));
+        order.setCustomerEmail(resolveCustomerEmail(user, request));
+        order.setCustomerPhone(resolveCustomerPhone(request));
+        order.setDeliveryAddress(resolveDeliveryAddress(request));
+        order.setPaymentType(resolvePaymentType(request));
 
         List<OrderItem> items = new ArrayList<>();
         double total = 0.0;
@@ -130,6 +144,16 @@ public class OrderService {
                 .map(this::toDTO);
     }
 
+    @Transactional(readOnly = true)
+    public Page<OrderDTO> getAllOrders(int page, int size) {
+        int safePage = Math.max(page, 0);
+        int safeSize = size <= 0 ? 10 : size;
+        PageRequest pageable = PageRequest.of(safePage, safeSize);
+
+        return orderRepository.findAllByOrderByOrderDateDesc(pageable)
+                .map(this::toDTO);
+    }
+
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
@@ -153,7 +177,11 @@ public class OrderService {
         dto.setTotalPrice(order.getTotalPrice());
         dto.setStatus(order.getStatus() != null ? order.getStatus().name() : null);
         dto.setUserId(order.getUser() != null ? order.getUser().getId() : null);
-        dto.setPaymentType(resolvePaymentType(order.getId()));
+        dto.setPaymentType(toPaymentLabel(order.getPaymentType()));
+        dto.setCustomerName(order.getCustomerName());
+        dto.setCustomerEmail(order.getCustomerEmail());
+        dto.setCustomerPhone(order.getCustomerPhone());
+        dto.setDeliveryAddress(order.getDeliveryAddress());
         LocalDateTime bangladeshDateTime = toBangladeshDateTime(order.getOrderDate());
         dto.setOrderDateDisplay(ORDER_DATE_FORMAT.format(bangladeshDateTime));
         dto.setOrderTimeDisplay(ORDER_TIME_FORMAT.format(bangladeshDateTime));
@@ -164,6 +192,7 @@ public class OrderService {
                     OrderItemSummaryDTO itemDTO = new OrderItemSummaryDTO();
                     itemDTO.setProductId(item.getProduct() != null ? item.getProduct().getId() : null);
                     itemDTO.setProductName(item.getProduct() != null ? item.getProduct().getName() : "Product");
+                    itemDTO.setProductCategory(item.getProduct() != null ? item.getProduct().getCategory() : null);
                     itemDTO.setImageUrl(item.getProduct() != null ? item.getProduct().getImageUrl() : null);
                     itemDTO.setQuantity(item.getQuantity());
                     itemDTO.setUnitPrice(item.getPrice());
@@ -185,12 +214,51 @@ public class OrderService {
                 .toLocalDateTime();
     }
 
-    private String resolvePaymentType(Long orderId) {
-        String[] paymentTypes = {"CASH", "BKASH", "NAGAD", "BANK"};
-        if (orderId == null) {
-            return paymentTypes[0];
+    private String resolveCustomerName(User user, OrderCreateRequestDTO request) {
+        if (request != null && StringUtils.hasText(request.getCustomerName())) {
+            return request.getCustomerName().trim();
         }
-        int index = (int) (Math.abs(orderId) % paymentTypes.length);
-        return paymentTypes[index];
+        return user.getName();
+    }
+
+    private String resolveCustomerEmail(User user, OrderCreateRequestDTO request) {
+        if (request != null && StringUtils.hasText(request.getCustomerEmail())) {
+            return request.getCustomerEmail().trim().toLowerCase();
+        }
+        return user.getEmail();
+    }
+
+    private String resolveCustomerPhone(OrderCreateRequestDTO request) {
+        if (request != null && StringUtils.hasText(request.getCustomerPhone())) {
+            return request.getCustomerPhone().trim();
+        }
+        return null;
+    }
+
+    private String resolveDeliveryAddress(OrderCreateRequestDTO request) {
+        if (request != null && StringUtils.hasText(request.getDeliveryAddress())) {
+            return request.getDeliveryAddress().trim();
+        }
+        return null;
+    }
+
+    private String resolvePaymentType(OrderCreateRequestDTO request) {
+        if (request == null || !StringUtils.hasText(request.getPaymentType())) {
+            return PAYMENT_CASH_ON_DELIVERY;
+        }
+
+        String paymentType = request.getPaymentType().trim().toUpperCase();
+        if (PAYMENT_BKASH.equals(paymentType)) {
+            return PAYMENT_BKASH;
+        }
+
+        return PAYMENT_CASH_ON_DELIVERY;
+    }
+
+    private String toPaymentLabel(String paymentType) {
+        if (PAYMENT_BKASH.equalsIgnoreCase(paymentType)) {
+            return "Bkash";
+        }
+        return "Cash on Delivery";
     }
 }

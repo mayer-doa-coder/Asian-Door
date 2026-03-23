@@ -45,7 +45,7 @@ public class UserService {
     @Value("${app.mail.from-email:no-reply@asiandoor.local}")
     private String mailFrom;
 
-    @Value("${app.mail.from-name:Asian Door}")
+    @Value("${app.mail.from-name:Asian Wooden Decor}")
     private String mailFromName;
 
     private static final Random RANDOM = new Random();
@@ -200,9 +200,9 @@ public class UserService {
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
             helper.setFrom(mailFrom, mailFromName);
             helper.setTo(recipient);
-            helper.setSubject("Asian Door verification code");
+            helper.setSubject("Asian Wooden Decor verification code");
             helper.setText(
-                    "Welcome to Asian Door!\n\n"
+                    "Welcome to Asian Wooden Decor!\n\n"
                             + "Your 6-digit verification code is: " + code + "\n"
                             + "This code expires in " + verificationCodeExpiryMinutes + " minutes.\n\n"
                             + "If you did not create this account, you can ignore this email."
@@ -219,9 +219,9 @@ public class UserService {
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
             helper.setFrom(mailFrom, mailFromName);
             helper.setTo(recipient);
-            helper.setSubject("Asian Door password reset code");
+            helper.setSubject("Asian Wooden Decor password reset code");
             helper.setText(
-                    "We received a request to reset your Asian Door password.\n\n"
+                    "We received a request to reset your Asian Wooden Decor password.\n\n"
                             + "Your 6-digit reset code is: " + code + "\n"
                             + "This code expires in " + passwordResetCodeExpiryMinutes + " minutes.\n\n"
                             + "If you did not request this, you can ignore this email."

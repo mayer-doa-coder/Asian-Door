@@ -3,11 +3,11 @@
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
-    <title>Asian Door | Products</title>
+    <title>Asian Wooden Decor | Products</title>
 
     <style th:inline="css">
         .figma-products {
-            background: #f6f6f6;
+            background: #f5efe7;
             color: #2f2f2f;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
@@ -33,9 +33,9 @@
         }
 
         .figma-products .sort-wrap select {
-            border: 1px solid #d3d3d3;
-            background: #fff;
-            color: #7e7e7e;
+            border: 1px solid #ccb79f;
+            background: #fff9f0;
+            color: #5a4638;
             font-size: .92rem;
             padding: .35rem .55rem;
             min-width: 170px;
@@ -96,8 +96,8 @@
         }
 
         .figma-products .search-box {
-            border: 1px solid rgba(0, 0, 0, .2);
-            background: #f6f6f6;
+            border: 1px solid #ccb79f;
+            background: #f8f1e8;
             min-height: 50px;
         }
 
@@ -114,7 +114,7 @@
 
         .figma-products .search-box .btn {
             border: 0;
-            color: #646464;
+            color: #4a3728;
         }
 
         .figma-products .filter-block {
@@ -151,7 +151,7 @@
         .figma-products .price-line {
             height: 3px;
             border-radius: 10px;
-            background: #3a3a3a;
+            background: #4a3728;
             position: relative;
             margin: .55rem 0 .85rem;
         }
@@ -165,7 +165,7 @@
             width: 11px;
             height: 11px;
             border-radius: 50%;
-            background: #3f3f3f;
+            background: #4a3728;
         }
 
         .figma-products .price-line::before { left: 0; }
@@ -201,27 +201,32 @@
         }
 
         .figma-products .btn-filter {
-            background: #393939;
-            color: #f4f4f4;
+            background: #4a3728;
+            color: #f5efe6;
             border: 0;
             border-radius: 0;
             padding: .4rem 1rem;
             font-size: .88rem;
         }
 
+        .figma-products .btn-filter:hover {
+            background: #3f2f22;
+            color: #fff;
+        }
+
         .figma-products .btn-clear-filters {
             display: inline-block;
             background: transparent;
-            border: 1px solid #cfcfcf;
-            color: #5f5f5f;
+            border: 1px solid #ccb79f;
+            color: #5a4638;
             border-radius: 0;
             padding: .4rem 1rem;
             font-size: .88rem;
         }
 
         .figma-products .btn-clear-filters:hover {
-            color: #2f2f2f;
-            border-color: #9d9d9d;
+            color: #3f2f22;
+            border-color: #a98f74;
         }
 
         .figma-products .pagination-wrap {

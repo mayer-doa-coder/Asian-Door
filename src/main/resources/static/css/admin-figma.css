@@ -21,11 +21,12 @@
 }
 
 .admin-figma .admin-brand {
-    font-size: 1.75rem;
+    font-size: 1.22rem;
     font-weight: 800;
     color: #2f2f2f;
     text-decoration: none;
-    line-height: 1;
+    line-height: 1.25;
+    display: inline-block;
 }
 
 .admin-figma .admin-brand::before {
@@ -80,10 +81,10 @@
     display: flex;
     align-items: center;
     gap: .65rem;
-    color: #3d3d3d;
+    color: #5a4638;
     text-decoration: none;
-    background: transparent;
-    border: 0;
+    background: #fffaf3;
+    border: 1px solid #d8cab9;
     padding: .52rem .65rem;
     border-radius: .5rem;
     font-size: .92rem;
@@ -93,12 +94,13 @@
 
 .admin-figma .sidebar-footer a:hover,
 .admin-figma .sidebar-footer button:hover {
-    background: #f3f3f3;
-    color: #1f1f1f;
+    background: #efe4d6;
+    color: #3f2f22;
+    border-color: #c6ad90;
 }
 
 .admin-figma .sidebar-footer button {
-    color: #b14141;
+    color: #5a4638;
 }
 
 .admin-figma .admin-main {
@@ -152,8 +154,8 @@
 }
 
 .admin-figma .create-btn {
-    background: #3e6be0;
-    color: #fff;
+    background: #4a3728;
+    color: #f5efe6;
     border: 0;
     border-radius: .4rem;
     padding: .5rem 1rem;
@@ -163,7 +165,7 @@
 }
 
 .admin-figma .create-btn:hover {
-    background: #3157ba;
+    background: #3f2f22;
     color: #fff;
 }
 
@@ -171,18 +173,19 @@
     width: 36px;
     height: 36px;
     border-radius: .45rem;
-    border: 1px solid #ececec;
-    background: #fff;
+    border: 1px solid #ccb79f;
+    background: #fff9f0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #363636;
+    color: #4a3728;
     text-decoration: none;
 }
 
 .admin-figma .icon-btn:hover {
-    background: #f6f6f6;
-    color: #1f1f1f;
+    background: #efe4d6;
+    border-color: #b89d80;
+    color: #3f2f22;
 }
 
 .admin-figma .topbar-avatar {

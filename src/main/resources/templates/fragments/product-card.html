@@ -10,7 +10,6 @@
   The fragment renders a fully styled Bootstrap card with:
     • Fixed-height image with zoom-on-hover
     • Category badge (colour-coded, top-left overlay on image)
-    • Stock badge (top-right overlay — Out of Stock / Low Stock)
     • Product Name
     • Material row
     • Dimensions row (hidden when null/empty)
@@ -41,16 +40,6 @@
               th:text="${product.category}"
               th:classappend="${'category-badge-' + product.category}"
               class="category-badge category-badge-overlay text-capitalize"></span>
-
-        <!-- Stock badge — top-right overlay (only shown when low/out) -->
-        <span th:if="${product.stock != null and product.stock == 0}"
-              class="product-card-stock-badge badge bg-danger">
-            <i class="bi bi-x-circle-fill me-1"></i>Out of Stock
-        </span>
-        <span th:if="${product.stock != null and product.stock > 0 and product.stock <= 5}"
-              class="product-card-stock-badge badge bg-warning text-dark">
-            Only <span th:text="${product.stock}">0</span> left
-        </span>
 
     </div>
 
@@ -89,10 +78,9 @@
                     <button sec:authorize="isAuthenticated()"
                             type="button"
                             class="btn btn-outline-dark btn-sm product-card-btn js-add-to-cart"
-                            th:attr="data-product-id=${product.id},data-product-name=${product.name}"
-                            th:disabled="${product.stock != null and product.stock == 0}">
+                            th:attr="data-product-id=${product.id},data-product-name=${product.name}">
                         <i class="bi bi-cart-plus me-1"></i>
-                        <span th:text="${product.stock != null and product.stock == 0} ? 'Out of Stock' : 'Add to Cart'">Add to Cart</span>
+                        <span>Add to Cart</span>
                     </button>
 
                     <a sec:authorize="!isAuthenticated()"

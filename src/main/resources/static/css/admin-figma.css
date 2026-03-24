@@ -289,10 +289,6 @@
     padding: .21rem .62rem;
 }
 
-.admin-figma .stock-ok { color: #138d3c; font-weight: 700; }
-.admin-figma .stock-low { color: #bd7f15; font-weight: 700; }
-.admin-figma .stock-out { color: #c03f3f; font-weight: 700; }
-
 .admin-figma .action-btn {
     border-radius: .45rem;
     width: 32px;

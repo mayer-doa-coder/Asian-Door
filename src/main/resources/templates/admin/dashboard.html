@@ -23,10 +23,6 @@
                             <p class="stat-label mb-1">Categories</p>
                             <p class="stat-value mb-0" th:text="${categoryCount}">0</p>
                         </div>
-                        <div class="stat-box">
-                            <p class="stat-label mb-1">Low Stock</p>
-                            <p class="stat-value mb-0" th:text="${lowStockCount}">0</p>
-                        </div>
                     </div>
                 </div>
 
@@ -43,7 +39,6 @@
                                 <th class="ps-3">Product</th>
                                 <th>Category</th>
                                 <th class="text-end">Price</th>
-                                <th class="text-center pe-3">Stock</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -61,10 +56,6 @@
                                     Tk <span th:text="${p.price != null}
                                         ? ${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')}
                                         : '0.00'">0.00</span>
-                                </td>
-                                <td class="text-center pe-3">
-                                    <span th:text="${p.stock}"
-                                          th:classappend="${p.stock == 0} ? 'stock-out' : (${p.stock <= 5} ? 'stock-low' : 'stock-ok')">0</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -89,10 +80,9 @@
                 </div>
 
                 <hr/>
-                <h2 class="mb-2">Inventory Status</h2>
+                <h2 class="mb-2">Catalog Snapshot</h2>
                 <div class="d-flex flex-column gap-2">
-                    <div class="d-flex justify-content-between"><span class="text-muted">Low Stock</span><strong th:text="${lowStockCount}">0</strong></div>
-                    <div class="d-flex justify-content-between"><span class="text-muted">Out of Stock</span><strong th:text="${outOfStockCount}">0</strong></div>
+                    <div class="d-flex justify-content-between"><span class="text-muted">Recent Products</span><strong th:text="${recentProducts != null ? #lists.size(recentProducts) : 0}">0</strong></div>
                     <div class="d-flex justify-content-between"><span class="text-muted">Categories</span><strong th:text="${categoryCount}">0</strong></div>
                 </div>
             </aside>

@@ -44,7 +44,6 @@ class ProductServiceTest {
         request.setMaterial("Oak");
         request.setPrice(450.0);
         request.setDimensions("210x90 cm");
-        request.setStock(12);
         request.setImageUrl("/images/products/wood-door.jpg");
         request.setDescription("Premium wooden door");
 
@@ -65,7 +64,6 @@ class ProductServiceTest {
         verify(productRepository).save(captor.capture());
         Product persisted = captor.getValue();
         assertEquals("Wooden Door", persisted.getName());
-        assertEquals(12, persisted.getStock());
     }
 
     @Test
@@ -75,7 +73,6 @@ class ProductServiceTest {
         Product existing = new Product();
         existing.setId(id);
         existing.setName("Old Door");
-        existing.setStock(2);
 
         ProductDTO update = new ProductDTO();
         update.setName("Updated Door");
@@ -83,7 +80,6 @@ class ProductServiceTest {
         update.setMaterial("Steel");
         update.setPrice(999.0);
         update.setDimensions("220x100 cm");
-        update.setStock(9);
         update.setImageUrl("/uploads/new.jpg");
         update.setDescription("Updated description");
 
@@ -95,7 +91,6 @@ class ProductServiceTest {
         assertEquals(id, result.getId());
         assertEquals("Updated Door", result.getName());
         assertEquals("security", result.getCategory());
-        assertEquals(9, result.getStock());
     }
 
     @Test

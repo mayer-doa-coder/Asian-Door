@@ -328,19 +328,6 @@ strong, b {
 .category-badge-interior { background-color: #e8f5e9; color: #2e6b34; }
 .category-badge-exterior { background-color: #ede8f5; color: #4a2e8b; }
 
-/* Stock badge — floating over image (top-right) */
-.product-card-stock-badge {
-    position: absolute;
-    top: 0.65rem;
-    right: 0.65rem;
-    z-index: 2;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    padding: 0.28em 0.6em;
-    border-radius: 0.35rem;
-}
-
 /* Product name — ellipsis on overflow */
 .product-name {
     font-size: 1rem;

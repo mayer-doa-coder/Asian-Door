@@ -312,7 +312,6 @@ public class ProductService {
         existing.setPrice(dto.getPrice());
         existing.setDimensions(dto.getDimensions());
         existing.setLockSystem(dto.getLockSystem());
-        existing.setStock(dto.getStock());
         existing.setImageUrl(dto.getImageUrl());
         existing.setDescription(dto.getDescription());
         return toDTO(productRepository.save(existing));
@@ -335,7 +334,6 @@ public class ProductService {
         dto.setPrice(p.getPrice());
         dto.setDimensions(p.getDimensions());
         dto.setLockSystem(p.getLockSystem());
-        dto.setStock(p.getStock());
         dto.setImageUrl(p.getImageUrl());
         dto.setDescription(p.getDescription());
         return dto;
@@ -349,7 +347,6 @@ public class ProductService {
         p.setPrice(dto.getPrice());
         p.setDimensions(dto.getDimensions());
         p.setLockSystem(dto.getLockSystem());
-        p.setStock(dto.getStock());
         p.setImageUrl(dto.getImageUrl());
         p.setDescription(dto.getDescription());
         return p;

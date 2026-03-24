@@ -30,8 +30,6 @@ public class Product {
 
     private String lockSystem;
 
-    private Integer stock;
-
     private String imageUrl;
 
     @Column(length = 1000)

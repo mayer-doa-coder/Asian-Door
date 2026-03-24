@@ -1,7 +1,6 @@
 package com.asiandoor.dto;
 
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -31,10 +30,6 @@ public class ProductDTO {
     private String dimensions;
 
     private String lockSystem;
-
-    @NotNull(message = "Stock is required.")
-    @Min(value = 0, message = "Stock cannot be negative.")
-    private Integer stock;
 
     private String imageUrl;
 

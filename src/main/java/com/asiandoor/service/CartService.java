@@ -37,19 +37,10 @@ public class CartService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productId));
 
-        int stock = product.getStock() == null ? 0 : product.getStock();
-        if (stock <= 0) {
-            throw new IllegalStateException("Product is out of stock.");
-        }
-
         userCarts.computeIfAbsent(userId, ignored -> new ConcurrentHashMap<>())
                 .compute(productId, (key, existingQty) -> {
                     int currentQty = existingQty == null ? 0 : existingQty;
-                    int newQty = currentQty + quantity;
-                    if (newQty > stock) {
-                        throw new IllegalStateException("Requested quantity exceeds available stock.");
-                    }
-                    return newQty;
+                    return currentQty + quantity;
                 });
     }
 

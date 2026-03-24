@@ -86,11 +86,6 @@ public class OrderService {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productId));
 
-            int stock = product.getStock() == null ? 0 : product.getStock();
-            if (stock < quantity) {
-                throw new IllegalStateException("Insufficient stock for product: " + product.getName());
-            }
-
             double unitPrice = product.getPrice() == null ? 0.0 : product.getPrice();
 
             OrderItem item = new OrderItem();
@@ -99,9 +94,6 @@ public class OrderService {
             item.setQuantity(quantity);
             item.setPrice(unitPrice);
             items.add(item);
-
-            product.setStock(stock - quantity);
-            productRepository.save(product);
 
             total += unitPrice * quantity;
         }

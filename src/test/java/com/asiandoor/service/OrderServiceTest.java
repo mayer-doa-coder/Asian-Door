@@ -64,7 +64,6 @@ class OrderServiceTest {
         product.setId(productId);
         product.setName("Test Door");
         product.setPrice(2500.0);
-        product.setStock(8);
 
         Map<Long, Integer> snapshot = new LinkedHashMap<>();
         snapshot.put(productId, 2);
@@ -72,7 +71,6 @@ class OrderServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(cartService.getCartSnapshot(userId)).thenReturn(snapshot);
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
             Order saved = invocation.getArgument(0, Order.class);
             saved.setId(999L);
@@ -86,8 +84,6 @@ class OrderServiceTest {
         assertEquals("PENDING", result.getStatus());
         assertEquals(5000.0, result.getTotalPrice());
         assertEquals(userId, result.getUserId());
-
-        assertEquals(6, product.getStock());
 
         ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
         verify(orderRepository).save(orderCaptor.capture());

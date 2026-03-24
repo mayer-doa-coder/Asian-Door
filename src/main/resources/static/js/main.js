@@ -161,11 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        var maxStock = Number(button.getAttribute('data-max-stock'));
-        if (Number.isFinite(maxStock) && maxStock > 0 && quantity > maxStock) {
-            quantity = maxStock;
-        }
-
         var originalHtml = button.innerHTML;
         button.disabled = true;
         button.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Adding...';
@@ -208,29 +203,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var detailQtyInput = document.getElementById('detailQty');
     var qtyDecreaseBtn = document.querySelector('.js-qty-decrease');
     var qtyIncreaseBtn = document.querySelector('.js-qty-increase');
-    var detailAddButton = document.querySelector('.js-add-to-cart[data-quantity-input="detailQty"]');
 
     if (detailQtyInput && qtyDecreaseBtn && qtyIncreaseBtn) {
-        var maxDetailStock = detailAddButton ? Number(detailAddButton.getAttribute('data-max-stock')) : NaN;
-        if (!Number.isFinite(maxDetailStock) || maxDetailStock < 1) {
-            maxDetailStock = 0;
-        }
-
         function updateDetailQtyControls() {
             var currentQty = Number(detailQtyInput.value);
             if (!Number.isFinite(currentQty) || currentQty < 1) {
                 currentQty = 1;
             }
 
-            if (maxDetailStock > 0 && currentQty > maxDetailStock) {
-                currentQty = maxDetailStock;
-            }
-
             detailQtyInput.value = String(currentQty);
-
-            var outOfStock = maxDetailStock <= 0;
-            qtyDecreaseBtn.disabled = outOfStock || currentQty <= 1;
-            qtyIncreaseBtn.disabled = outOfStock || currentQty >= maxDetailStock;
+            qtyDecreaseBtn.disabled = currentQty <= 1;
+            qtyIncreaseBtn.disabled = false;
         }
 
         qtyDecreaseBtn.addEventListener('click', function () {
@@ -240,11 +223,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         qtyIncreaseBtn.addEventListener('click', function () {
-            if (maxDetailStock <= 0) {
-                return;
-            }
             var currentQty = Number(detailQtyInput.value) || 1;
-            detailQtyInput.value = String(Math.min(maxDetailStock, currentQty + 1));
+            detailQtyInput.value = String(currentQty + 1);
             updateDetailQtyControls();
         });
 

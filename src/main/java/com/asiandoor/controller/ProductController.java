@@ -54,12 +54,6 @@ public class ProductController {
     public String adminDashboard(Model model) {
         List<ProductDTO> all = productService.getAllProductDTOs();
 
-        long lowStock    = all.stream()
-                .filter(p -> p.getStock() != null && p.getStock() > 0 && p.getStock() <= 5)
-                .count();
-        long outOfStock  = all.stream()
-                .filter(p -> p.getStock() != null && p.getStock() == 0)
-                .count();
         long categories  = all.stream()
                 .filter(p -> p.getCategory() != null)
                 .map(ProductDTO::getCategory)
@@ -73,8 +67,6 @@ public class ProductController {
         java.util.Collections.reverse(recent);
 
         model.addAttribute("totalProducts",  all.size());
-        model.addAttribute("lowStockCount",  lowStock);
-        model.addAttribute("outOfStockCount",outOfStock);
         model.addAttribute("categoryCount",  categories);
         model.addAttribute("recentProducts", recent);
 
@@ -87,17 +79,8 @@ public class ProductController {
     public String listProducts(Model model) {
         List<ProductDTO> all = productService.getAllProductDTOs();
 
-        long lowStock   = all.stream()
-                .filter(p -> p.getStock() != null && p.getStock() > 0 && p.getStock() <= 5)
-                .count();
-        long outOfStock = all.stream()
-                .filter(p -> p.getStock() != null && p.getStock() == 0)
-                .count();
-
         model.addAttribute("products",       all);
         model.addAttribute("totalProducts",  all.size());
-        model.addAttribute("lowStockCount",  lowStock);
-        model.addAttribute("outOfStockCount",outOfStock);
         return "admin/products";
     }
 

@@ -92,31 +92,31 @@ public class DataSeeder implements CommandLineRunner {
     private void seedProducts() {
         List<Product> demoCatalog = List.of(
 
-                product("Minimalist Coffee Table", "wooden", "Engineered Wood", 8500.00, "120 x 60 cm", 10,
+                product("Minimalist Coffee Table", "wooden", "Engineered Wood", 8500.00, "120 x 60 cm",
                     "/images/products/coffee table.jpg",
                         "A clean-lined coffee table that anchors your living room with practical surface space and a warm wood finish."),
 
-                product("Queen Size Wooden Bed", "wooden", "Solid Wood", 32500.00, "200 x 160 cm", 5,
+                product("Queen Size Wooden Bed", "wooden", "Solid Wood", 32500.00, "200 x 160 cm",
                     "/images/products/bed 1.jpg",
                         "A queen-size bed frame with sturdy support and elegant detailing, designed for restful everyday comfort."),
 
-                product("Premium Steel Almira", "security", "Powder-Coated Steel", 28000.00, "200 x 95 cm", 4,
+                product("Premium Steel Almira", "security", "Powder-Coated Steel", 28000.00, "200 x 95 cm",
                         "/images/products/almira.jpg",
                         "A spacious steel almira with secure locking and smart shelf layout for organized clothing and document storage."),
 
-                product("Compact Office Almira", "security", "Steel Alloy", 15900.00, "190 x 80 cm", 6,
+                product("Compact Office Almira", "security", "Steel Alloy", 15900.00, "190 x 80 cm",
                         "/images/products/almira2.jpg",
                         "A compact office-ready almira with reinforced shelves that keeps files, essentials, and tools neatly arranged."),
 
-                product("Family Dining Table Set", "interior", "Tempered Glass and Wood", 21500.00, "200 x 90 cm", 8,
+                product("Family Dining Table Set", "interior", "Tempered Glass and Wood", 21500.00, "200 x 90 cm",
                         "/images/products/table1.jpg",
                         "A six-seater dining table setup that balances premium finish, durable construction, and day-to-day practicality."),
 
-                product("Modern Fabric Sofa", "interior", "Fabric Upholstery", 24000.00, "190 x 85 cm", 7,
+                product("Modern Fabric Sofa", "interior", "Fabric Upholstery", 24000.00, "190 x 85 cm",
                         "/images/products/sofa.jpg",
                         "A modern fabric sofa with supportive cushions and a clean silhouette to elevate family seating spaces."),
 
-                product("Classic Accent Chair", "interior", "Mahogany Wood", 12300.00, "95 x 70 cm", 12,
+                product("Classic Accent Chair", "interior", "Mahogany Wood", 12300.00, "95 x 70 cm",
                         "/images/products/chair-1.jpg",
                         "A refined accent chair ideal for reading corners and lounge areas, combining comfort with elegant style.")
         );
@@ -127,7 +127,6 @@ public class DataSeeder implements CommandLineRunner {
                     existing.setMaterial(seedProduct.getMaterial());
                     existing.setPrice(seedProduct.getPrice());
                     existing.setDimensions(seedProduct.getDimensions());
-                    existing.setStock(seedProduct.getStock());
                     existing.setImageUrl(seedProduct.getImageUrl());
                     existing.setDescription(seedProduct.getDescription());
                     productRepository.save(existing);
@@ -168,7 +167,7 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private Product product(String name, String category, String material,
-                            double price, String dimensions, int stock,
+                            double price, String dimensions,
                             String imageUrl, String description) {
         Product p = new Product();
         p.setName(name);
@@ -176,7 +175,6 @@ public class DataSeeder implements CommandLineRunner {
         p.setMaterial(material);
         p.setPrice(price);
         p.setDimensions(dimensions);
-        p.setStock(stock);
         p.setImageUrl(imageUrl);
         p.setDescription(description);
         return p;

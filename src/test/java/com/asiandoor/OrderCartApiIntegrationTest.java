@@ -106,7 +106,6 @@ class OrderCartApiIntegrationTest {
         product.setMaterial("Oak");
         product.setPrice(1000.0);
         product.setDimensions("210 x 90 cm");
-        product.setStock(10);
         product.setImageUrl("/images/products/test-door.jpg");
         product.setDescription("Integration testing product.");
         testProduct = productRepository.save(product);
@@ -157,9 +156,6 @@ class OrderCartApiIntegrationTest {
         var orderItems = orderItemRepository.findByOrderId(savedOrder.getId());
         org.junit.jupiter.api.Assertions.assertEquals(1, orderItems.size());
         org.junit.jupiter.api.Assertions.assertEquals(2, orderItems.get(0).getQuantity());
-
-        Product updatedProduct = productRepository.findById(testProduct.getId()).orElseThrow();
-        org.junit.jupiter.api.Assertions.assertEquals(8, updatedProduct.getStock());
 
         mockMvc.perform(get("/cart").session(session))
                 .andExpect(status().isOk())
@@ -239,9 +235,6 @@ class OrderCartApiIntegrationTest {
         var orderItems = orderItemRepository.findByOrderId(savedOrder.getId());
         org.junit.jupiter.api.Assertions.assertEquals(1, orderItems.size());
         org.junit.jupiter.api.Assertions.assertEquals(2, orderItems.get(0).getQuantity());
-
-        Product updatedProduct = productRepository.findById(testProduct.getId()).orElseThrow();
-        org.junit.jupiter.api.Assertions.assertEquals(8, updatedProduct.getStock());
 
         mockMvc.perform(get("/cart").session(session))
                 .andExpect(status().isOk())

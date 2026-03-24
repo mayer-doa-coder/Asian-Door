@@ -36,7 +36,6 @@ class CartServiceTest {
         product.setId(productId);
         product.setName("Security Door");
         product.setPrice(300.0);
-        product.setStock(5);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
@@ -61,7 +60,7 @@ class CartServiceTest {
     }
 
     @Test
-    void shouldRejectWhenRequestedQuantityExceedsStock() {
+    void shouldAccumulateQuantityAcrossMultipleAdds() {
         Long userId = 2L;
         Long productId = 31L;
 
@@ -69,16 +68,14 @@ class CartServiceTest {
         product.setId(productId);
         product.setName("Glass Door");
         product.setPrice(200.0);
-        product.setStock(2);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
         cartService.addToCart(userId, productId, 1);
+        cartService.addToCart(userId, productId, 2);
 
-        IllegalStateException ex = assertThrows(IllegalStateException.class,
-                () -> cartService.addToCart(userId, productId, 2));
-
-        assertEquals("Requested quantity exceeds available stock.", ex.getMessage());
+        Map<Long, Integer> snapshot = cartService.getCartSnapshot(userId);
+        assertEquals(3, snapshot.get(productId));
     }
 
     @Test
@@ -90,7 +87,6 @@ class CartServiceTest {
         product.setId(productId);
         product.setName("Interior Door");
         product.setPrice(150.0);
-        product.setStock(10);
         product.setImageUrl("/img/interior.jpg");
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));

@@ -28,7 +28,7 @@ public class DataSeeder implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.admin.name:Asian Door Admin}")
+    @Value("${app.admin.name:Asian Wooden Decor Admin}")
     private String adminName;
 
     @Value("${app.admin.email:admin@asiandoor.com}")
@@ -90,53 +90,54 @@ public class DataSeeder implements CommandLineRunner {
     // ── Demo products ─────────────────────────────────────────────────────────
 
     private void seedProducts() {
-        if (productRepository.count() > 0) {
-            normalizeExistingProductImageUrls();
-            return;
-        }
+        List<Product> demoCatalog = List.of(
 
-        productRepository.saveAll(List.of(
+                product("Minimalist Coffee Table", "wooden", "Engineered Wood", 8500.00, "120 x 60 cm", 10,
+                    "/images/products/coffee table.jpg",
+                        "A clean-lined coffee table that anchors your living room with practical surface space and a warm wood finish."),
 
-            // Wooden Doors
-            product("Pine Wood Entry Door", "wooden", "Pine Wood", 8500.00, "210 × 90 cm", 10,
-                "/images/country-house-door-pine-wood.jpg",
-                "A classic entry door handcrafted from natural pine wood. Features a smooth finish, strong frame, and excellent insulation properties ideal for Filipino homes."),
+                product("Queen Size Wooden Bed", "wooden", "Solid Wood", 32500.00, "200 x 160 cm", 5,
+                    "/images/products/bed 1.jpg",
+                        "A queen-size bed frame with sturdy support and elegant detailing, designed for restful everyday comfort."),
 
-            product("Narra Solid Wood Door", "wooden", "Narra Wood", 14500.00, "210 × 90 cm", 6,
-                "/images/country-house-door-pine-wood.jpg",
-                "Premium Narra solid wood door with a rich grain pattern and warm reddish tone. Durable, termite-resistant, and adds timeless elegance to any entrance."),
+                product("Premium Steel Almira", "security", "Powder-Coated Steel", 28000.00, "200 x 95 cm", 4,
+                        "/images/products/almira.jpg",
+                        "A spacious steel almira with secure locking and smart shelf layout for organized clothing and document storage."),
 
-            // Steel Doors
-            product("Galvanized Steel Entry Door", "steel", "Galvanized Steel", 15900.00, "210 × 90 cm", 5,
-                "/images/country-house-door-pine-wood.jpg",
-                "Heavy-duty galvanized steel door built for high-traffic areas. Rust-resistant coating ensures long-term durability in tropical climates."),
+                product("Compact Office Almira", "security", "Steel Alloy", 15900.00, "190 x 80 cm", 6,
+                        "/images/products/almira2.jpg",
+                        "A compact office-ready almira with reinforced shelves that keeps files, essentials, and tools neatly arranged."),
 
-            // Glass Doors
-            product("Tempered Glass Panel Door", "glass", "Tempered Glass", 21500.00, "210 × 90 cm", 8,
-                "/images/country-house-door-pine-wood.jpg",
-                "Modern tempered glass door that floods interiors with natural light. Engineered for safety with shatter-resistant glass and an aluminium frame."),
+                product("Family Dining Table Set", "interior", "Tempered Glass and Wood", 21500.00, "200 x 90 cm", 8,
+                        "/images/products/table1.jpg",
+                        "A six-seater dining table setup that balances premium finish, durable construction, and day-to-day practicality."),
 
-            // Security Doors
-            product("Multi-Point Lock Security Door", "security", "Steel Alloy", 28000.00, "210 × 90 cm", 4,
-                "/images/country-house-door-pine-wood.jpg",
-                "Advanced security door featuring a multi-point locking system, reinforced steel core, and anti-tamper hinges. Certified for high-security residential use."),
+                product("Modern Fabric Sofa", "interior", "Fabric Upholstery", 24000.00, "190 x 85 cm", 7,
+                        "/images/products/sofa.jpg",
+                        "A modern fabric sofa with supportive cushions and a clean silhouette to elevate family seating spaces."),
 
-            // Interior Doors
-            product("Mahogany Panel Interior Door", "interior", "Mahogany Wood", 12300.00, "210 × 80 cm", 12,
-                "/images/country-house-door-pine-wood.jpg",
-                "Elegant mahogany interior door with a smooth, pre-finished surface. Lightweight yet sturdy, ideal for bedrooms, bathrooms, and living spaces."),
+                product("Classic Accent Chair", "interior", "Mahogany Wood", 12300.00, "95 x 70 cm", 12,
+                        "/images/products/chair-1.jpg",
+                        "A refined accent chair ideal for reading corners and lounge areas, combining comfort with elegant style.")
+        );
 
-            // Exterior Doors
-            product("Fiberglass Exterior Door", "exterior", "Fiberglass", 24000.00, "210 × 90 cm", 3,
-                "/images/country-house-door-pine-wood.jpg",
-                "Low-maintenance fiberglass exterior door engineered to resist warping, cracking, and corrosion. Achieves the look of real wood with superior weather performance.")
-        ));
+        demoCatalog.forEach(seedProduct -> productRepository.findByNameIgnoreCase(seedProduct.getName())
+                .ifPresentOrElse(existing -> {
+                    existing.setCategory(seedProduct.getCategory());
+                    existing.setMaterial(seedProduct.getMaterial());
+                    existing.setPrice(seedProduct.getPrice());
+                    existing.setDimensions(seedProduct.getDimensions());
+                    existing.setStock(seedProduct.getStock());
+                    existing.setImageUrl(seedProduct.getImageUrl());
+                    existing.setDescription(seedProduct.getDescription());
+                    productRepository.save(existing);
+                }, () -> productRepository.save(seedProduct)));
 
         normalizeExistingProductImageUrls();
     }
 
     private void normalizeExistingProductImageUrls() {
-        String fallbackImage = "/images/country-house-door-pine-wood.jpg";
+        String fallbackImage = "/images/products/sofa.jpg";
 
         productRepository.findAll().forEach(product -> {
             String imageUrl = product.getImageUrl();
@@ -148,7 +149,8 @@ public class DataSeeder implements CommandLineRunner {
             } else {
                 String normalized = imageUrl.trim();
 
-                if ("/images/products/pine-wood-door.jpg".equalsIgnoreCase(normalized)) {
+                if ("/images/products/pine-wood-door.jpg".equalsIgnoreCase(normalized)
+                        || "/images/country-house-door-pine-wood.jpg".equalsIgnoreCase(normalized)) {
                     product.setImageUrl(fallbackImage);
                     changed = true;
                 } else if (!normalized.startsWith("http://")

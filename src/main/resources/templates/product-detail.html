@@ -3,7 +3,7 @@
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
-    <title th:text="${product.name + ' | Asian Door'}">Product Detail | Asian Door</title>
+    <title th:text="${product.name + ' | Asian Wooden Decor'}">Product Detail | Asian Wooden Decor</title>
 
     <style th:inline="css">
         .figma-detail {
@@ -391,15 +391,15 @@
                     </a>
                 </div>
 
-                <p class="meta">Door Size:
+                <p class="meta">Item Size:
                     <span th:text="${product.dimensions != null and !#strings.isEmpty(product.dimensions) ? product.dimensions : 'Standard 210 × 90 cm'}">Standard 210 × 90 cm</span>
                 </p>
-                <p class="meta">Door Lock System:
-                    <span th:text="${product.lockSystem != null and !#strings.isEmpty(product.lockSystem) ? product.lockSystem : 'Standard mortise lock'}">Standard mortise lock</span>
+                <p class="meta">Material / Finish:
+                    <span th:text="${product.lockSystem != null and !#strings.isEmpty(product.lockSystem) ? product.lockSystem : 'Standard finish details'}">Standard finish details</span>
                 </p>
 
                 <p class="meta">Category:
-                    <span th:text="${product.category != null ? product.category : 'door'}">door</span>
+                    <span th:text="${product.category != null ? product.category : 'furniture'}">furniture</span>
                 </p>
 
 
@@ -431,14 +431,14 @@
                         <button type="button" data-star="4"><i class="bi bi-star-fill"></i></button>
                         <button type="button" data-star="5"><i class="bi bi-star-fill"></i></button>
                     </div>
-                    <textarea id="reviewComment" maxlength="1200" placeholder="Write your review for this door..."></textarea>
+                    <textarea id="reviewComment" maxlength="1200" placeholder="Write your review for this furniture item..."></textarea>
                     <div class="mt-2">
                         <button type="submit" class="btn-add">Submit review</button>
                     </div>
                 </form>
 
                 <div sec:authorize="!isAuthenticated()" class="small text-muted">
-                    <a th:href="@{/login}">Login</a> to rate and review this door.
+                    <a th:href="@{/login}">Login</a> to rate and review this furniture item.
                 </div>
             </div>
 
@@ -455,12 +455,12 @@
             <div class="col-6 col-lg-3" th:each="rp : ${relatedProducts}">
                 <a class="related-card" th:href="@{/products/{id}(id=${rp.id})}">
                     <div class="img-wrap"><img th:src="@{${rp.imageUrl}}" th:alt="${rp.name}"/></div>
-                    <h6 th:text="${rp.name}">Door Product</h6>
+                    <h6 th:text="${rp.name}">Furniture Product</h6>
                     <div class="stars" aria-hidden="true"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                 </a>
             </div>
             <div class="col-12" th:if="${relatedProducts == null or #lists.isEmpty(relatedProducts)}">
-                <p class="text-muted mb-0">No related door products available right now.</p>
+                <p class="text-muted mb-0">No related furniture products available right now.</p>
             </div>
         </div>
     </section>
@@ -503,7 +503,7 @@
             }
 
             if (!reviews || reviews.length === 0) {
-                reviewList.innerHTML = '<div class="text-muted small">No reviews yet. Be the first to review this door.</div>';
+                reviewList.innerHTML = '<div class="text-muted small">No reviews yet. Be the first to review this furniture item.</div>';
                 return;
             }
 

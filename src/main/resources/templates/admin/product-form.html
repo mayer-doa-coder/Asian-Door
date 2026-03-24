@@ -4,8 +4,8 @@
     <th:block th:replace="~{header :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin-figma.css}"/>
-    <title th:text="${editMode} ? 'Edit Product - Admin | Asian Door' : 'Add Product - Admin | Asian Door'">
-        Product Form - Admin | Asian Door
+    <title th:text="${editMode} ? 'Edit Product - Admin | Asian Wooden Decor' : 'Add Product - Admin | Asian Wooden Decor'">
+        Product Form - Admin | Asian Wooden Decor
     </title>
 </head>
 <body class="admin-figma">
@@ -31,7 +31,7 @@
                         <label for="name" class="form-label">Product Name</label>
                         <input type="text" id="name" th:field="*{name}" class="form-control"
                                th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
-                               placeholder="e.g. Pine Wood Entry Door" />
+                               placeholder="e.g. Solid Wood Coffee Table" />
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                     </div>
 
@@ -41,12 +41,12 @@
                             <select id="category" th:field="*{category}" class="form-select"
                                     th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
                                 <option value="">— Select category —</option>
-                                <option value="wooden">Wooden Door</option>
-                                <option value="steel">Steel Door</option>
-                                <option value="glass">Glass Door</option>
-                                <option value="security">Security Door</option>
-                                <option value="interior">Interior Door</option>
-                                <option value="exterior">Exterior Door</option>
+                                <option value="wooden">Wood Furniture</option>
+                                <option value="steel">Metal Furniture</option>
+                                <option value="glass">Glass Furniture</option>
+                                <option value="security">Storage Furniture</option>
+                                <option value="interior">Indoor Furniture</option>
+                                <option value="exterior">Outdoor Furniture</option>
                             </select>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
                         </div>

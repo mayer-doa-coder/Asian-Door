@@ -3,74 +3,162 @@
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
-    <title>Asian Door | Register</title>
+    <title>Asian Wooden Decor | Register</title>
 
     <style th:inline="css">
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         .figma-auth {
-            background: #f6f6f6;
-            color: #2f2f2f;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-        }
-
-        .figma-auth a { text-decoration: none; }
-
-
-        .figma-auth .auth-wrap {
-            padding: 1.2rem 0 3rem;
-        }
-
-        .figma-auth .auth-box {
-            background: #fff;
-            border: 1px solid #ececec;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, .06);
-        }
-
-        .figma-auth .auth-visual {
-            background: linear-gradient(rgba(0,0,0,.26), rgba(0,0,0,.26)),
-                        url([[@{/images/products/door-grp2.jpg}]]) center/cover no-repeat;
-            min-height: 640px;
+            width: 100%;
+            height: 100vh;
             display: flex;
-            align-items: end;
+            color: #2f2f2f;
+            background: #f5f3ef;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .figma-auth a {
+            text-decoration: none;
+        }
+
+        .figma-auth .auth-left,
+        .figma-auth .auth-right {
+            width: 50%;
+            height: 100%;
+        }
+
+        .figma-auth .auth-left {
+            position: relative;
+            overflow: hidden;
             color: #fff;
-            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .figma-auth .auth-visual h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: .55rem;
+        .figma-auth .auth-left::before {
+            content: "";
+            position: absolute;
+            inset: -18px;
+            background: url([[@{/images/login-signup/grunge-wood-texture-background_1048-7944.avif}]]) center/cover no-repeat;
+            filter: blur(3px);
+            transform: scale(1.05);
         }
 
-        .figma-auth .auth-visual p {
+        .figma-auth .auth-left::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(140deg, rgba(26, 16, 10, .68), rgba(43, 27, 17, .45));
+        }
+
+        .figma-auth .left-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem 2.4rem;
+            max-width: 86%;
+        }
+
+        .figma-auth .brand-stack {
+            display: inline-flex;
+            align-items: center;
+            gap: .85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .figma-auth .brand-stack img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        .figma-auth .brand-stack h1 {
             margin: 0;
-            color: rgba(255,255,255,.88);
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            text-transform: uppercase;
+        }
+
+        .figma-auth .left-heading {
+            margin: 0 0 .75rem;
+            font-size: clamp(1.8rem, 3vw, 2.35rem);
+            line-height: 1.18;
+            font-weight: 700;
+        }
+
+        .figma-auth .left-copy {
+            margin: 0 0 1.1rem;
+            color: rgba(255, 255, 255, .9);
             line-height: 1.45;
+            max-width: 46ch;
+        }
+
+        .figma-auth .typewriter-line {
+            font-size: 1.04rem;
+            font-weight: 600;
+            color: #f4e1c7;
+            min-height: 1.6rem;
+        }
+
+        .figma-auth .typewriter-text {
+            border-right: 2px solid rgba(244, 225, 199, .95);
+            padding-right: .28rem;
+            animation: caretBlink .9s step-end infinite;
+        }
+
+        .figma-auth .auth-right {
+            background: #f9f8f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: .85rem;
         }
 
         .figma-auth .auth-form {
-            padding: 2rem;
+            width: min(100%, 560px);
+            background: #fff;
+            border: 1px solid #e7e4dc;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, .08);
+            border-radius: .5rem;
+            padding: 1rem 1.05rem;
         }
 
         .figma-auth .auth-title {
-            font-size: 1.9rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #2b2b2b;
-            margin-bottom: .3rem;
+            margin-bottom: .18rem;
         }
 
         .figma-auth .auth-subtitle {
-            color: #8d8d8d;
-            margin-bottom: 1.1rem;
-            font-size: .94rem;
+            color: #7e7b76;
+            margin-bottom: .66rem;
+            font-size: .86rem;
+        }
+
+        .figma-auth .auth-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .58rem .72rem;
+        }
+
+        .figma-auth .auth-grid .full-width {
+            grid-column: span 2;
         }
 
         .figma-auth .form-label {
-            font-size: .78rem;
+            font-size: .72rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: .05em;
             color: #666;
+            margin-bottom: .26rem;
         }
 
         .figma-auth .input-group-text,
@@ -80,158 +168,187 @@
         }
 
         .figma-auth .form-control {
-            min-height: 44px;
-            border-color: #dddddd;
+            min-height: 38px;
+            border-color: #ddd8ce;
         }
 
         .figma-auth .form-control:focus {
-            border-color: #8e8e8e;
+            border-color: #8f7a63;
             box-shadow: none;
         }
 
         .figma-auth .auth-btn {
-            background: #393939;
-            color: #f4f4f4;
+            background: #4a3728;
+            color: #f5efe6;
             border: 0;
             border-radius: 0;
-            min-height: 46px;
+            min-height: 40px;
             font-weight: 600;
         }
 
         .figma-auth .auth-btn:hover {
-            background: #2b2b2b;
+            background: #3f2f22;
             color: #fff;
         }
 
         .figma-auth .hint-link {
-            color: #2f2f2f;
+            color: #4a3728;
             font-weight: 700;
             text-decoration: underline;
             text-underline-offset: 2px;
         }
 
+        .figma-auth .alert {
+            margin-bottom: .6rem;
+        }
+
+        @keyframes caretBlink {
+            0%,
+            100% { border-color: rgba(244, 225, 199, .95); }
+            50% { border-color: transparent; }
+        }
+
+        @media (max-width: 1200px) {
+            .figma-auth .auth-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .figma-auth .auth-grid .full-width {
+                grid-column: span 1;
+            }
+        }
+
         @media (max-width: 992px) {
-            .figma-auth .auth-visual {
-                min-height: 220px;
+            .figma-auth .auth-left {
+                display: none;
+            }
+
+            .figma-auth .auth-right {
+                width: 100%;
+                padding: .7rem;
+            }
+
+            .figma-auth .auth-form {
+                width: min(100%, 620px);
+                padding: .9rem;
             }
         }
     </style>
 </head>
 <body>
 <main class="figma-auth">
-    <th:block th:replace="~{fragments/figma-shell :: topNav('home', '#')}"></th:block>
-
-    <section class="auth-wrap">
-        <div class="container">
-            <div class="row g-0 auth-box">
-                <div class="col-lg-6 d-none d-lg-block">
-                    <div class="auth-visual">
-                        <div>
-                            <h2>Create Account</h2>
-                            <p>Create your account to save favorites, place orders, and track deliveries for your doors.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="auth-form">
-                        <h1 class="auth-title">Register</h1>
-                        <p class="auth-subtitle">Join Asian Door and start ordering trusted doors for home and office.</p>
-
-                        <div th:if="${errorMessage}" class="alert alert-danger py-2 small">
-                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                            <span th:text="${errorMessage}"></span>
-                        </div>
-
-                        <form th:action="@{/register}" method="post" th:object="${registerRequest}" novalidate>
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" id="fullName" class="form-control"
-                                           th:field="*{fullName}"
-                                           th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
-                                           placeholder="Juan dela Cruz"
-                                           autocomplete="name" required />
-                                    <div class="invalid-feedback" th:errors="*{fullName}">Full name is required.</div>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" id="email" class="form-control"
-                                           th:field="*{email}"
-                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
-                                           placeholder="you@example.com"
-                                           autocomplete="email" required />
-                                    <div class="invalid-feedback" th:errors="*{email}">Please enter a valid email address.</div>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone Number (Optional)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="tel" id="phone" class="form-control"
-                                           th:field="*{phone}"
-                                           placeholder="+63 9XX XXX XXXX"
-                                           autocomplete="tel" />
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                    <input type="password" id="password" class="form-control"
-                                           th:field="*{password}"
-                                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
-                                           placeholder="Min. 8 characters"
-                                           minlength="8"
-                                           autocomplete="new-password" required />
-                                    <button class="btn btn-outline-secondary" type="button"
-                                            onclick="togglePwd('password', this)"
-                                            aria-label="Toggle password visibility">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <div class="invalid-feedback" th:errors="*{password}">Password must be at least 8 characters.</div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                    <input type="password" id="confirmPassword" class="form-control"
-                                           th:field="*{confirmPassword}"
-                                           th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
-                                           placeholder="Repeat your password"
-                                           autocomplete="new-password" required />
-                                    <button class="btn btn-outline-secondary" type="button"
-                                            onclick="togglePwd('confirmPassword', this)"
-                                            aria-label="Toggle confirm password visibility">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <div class="invalid-feedback" th:errors="*{confirmPassword}">Please confirm your password.</div>
-                                </div>
-                            </div>
-
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn auth-btn">
-                                    <i class="bi bi-person-check me-1"></i> Create Account
-                                </button>
-                            </div>
-                        </form>
-
-                        <p class="small mb-0">
-                            Already have an account?
-                            <a class="hint-link" th:href="@{/login}">Sign in</a>
-                        </p>
-                    </div>
-                </div>
+    <section class="auth-left">
+        <div class="left-content">
+            <div class="brand-stack">
+                <img th:src="@{/images/logo.png}" alt="Asian Wooden Decor logo" />
+                <h1>Asian Wooden Decor</h1>
             </div>
+            <h2 class="left-heading">Bring Your Vision To Life With Handpicked Wooden Styles</h2>
+            <p class="left-copy">Create your account and start curating furniture and decor pieces that make every room feel warm and timeless.</p>
+            <p class="typewriter-line">
+                Designed for <span id="registerTypewriter" class="typewriter-text"></span>
+            </p>
+        </div>
+    </section>
+
+    <section class="auth-right">
+        <div class="auth-form">
+            <h2 class="auth-title">Register</h2>
+            <p class="auth-subtitle">Join Asian Wooden Decor and start ordering trusted furniture for home and office.</p>
+
+            <div th:if="${errorMessage}" class="alert alert-danger py-2 small">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form th:action="@{/register}" method="post" th:object="${registerRequest}" novalidate>
+                <div class="auth-grid">
+                    <div>
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input type="text" id="fullName" class="form-control"
+                                   th:field="*{fullName}"
+                                   th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                                placeholder="Enter your full name"
+                                   autocomplete="name" required />
+                            <div class="invalid-feedback" th:errors="*{fullName}">Full name is required.</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" id="email" class="form-control"
+                                   th:field="*{email}"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                placeholder="Enter your email address"
+                                   autocomplete="email" required />
+                            <div class="invalid-feedback" th:errors="*{email}">Please enter a valid email address.</div>
+                        </div>
+                    </div>
+
+                    <div class="full-width">
+                        <label for="phone" class="form-label">Phone Number (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                            <input type="tel" id="phone" class="form-control"
+                                   th:field="*{phone}"
+                                placeholder="Enter your phone number"
+                                   autocomplete="tel" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" id="password" class="form-control"
+                                   th:field="*{password}"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                placeholder="Minimum 8 characters"
+                                   minlength="8"
+                                   autocomplete="new-password" required />
+                            <button class="btn btn-outline-secondary" type="button"
+                                    onclick="togglePwd('password', this)"
+                                    aria-label="Toggle password visibility">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <div class="invalid-feedback" th:errors="*{password}">Password must be at least 8 characters.</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                            <input type="password" id="confirmPassword" class="form-control"
+                                   th:field="*{confirmPassword}"
+                                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
+                                placeholder="Repeat your password"
+                                   autocomplete="new-password" required />
+                            <button class="btn btn-outline-secondary" type="button"
+                                    onclick="togglePwd('confirmPassword', this)"
+                                    aria-label="Toggle confirm password visibility">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <div class="invalid-feedback" th:errors="*{confirmPassword}">Please confirm your password.</div>
+                        </div>
+                    </div>
+
+                    <div class="full-width d-grid mt-1">
+                        <button type="submit" class="btn auth-btn">
+                            <i class="bi bi-person-check me-1"></i> Create Account
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <p class="small mt-2 mb-0">
+                Already have an account?
+                <a class="hint-link" th:href="@{/login}">Sign in</a>
+            </p>
         </div>
     </section>
 </main>
@@ -249,6 +366,42 @@
             icon.classList.replace('bi-eye-slash', 'bi-eye');
         }
     }
+
+    (function runTypewriter() {
+        var target = document.getElementById('registerTypewriter');
+        if (!target) {
+            return;
+        }
+
+        var words = ['Bespoke Interiors', 'Rustic Luxury', 'Handcrafted Storage', 'Modern Woodcraft', 'Statement Furniture'];
+        var wordIndex = 0;
+        var charIndex = 0;
+        var deleting = false;
+
+        function tick() {
+            var currentWord = words[wordIndex];
+            if (!deleting) {
+                charIndex++;
+                target.textContent = currentWord.slice(0, charIndex);
+                if (charIndex === currentWord.length) {
+                    deleting = true;
+                    setTimeout(tick, 1200);
+                    return;
+                }
+            } else {
+                charIndex--;
+                target.textContent = currentWord.slice(0, charIndex);
+                if (charIndex === 0) {
+                    deleting = false;
+                    wordIndex = (wordIndex + 1) % words.length;
+                }
+            }
+
+            setTimeout(tick, deleting ? 45 : 85);
+        }
+
+        tick();
+    })();
 </script>
 </body>
 </html>

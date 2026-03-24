@@ -1,11 +1,16 @@
 /* =========================================
-   Asian Door — Custom Stylesheet
+   Asian Wooden Decor — Custom Stylesheet
    ========================================= */
 
 /* Root variables */
 :root {
-    --ad-primary:        #1a1a2e;
-    --ad-accent:         #e63946;
+    --ad-primary:        #4a3728;
+    --ad-accent:         #3f2f22;
+    --ad-warm-bg:        #f5efe7;
+    --ad-warm-surface:   #fff9f0;
+    --ad-warm-border:    #ccb79f;
+    --ad-warm-text:      #5a4638;
+    --ad-warm-soft:      #efe4d6;
     --ad-light:          #f8f9fa;
     --skeleton-base:     #e2e5e8;
     --skeleton-shine:    #f0f2f4;
@@ -16,7 +21,56 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 400;
-    background-color: #f5f5f5;
+    background-color: var(--ad-warm-bg);
+}
+
+/* Global wooden button theme for non-figma pages */
+.btn-dark,
+.btn-primary,
+.btn-secondary {
+    --bs-btn-bg: #4a3728;
+    --bs-btn-border-color: #4a3728;
+    --bs-btn-color: #f5efe6;
+    --bs-btn-hover-bg: #3f2f22;
+    --bs-btn-hover-border-color: #3f2f22;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: #3a2b1f;
+    --bs-btn-active-border-color: #3a2b1f;
+    --bs-btn-focus-shadow-rgb: 74, 55, 40;
+}
+
+.btn-outline-dark,
+.btn-outline-secondary,
+.btn-outline-light {
+    --bs-btn-color: #4a3728;
+    --bs-btn-border-color: #4a3728;
+    --bs-btn-hover-bg: #4a3728;
+    --bs-btn-hover-border-color: #4a3728;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: #3f2f22;
+    --bs-btn-active-border-color: #3f2f22;
+    --bs-btn-active-color: #fff;
+    --bs-btn-focus-shadow-rgb: 74, 55, 40;
+}
+
+.btn i,
+.btn .bi {
+    color: inherit;
+}
+
+.icon-btn,
+.nav-avatar-link,
+.nav-avatar-btn {
+    border-color: var(--ad-warm-border);
+    background: var(--ad-warm-surface);
+    color: #4a3728;
+}
+
+.icon-btn:hover,
+.nav-avatar-link:hover,
+.nav-avatar-btn:hover {
+    background: var(--ad-warm-soft);
+    color: #3f2f22;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -107,9 +161,9 @@ strong, b {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    background: rgba(255, 255, 255, 0.14);
-    color: #fff;
+    border: 1px solid var(--ad-warm-border);
+    background: var(--ad-warm-surface);
+    color: #4a3728;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -120,8 +174,8 @@ strong, b {
 .nav-avatar-link:hover,
 .nav-avatar-btn:hover {
     transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.24);
-    color: #fff;
+    background: var(--ad-warm-soft);
+    color: #3f2f22;
 }
 
 .avatar-dropdown-toggle::after {
@@ -164,11 +218,14 @@ strong, b {
     letter-spacing: 0.3px;
     padding: 0.25rem 0.75rem;
     border-radius: 0.375rem;
+    border-color: var(--ad-warm-border);
+    color: #4a3728;
+    background: var(--ad-warm-surface);
     transition: background-color 0.15s ease, color 0.15s ease;
 }
 .nav-admin-btn:hover {
-    background-color: var(--ad-accent);
-    border-color: var(--ad-accent);
+    background-color: #4a3728;
+    border-color: #4a3728;
     color: #fff;
 }
 
@@ -387,4 +444,86 @@ strong, b {
     width: 90px;
     height: 1.9rem;
     border-radius: 0.45rem;
+}
+
+/* Wooden consistency overrides for pages with inline dark styles */
+.footer-dark,
+.figma-home .footer-dark {
+    background: #3a2b1f !important;
+    color: #f1e7da !important;
+}
+
+.footer-dark h6,
+.figma-home .footer-dark h6 {
+    color: #fff7ed !important;
+}
+
+.footer-dark a,
+.footer-dark p,
+.footer-dark li,
+.figma-home .footer-dark a,
+.figma-home .footer-dark p,
+.figma-home .footer-dark li {
+    color: #dcccb9 !important;
+}
+
+.footer-dark a:hover,
+.figma-home .footer-dark a:hover {
+    color: #fff3e6 !important;
+}
+
+.nav-tabs .nav-link,
+.nav-pills .nav-link {
+    color: #5a4638;
+}
+
+.nav-tabs .nav-link.active,
+.nav-pills .nav-link.active {
+    color: #fff7ed !important;
+    background-color: #4a3728 !important;
+    border-color: #4a3728 !important;
+}
+
+.nav-link:focus-visible,
+.btn:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus,
+.dropdown-item:focus,
+.dropdown-item:active {
+    border-color: #8f7a63 !important;
+    box-shadow: 0 0 0 .2rem rgba(74, 55, 40, .2) !important;
+    outline: none;
+}
+
+.figma-profile .profile-nav a.active,
+.figma-profile .profile-nav a.active:hover {
+    background: #4a3728 !important;
+    color: #f5efe6 !important;
+}
+
+.figma-profile .profile-nav a:hover,
+.figma-profile .profile-nav form button:hover {
+    background: #efe4d6 !important;
+    color: #3f2f22 !important;
+}
+
+.figma-profile .support-underline {
+    background: #8f7a63 !important;
+}
+
+.figma-profile .support-icon {
+    color: #6b4f3a !important;
+}
+
+.figma-profile .action-btn.call,
+.figma-profile .action-btn.whatsapp,
+.figma-profile .action-btn.map {
+    background: #4a3728 !important;
+}
+
+.figma-profile .action-btn.call:hover,
+.figma-profile .action-btn.whatsapp:hover,
+.figma-profile .action-btn.map:hover {
+    background: #3f2f22 !important;
 }

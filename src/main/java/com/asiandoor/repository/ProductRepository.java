@@ -1,5 +1,8 @@
 package com.asiandoor.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,9 +12,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.asiandoor.entity.Product;
 
-import java.util.List;
-
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+
+        Optional<Product> findByNameIgnoreCase(String name);
 
     Page<Product> findByCategoryIgnoreCase(String category, Pageable pageable);
 

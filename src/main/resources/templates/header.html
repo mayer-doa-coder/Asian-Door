@@ -36,7 +36,7 @@
             <!-- Brand -->
             <a class="navbar-brand fw-bold d-flex align-items-center" th:href="@{/}">
                 <img th:src="@{/images/logo.png}" alt="A" class="navbar-brand-logo" />
-                <span>sian Door</span>
+                <span>sian Wooden Decor</span>
             </a>
 
             <div class="navbar-collapse" id="navbarMain">
@@ -70,7 +70,7 @@
                 <form class="d-flex me-3 my-2 my-lg-0" th:action="@{/products}" method="get">
                     <div class="input-group input-group-sm">
                         <input class="form-control nav-search-input" type="search" name="search"
-                               placeholder="Search doors…" aria-label="Search"/>
+                               placeholder="Search furniture…" aria-label="Search"/>
                         <button class="btn btn-outline-light" type="submit">
                             <i class="bi bi-search"></i>
                         </button>
@@ -107,7 +107,7 @@
                     </li>
 
                     <li class="nav-item" sec:authorize="isAuthenticated() and hasRole('ADMIN')">
-                        <a class="btn btn-sm btn-outline-danger ms-1" th:href="@{/admin}">
+                        <a class="btn btn-sm nav-admin-btn ms-1" th:href="@{/admin}">
                             <i class="bi bi-shield-lock me-1"></i>Admin
                         </a>
                     </li>

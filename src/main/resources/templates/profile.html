@@ -3,7 +3,7 @@
 <head>
     <th:block th:replace="~{header :: head}"></th:block>
     <link rel="stylesheet" th:href="@{/css/figma-shared.css}"/>
-    <title>Asian Door | Buyer Profile</title>
+    <title>Asian Wooden Decor | Buyer Profile</title>
     <style>
         .figma-profile {
             background: #f6f6f6;
@@ -221,8 +221,8 @@
                                  th:src="@{/images/products-figma/product-1.jpg}"
                                  th:alt="${product.name}"/>
                             <div>
-                                <p class="product-name" th:text="${product.name}">Door Product</p>
-                                <p class="product-desc" th:text="${product.description != null and !#strings.isEmpty(product.description) ? #strings.abbreviate(product.description, 55) : 'Top-rated door based on customer reviews.'}">Top-rated door</p>
+                                <p class="product-name" th:text="${product.name}">Furniture Product</p>
+                                <p class="product-desc" th:text="${product.description != null and !#strings.isEmpty(product.description) ? #strings.abbreviate(product.description, 55) : 'Top-rated furniture based on customer reviews.'}">Top-rated furniture</p>
                                 <div class="price-row"><span class="price-new">Tk <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span></span></div>
                                 <div class="save-note" th:text="${(product.totalReviews != null ? product.totalReviews : 0) + ' reviews'}">0 reviews</div>
                                 <div class="rating" th:with="roundedRating=${product.averageRating != null ? T(java.lang.Math).round(product.averageRating) : 0}">
@@ -246,8 +246,8 @@
                                  th:src="@{/images/products-figma/product-1.jpg}"
                                  th:alt="${product.name}"/>
                             <div>
-                                <p class="product-name" th:text="${product.name}">Door Product</p>
-                                <p class="product-desc" th:text="${'Recommended from your ' + (product.category != null ? product.category : 'recent') + ' purchase pattern.'}">Recommended door</p>
+                                <p class="product-name" th:text="${product.name}">Furniture Product</p>
+                                <p class="product-desc" th:text="${'Recommended from your ' + (product.category != null ? product.category : 'recent') + ' purchase pattern.'}">Recommended furniture</p>
                                 <div class="price-row"><span class="price-new">Tk <span th:text="${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span></span></div>
                                 <div class="save-note" th:text="${product.category != null ? #strings.capitalize(product.category) + ' category' : 'Category match'}">Category match</div>
                                 <div class="rating" th:with="roundedRating=${product.averageRating != null ? T(java.lang.Math).round(product.averageRating) : 0}">
